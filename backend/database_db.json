@@ -1,0 +1,213 @@
+{
+  "users": [],
+  "otps": [],
+  "stores": [],
+  "applications": [],
+  "brands": [
+    {
+      "id": "b1",
+      "name": "Apple",
+      "slug": "apple"
+    },
+    {
+      "id": "b2",
+      "name": "Samsung",
+      "slug": "samsung"
+    },
+    {
+      "id": "b3",
+      "name": "OnePlus",
+      "slug": "oneplus"
+    }
+  ],
+  "models": [
+    {
+      "id": "m1",
+      "brandId": "b1",
+      "name": "iPhone 13",
+      "slug": "iphone-13",
+      "specifications": {
+        "screen": "6.1 inches",
+        "chip": "A15 Bionic",
+        "camera": "Dual 12MP"
+      }
+    },
+    {
+      "id": "m2",
+      "brandId": "b1",
+      "name": "iPhone 14",
+      "slug": "iphone-14",
+      "specifications": {
+        "screen": "6.1 inches",
+        "chip": "A15 Bionic",
+        "camera": "Dual 12MP"
+      }
+    },
+    {
+      "id": "m3",
+      "brandId": "b2",
+      "name": "Galaxy S22",
+      "slug": "galaxy-s22",
+      "specifications": {
+        "screen": "6.1 inches",
+        "chip": "Snapdragon 8 Gen 1",
+        "camera": "Triple 50MP"
+      }
+    }
+  ],
+  "variants": [
+    {
+      "id": "v1",
+      "modelId": "m1",
+      "ram": "4GB",
+      "storage": "128GB",
+      "color": "Midnight"
+    },
+    {
+      "id": "v2",
+      "modelId": "m1",
+      "ram": "4GB",
+      "storage": "256GB",
+      "color": "Blue"
+    },
+    {
+      "id": "v3",
+      "modelId": "m3",
+      "ram": "8GB",
+      "storage": "128GB",
+      "color": "Phantom Black"
+    }
+  ],
+  "skus": [
+    {
+      "id": "s1",
+      "variantId": "v1",
+      "grade": "EXCELLENT",
+      "basePrice": 42000,
+      "dealerPrice": 38000
+    },
+    {
+      "id": "s2",
+      "variantId": "v1",
+      "grade": "LIKE_NEW",
+      "basePrice": 46000,
+      "dealerPrice": 42000
+    },
+    {
+      "id": "s3",
+      "variantId": "v3",
+      "grade": "GOOD",
+      "basePrice": 32000,
+      "dealerPrice": 29000
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv1",
+      "skuId": "s1",
+      "storeId": "store-mumbai",
+      "imei": "358291048291048",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "inv2",
+      "skuId": "s1",
+      "storeId": "store-mumbai",
+      "imei": "358291048291055",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "inv3",
+      "skuId": "s2",
+      "storeId": "store-delhi",
+      "imei": "358291048291062",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "inv4",
+      "skuId": "s3",
+      "storeId": "store-mumbai",
+      "imei": "358291048291079",
+      "status": "AVAILABLE"
+    }
+  ],
+  "orders": [],
+  "orderItems": [],
+  "tradeIns": [],
+  "blogs": [
+    {
+      "id": "bpost1",
+      "title": "Why Buying Refurbished Phones is the Smartest Choice in 2026",
+      "slug": "why-buying-refurbished-phones-smart-choice-2026",
+      "content": "# Why Buying Refurbished Phones is the Smartest Choice\n\nElectronic waste is a growing concern globally. By purchasing certified refurbished devices from EcoFone, you save up to 40% compared to new model prices while extending the life cycle of fully functional technology. All models go through our strict 47-point diagnostic checks.",
+      "seoTitle": "Why Buy Refurbished Phones in 2026 - EcoFone",
+      "seoDesc": "Save up to 40% on eco-friendly certified refurbished devices with a warranty.",
+      "authorId": "admin1",
+      "publishedAt": "2026-07-08T11:44:39.257Z"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job1",
+      "title": "Mobile Diagnostics technician",
+      "department": "Operations",
+      "location": "Mumbai Store",
+      "description": "Responsible for evaluating hardware performance, screens, batteries, and repairing refurbished devices.",
+      "requirements": "2+ years experience in cellular device diagnostics and repairs.",
+      "active": true
+    }
+  ],
+  "jobApplications": [],
+  "reviews": [
+    {
+      "id": "r1",
+      "authorName": "Rohan Sharma",
+      "rating": 5,
+      "comment": "Bought an iPhone 13 in Excellent condition. Looks brand new and battery health is at 94%. Fast shipping too!",
+      "verifiedProduct": "iPhone 13 128GB"
+    },
+    {
+      "id": "r2",
+      "authorName": "Priya Patel",
+      "rating": 4,
+      "comment": "Sold my old OnePlus 9. The diagnostic app gave a fair price and the pickup agent visited the next day. Money was credited instantly.",
+      "verifiedProduct": null
+    }
+  ],
+  "webhooks": [],
+  "teamMembers": [
+    {
+      "id": "team-1",
+      "name": "Ishaan Verma",
+      "role": "Lead Diagnostics Engineer",
+      "bio": "Automated test engineer with 6+ years designing cellular diagnostic routines and grade checking scales.",
+      "initials": "IV",
+      "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80",
+      "linkedinUrl": "https://linkedin.com",
+      "twitterUrl": "https://twitter.com",
+      "githubUrl": ""
+    },
+    {
+      "id": "team-2",
+      "name": "Kiara Sen",
+      "role": "Regional Operations Coordinator",
+      "bio": "Operations manager managing regional logistics networks, franchise launch alignments, and stock allocations.",
+      "initials": "KS",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&q=80",
+      "linkedinUrl": "https://linkedin.com",
+      "twitterUrl": "https://twitter.com",
+      "githubUrl": ""
+    },
+    {
+      "id": "team-3",
+      "name": "Dev Patel",
+      "role": "Senior Hardware Technician",
+      "bio": "Certified re-commerce device specialist focused on motherboards repairs, hardware component replacements, and grading.",
+      "initials": "DP",
+      "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80",
+      "linkedinUrl": "https://linkedin.com",
+      "twitterUrl": "",
+      "githubUrl": "https://github.com"
+    }
+  ]
+}

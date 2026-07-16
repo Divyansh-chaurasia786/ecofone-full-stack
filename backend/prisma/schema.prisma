@@ -1,0 +1,318 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  FRANCHISE_OWNER
+  STORE_MANAGER
+  CUSTOMER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum OrderStatus {
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum TradeInStatus {
+  QUOTED
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum InventoryStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  RETURNED
+}
+
+enum Grade {
+  LIKE_NEW
+  EXCELLENT
+  GOOD
+  FAIR
+}
+
+enum FranchiseAppStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String?       @unique
+  phone        String        @unique
+  name         String
+  passwordHash String?
+  role         Role          @default(CUSTOMER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  // Relations
+  stores       Store[]       // Stores managed/owned (for RBAC)
+  orders       Order[]
+  tradeIns     TradeInQuote[]
+  blogPosts    BlogPost[]
+
+  @@index([phone])
+  @@index([email])
+}
+
+model OtpRecord {
+  id        String   @id @default(uuid())
+  phone     String   @unique
+  code      String
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+model Store {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+  phone     String
+  mapsUrl   String?
+  type      String   @default("LIVE")
+  ownerId   String?
+  owner     User?    @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  inventory InventoryItem[]
+  orders    Order[]
+
+  @@index([latitude, longitude])
+}
+
+model FranchiseApplication {
+  id                 String             @id @default(uuid())
+  applicantName      String
+  email              String
+  phone              String
+  locationPreference String
+  investmentCapacity Float
+  experienceDesc     String
+  status             FranchiseAppStatus @default(PENDING)
+  createdAt          DateTime           @default(now())
+}
+
+model Brand {
+  id     String          @id @default(uuid())
+  name   String          @unique
+  slug   String          @unique
+  models DeviceModel[]
+}
+
+model DeviceModel {
+  id             String          @id @default(uuid())
+  brandId        String
+  brand          Brand           @relation(fields: [brandId], references: [id])
+  name           String
+  slug           String          @unique
+  specifications Json            // Screen size, processor, camera details
+  variants       DeviceVariant[]
+}
+
+model DeviceVariant {
+  id        String         @id @default(uuid())
+  modelId   String
+  model     DeviceModel    @relation(fields: [modelId], references: [id])
+  ram       String
+  storage   String
+  color     String
+  skus      SKU[]
+  tradeIns  TradeInQuote[]
+
+  @@unique([modelId, ram, storage, color])
+}
+
+model SKU {
+  id          String          @id @default(uuid())
+  variantId   String
+  variant     DeviceVariant   @relation(fields: [variantId], references: [id])
+  grade       Grade
+  basePrice   Float
+  dealerPrice Float
+  inventory   InventoryItem[]
+  orderItems  OrderItem[]
+
+  @@unique([variantId, grade])
+}
+
+model InventoryItem {
+  id         String          @id @default(uuid())
+  skuId      String
+  sku        SKU             @relation(fields: [skuId], references: [id])
+  storeId    String
+  store      Store           @relation(fields: [storeId], references: [id])
+  imei       String          @unique // Serial tracking
+  status     InventoryStatus @default(AVAILABLE)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  // Relations
+  orderItems OrderItem[]
+
+  @@index([skuId])
+  @@index([storeId])
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  customerId    String
+  customer      User          @relation(fields: [customerId], references: [id])
+  storeId       String?       // Storing retail purchase location if applicable
+  store         Store?        @relation(fields: [storeId], references: [id])
+  totalAmount   Float
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentId     String?       @unique // Razorpay signature/order ID
+  status        OrderStatus   @default(PROCESSING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  orderItems    OrderItem[]
+
+  @@index([customerId])
+}
+
+model OrderItem {
+  id              String         @id @default(uuid())
+  orderId         String
+  order           Order          @relation(fields: [orderId], references: [id])
+  skuId           String
+  sku             SKU            @relation(fields: [skuId], references: [id])
+  inventoryItemId String?
+  inventoryItem   InventoryItem? @relation(fields: [inventoryItemId], references: [id])
+  price           Float
+
+  @@index([orderId])
+}
+
+model TradeInQuote {
+  id             String        @id @default(uuid())
+  userId         String?
+  user           User?         @relation(fields: [userId], references: [id])
+  variantId      String
+  variant        DeviceVariant @relation(fields: [variantId], references: [id])
+  screenDefect   Boolean       @default(false)
+  bodyDefect     Boolean       @default(false)
+  batteryDefect  Boolean       @default(false)
+  cameraDefect   Boolean       @default(false)
+  networkDefect  Boolean       @default(false)
+  offeredPrice   Float
+  pickupAddress  String
+  pickupDate     DateTime
+  status         TradeInStatus @default(QUOTED)
+  createdAt      DateTime      @default(now())
+
+  @@index([userId])
+}
+
+model BlogPost {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  content     String   // Markdown
+  seoTitle    String
+  seoDesc     String
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  publishedAt DateTime @default(now())
+
+  @@index([slug])
+}
+
+model JobListing {
+  id           String           @id @default(uuid())
+  title        String
+  department   String
+  location     String
+  description  String
+  requirements String
+  active       Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  applications JobApplication[]
+}
+
+model JobApplication {
+  id            String     @id @default(uuid())
+  jobId         String
+  job           JobListing @relation(fields: [jobId], references: [id])
+  candidateName String
+  email         String
+  phone         String
+  resumeUrl     String     // Cloudflare R2 uploaded file url
+  createdAt     DateTime   @default(now())
+}
+
+model Review {
+  id              String   @id @default(uuid())
+  authorName      String
+  rating          Int
+  comment         String
+  verifiedProduct String?  // Optional name of product purchased
+  status          String   @default("PENDING") // PENDING | APPROVED | REJECTED
+  adminReply      String?  // Optional reply from administrator
+  isVerified      Boolean  @default(false)     // True if admin verified the purchase
+  createdAt       DateTime @default(now())
+}
+
+model WebhookConfig {
+  id        String   @id @default(uuid())
+  name      String
+  url       String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model TeamMember {
+  id          String   @id @default(uuid())
+  name        String
+  role        String
+  bio         String
+  initials    String
+  imageUrl    String
+  linkedinUrl String
+  twitterUrl  String
+  githubUrl   String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model SubAdmin {
+  id          String   @id @default(uuid())
+  username    String   @unique
+  password    String
+  permissions String[] // e.g. ["franchise", "contact", "stores"]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SystemLog {
+  id        String   @id @default(uuid())
+  action    String
+  operator  String
+  role      String
+  createdAt DateTime @default(now())
+}
