@@ -89,57 +89,57 @@ const convertToEmbedUrl = (url: string) => {
   return cleanUrl;
 };
 
-const MOCK_FRANCHISE_APPS = [
+const MOCK_FRANCHISE_APPS: FranchiseApp[] = [
   {
     id: 'f-1',
-    fullName: 'Rajesh Kumar',
+    applicantName: 'Rajesh Kumar',
     email: 'rajesh.kumar@example.com',
     phone: '+91 98765 43210',
     locationPreference: 'Lucknow',
-    investmentCapacity: '15-20 Lakhs',
-    priorExperience: '10 years in retail business',
+    investmentCapacity: 1500000,
+    experienceDesc: '10 years in retail business',
     status: 'PENDING',
     createdAt: new Date().toISOString()
   },
   {
     id: 'f-2',
-    fullName: 'Ananya Sen',
+    applicantName: 'Ananya Sen',
     email: 'ananya.sen@example.com',
     phone: '+91 91234 56789',
     locationPreference: 'Kolkata',
-    investmentCapacity: '25-30 Lakhs',
-    priorExperience: 'Owner of multi-brand mobile franchise',
+    investmentCapacity: 2500000,
+    experienceDesc: 'Owner of multi-brand mobile franchise',
     status: 'APPROVED',
     createdAt: new Date(Date.now() - 86400000).toISOString()
   }
 ];
 
-const MOCK_CONTACTS = [
+const MOCK_CONTACTS: FranchiseApp[] = [
   {
     id: 'c-1',
-    fullName: 'Amit Patel',
+    applicantName: 'Amit Patel',
     email: 'amit.patel@example.com',
     phone: '+91 88888 77777',
     locationPreference: 'Lucknow HQ Inquiry',
-    investmentCapacity: 'N/A',
-    priorExperience: 'Interested in bulk purchase of refurbished iPhones',
+    investmentCapacity: 0,
+    experienceDesc: 'Interested in bulk purchase of refurbished iPhones',
     status: 'PENDING',
     createdAt: new Date().toISOString()
   },
   {
     id: 'c-2',
-    fullName: 'Sneha Reddy',
+    applicantName: 'Sneha Reddy',
     email: 'sneha.reddy@example.com',
     phone: '+91 77777 66666',
     locationPreference: 'Lucknow HQ Inquiry',
-    investmentCapacity: 'N/A',
-    priorExperience: 'Looking to tie up for wholesale spare parts supply',
+    investmentCapacity: 0,
+    experienceDesc: 'Looking to tie up for wholesale spare parts supply',
     status: 'RESOLVED',
     createdAt: new Date(Date.now() - 172800000).toISOString()
   }
 ];
 
-const MOCK_STORES = [
+const MOCK_STORES: Store[] = [
   {
     id: 's-1',
     name: 'EcoFone Lucknow Flagship Store',
@@ -147,7 +147,8 @@ const MOCK_STORES = [
     phone: '+91 99199 65499',
     latitude: 26.8467,
     longitude: 80.9462,
-    mapsUrl: 'https://maps.google.com'
+    mapsUrl: 'https://maps.google.com',
+    status: 'LIVE'
   },
   {
     id: 's-2',
@@ -156,7 +157,8 @@ const MOCK_STORES = [
     phone: '+91 99199 65488',
     latitude: 26.8496,
     longitude: 80.9984,
-    mapsUrl: 'https://maps.google.com'
+    mapsUrl: 'https://maps.google.com',
+    status: 'LIVE'
   }
 ];
 
@@ -197,11 +199,13 @@ const MOCK_SUB_ADMINS = [
   {
     id: 'sa-1',
     username: 'lucknow_moderator',
+    password: '',
     permissions: ['franchise', 'contact', 'reviews']
   },
   {
     id: 'sa-2',
     username: 'store_manager',
+    password: '',
     permissions: ['stores', 'team']
   }
 ];
