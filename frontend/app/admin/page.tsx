@@ -1987,7 +1987,7 @@ export default function AdminDashboardPage() {
       <main className="flex-1 h-screen overflow-y-auto flex flex-col relative z-10">
         
         {/* Top Header Bar */}
-        <header className="h-16 border-b border-slate-800 bg-[#0F172A]/40 backdrop-blur-md px-3 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 sticky top-0 z-30">
+        <header className="min-h-16 border-b border-slate-800 bg-[#0F172A]/40 backdrop-blur-md px-3.5 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between py-3.5 sm:py-0 gap-3 sm:gap-0 shrink-0 sticky top-0 z-30">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 min-w-0">
             <button
               onClick={() => setIsSidebarOpen(true)}
@@ -2006,39 +2006,39 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Export Actions Hub */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2 justify-start sm:justify-end shrink-0">
             <button
               onClick={handleExcelExport}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] sm:text-[11px] px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl transition-all shadow flex items-center gap-1 sm:gap-1.5"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] sm:text-[11px] px-3.5 py-2.5 rounded-xl transition-all shadow flex items-center gap-1.5"
               title="Export complete database backup as .xlsx file"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span className="hidden md:inline">Excel Download</span>
-              <span className="md:hidden">Excel</span>
+              <span className="hidden sm:inline">Excel Download</span>
+              <span className="sm:hidden">Excel</span>
             </button>
              <button
               onClick={handleShareLinkWhatsApp}
-              className="bg-emerald-500/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 font-bold text-[10px] sm:text-[11px] px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl transition-all flex items-center gap-1 sm:gap-1.5"
+              className="bg-emerald-500/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 font-bold text-[10px] sm:text-[11px] px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-1.5"
               title="Share CSV report download URL via WhatsApp"
             >
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.197 1.451 4.811 1.452 5.43.003 9.85-4.403 9.853-9.83.002-2.628-1.018-5.1-2.868-6.952C16.591 1.97 14.121.95 11.5.951c-5.433 0-9.855 4.407-9.858 9.835-.001 1.706.467 3.373 1.356 4.821l-.994 3.634 3.72-.977zm11.582-7.14c-.29-.145-1.716-.847-1.978-.942-.262-.096-.453-.145-.643.14-.19.285-.736.942-.903 1.133-.166.19-.332.213-.622.068-.29-.145-1.22-.45-2.323-1.433-.859-.766-1.438-1.712-1.606-2.002-.166-.29-.018-.447.127-.591.13-.13.29-.34.435-.508.145-.17.193-.285.29-.475.097-.19.047-.356-.024-.5-.071-.144-.643-1.551-.881-2.122-.232-.559-.467-.482-.643-.491-.167-.008-.356-.01-.546-.01s-.5.071-.762.356c-.262.285-.999.976-.999 2.38s1.022 2.762 1.165 2.953c.143.19 2.011 3.071 4.871 4.303.68.293 1.21.468 1.623.6a3.896 3.896 0 0 0 1.777.112c.548-.08 1.716-.701 1.954-1.378.24-.678.24-1.258.167-1.378-.072-.12-.262-.19-.553-.336z"/>
               </svg>
-              <span className="hidden md:inline">Share WA</span>
-              <span className="md:hidden">WA</span>
+              <span className="hidden sm:inline">Share WA</span>
+              <span className="sm:hidden">WA</span>
             </button>
              <button
               onClick={handleShareLinkEmail}
-              className="bg-blue-500/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 font-bold text-[10px] sm:text-[11px] px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl transition-all flex items-center gap-1 sm:gap-1.5"
+              className="bg-blue-500/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 font-bold text-[10px] sm:text-[11px] px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-1.5"
               title="Share CSV report download URL via Email"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <span className="hidden md:inline">Share Email</span>
-              <span className="md:hidden">Email</span>
+              <span className="hidden sm:inline">Share Email</span>
+              <span className="sm:hidden">Email</span>
             </button>
           </div>
         </header>
