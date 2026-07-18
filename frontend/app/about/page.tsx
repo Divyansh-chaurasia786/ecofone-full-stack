@@ -37,6 +37,42 @@ const isValidSocialLink = (url: string | undefined | null) => {
   return true;
 };
 
+const MOCK_TEAM_MEMBERS = [
+  {
+    id: 't-1',
+    name: 'Divyansh Chaurasia',
+    role: 'Founder & CEO',
+    bio: 'Visionary leader driving the sustainable re-commerce revolution in India with EcoFone.',
+    imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
+    linkedin: 'https://linkedin.com',
+    twitter: 'https://twitter.com',
+    github: 'https://github.com',
+    order: 1
+  },
+  {
+    id: 't-2',
+    name: 'Rohan Malhotra',
+    role: 'Head of Diagnostics & Quality',
+    bio: 'Diagnostics expert overseeing the 32-point mobile inspection and certified seal assurance.',
+    imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+    linkedin: 'https://linkedin.com',
+    twitter: 'https://twitter.com',
+    github: 'https://github.com',
+    order: 2
+  },
+  {
+    id: 't-3',
+    name: 'Neha Kapoor',
+    role: 'Director of Franchise Operations',
+    bio: 'Supports franchise partners from initial demographic survey to grand outlet launch.',
+    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
+    linkedin: 'https://linkedin.com',
+    twitter: 'https://twitter.com',
+    github: 'https://github.com',
+    order: 3
+  }
+];
+
 export default function AboutPage() {
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
 
@@ -46,7 +82,8 @@ export default function AboutPage() {
         const data = await api.getTeamMembers();
         setTeamMembers(data || []);
       } catch (err) {
-        console.error('Failed to load team members:', err);
+        console.error('Failed to load team members, using offline fallbacks:', err);
+        setTeamMembers(MOCK_TEAM_MEMBERS);
       }
     };
     loadTeam();
