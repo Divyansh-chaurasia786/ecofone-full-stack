@@ -4,7 +4,7 @@
   "description": "EcoFone NestJS backend REST API",
   "main": "dist/main.js",
   "scripts": {
-    "build": "prisma db push && node clean-db.js && prisma generate && nest build",
+    "build": "prisma generate && nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main"
