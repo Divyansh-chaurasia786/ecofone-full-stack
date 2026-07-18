@@ -35,7 +35,29 @@ export default function FranchisePage() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-
+  const handleApplySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (step < 3) {
+      setStep(step + 1);
+      return;
+    }
+    setIsSubmitting(true);
+    setErrorMsg('');
+    try {
+      await api.applyFranchise(formData);
+      await submitToGoogleForm('Franchise', formData);
+      setSubmitSuccess(true);
+      if (typeof window !== 'undefined') {
+        const bc = new BroadcastChannel('ecofone_crm');
+        bc.postMessage('new_query_submitted');
+        bc.close();
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const roadmapSteps = [
     { num: "01", title: "Initial Inquiry", desc: "Submit your franchise application through our site. Our team will reach out within 24 hours to discuss the opportunity." },
