@@ -280,6 +280,19 @@ export class CmsService {
     });
   }
 
+  async deleteReview(id: string) {
+    return this.prisma.review.delete({
+      where: { id }
+    });
+  }
+
+  async updateReview(id: string, data: { authorName?: string; rating?: number; comment?: string; verifiedProduct?: string }) {
+    return this.prisma.review.update({
+      where: { id },
+      data
+    });
+  }
+
   // Store locator using browser geolocation and Google Maps API coordinates (Haversine formula)
   async locateStores(userLat?: number, userLng?: number): Promise<any[]> {
     const stores = await this.prisma.store.findMany();

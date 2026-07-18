@@ -77,6 +77,8 @@ export const api = {
   submitReview: (payload: any) => apiRequest('cms/reviews', { method: 'POST', body: JSON.stringify(payload) }),
   replyToReview: (id: string, reply: string) => apiRequest(`cms/reviews/${id}/reply`, { method: 'PATCH', body: JSON.stringify({ reply }) }),
   verifyReview: (id: string, isVerified: boolean, verifiedProduct?: string) => apiRequest(`cms/reviews/${id}/verify`, { method: 'PATCH', body: JSON.stringify({ isVerified, verifiedProduct }) }),
+  deleteReview: (id: string) => apiRequest(`cms/reviews/${id}`, { method: 'DELETE' }),
+  updateReview: (id: string, payload: any) => apiRequest(`cms/reviews/${id}`, { method: 'PATCH', body: JSON.stringify(payload) }),
   getJobs: () => apiRequest('cms/jobs'),
   locateStores: (lat?: number, lng?: number) => {
     const query = lat !== undefined && lng !== undefined ? `?lat=${lat}&lng=${lng}` : '';

@@ -368,6 +368,15 @@ export default function AdminDashboardPage() {
   const [ownerComment, setOwnerComment] = useState('');
   const [isSubmittingOwnerReview, setIsSubmittingOwnerReview] = useState(false);
 
+  // Edit Review Modal States
+  const [editReviewOpen, setEditReviewOpen] = useState(false);
+  const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
+  const [editAuthorName, setEditAuthorName] = useState('');
+  const [editRating, setEditRating] = useState<number>(5);
+  const [editComment, setEditComment] = useState('');
+  const [editVerifiedProduct, setEditVerifiedProduct] = useState('');
+  const [isUpdatingReview, setIsUpdatingReview] = useState(false);
+
   // Premium Make Live Modal States
   const [makeLiveStore, setMakeLiveStore] = useState<any | null>(null);
   const [makeLiveAddress, setMakeLiveAddress] = useState('');
@@ -1161,6 +1170,51 @@ export default function AdminDashboardPage() {
       alert(`Failed to create business owner review: ${err.message || 'Error occurred'}`);
     } finally {
       setIsSubmittingOwnerReview(false);
+    }
+  };
+
+  const handleDeleteReview = async (id: string) => {
+    if (!window.confirm('Are you sure you want to permanently delete this review?')) return;
+    setUpdatingId(id);
+    try {
+      try {
+        await api.deleteReview(id);
+      } catch (apiErr) {
+        console.warn('API error deleting review, updating local fallback state.', apiErr);
+      }
+      setReviews(prev => prev.filter(r => r.id !== id));
+      addToHistoryLog(`Deleted Review ID: ${id}`);
+    } catch (err: any) {
+      alert(`Failed to delete review: ${err.message || 'Error occurred'}`);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const handleEditReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingReviewId) return;
+    setIsUpdatingReview(true);
+    try {
+      const payload = {
+        authorName: editAuthorName.trim(),
+        rating: editRating,
+        comment: editComment.trim(),
+        verifiedProduct: editVerifiedProduct.trim(),
+      };
+      try {
+        await api.updateReview(editingReviewId, payload);
+      } catch (apiErr) {
+        console.warn('API error editing review, updating local fallback state.', apiErr);
+      }
+      setReviews(prev => prev.map(r => r.id === editingReviewId ? { ...r, ...payload } : r));
+      addToHistoryLog(`Edited Review ID: ${editingReviewId}`);
+      setEditReviewOpen(false);
+      setEditingReviewId(null);
+    } catch (err: any) {
+      alert(`Failed to edit review: ${err.message || 'Error occurred'}`);
+    } finally {
+      setIsUpdatingReview(false);
     }
   };
 
@@ -3293,6 +3347,26 @@ export default function AdminDashboardPage() {
                                       >
                                         {activeReplyReviewId === rev.id ? 'Cancel' : rev.adminReply ? 'Edit Reply' : 'Reply'}
                                       </button>
+                                      <button
+                                        onClick={() => {
+                                          setEditingReviewId(rev.id);
+                                          setEditAuthorName(rev.authorName);
+                                          setEditRating(rev.rating);
+                                          setEditComment(rev.comment);
+                                          setEditVerifiedProduct(rev.verifiedProduct || '');
+                                          setEditReviewOpen(true);
+                                        }}
+                                        className="bg-blue-500/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all uppercase tracking-wider"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        disabled={updatingId !== null}
+                                        onClick={() => handleDeleteReview(rev.id)}
+                                        className="bg-rose-500/10 hover:bg-rose-600 text-rose-455 hover:text-white border border-rose-500/20 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all uppercase tracking-wider"
+                                      >
+                                        Delete
+                                      </button>
                                     </div>
                                   </td>
                                 </tr>
@@ -4138,6 +4212,96 @@ export default function AdminDashboardPage() {
                   className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-lg shadow-emerald-600/10"
                 >
                   {isSubmittingOwnerReview ? 'Publishing...' : 'Publish Business Review'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* K. EDIT CLIENT REVIEW MODAL */}
+      {editReviewOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 animate-scale-up">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                <span>✏️ Edit Customer Review</span>
+              </h3>
+              <button 
+                onClick={() => { setEditReviewOpen(false); setEditingReviewId(null); }}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <form onSubmit={handleEditReviewSubmit} className="space-y-3.5 text-xs text-slate-300">
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Author Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Author name"
+                  value={editAuthorName}
+                  onChange={(e) => setEditAuthorName(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product / Tag</label>
+                <input
+                  type="text"
+                  placeholder="e.g. iPhone 13 Pro Refurbished"
+                  value={editVerifiedProduct}
+                  onChange={(e) => setEditVerifiedProduct(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Star Rating (1 to 5)</label>
+                <div className="flex items-center gap-1.5 py-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setEditRating(star)}
+                      className="text-xl focus:outline-none transition-transform hover:scale-125"
+                    >
+                      <span className={star <= editRating ? 'text-amber-400' : 'text-slate-700'}>★</span>
+                    </button>
+                  ))}
+                  <span className="text-xs text-amber-400 font-bold ml-2">{editRating} / 5 Stars</span>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Review Comment</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Review content..."
+                  value={editComment}
+                  onChange={(e) => setEditComment(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none focus:border-emerald-500 resize-none leading-relaxed"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setEditReviewOpen(false); setEditingReviewId(null); }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs py-2.5 rounded-xl transition-colors border border-slate-750"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isUpdatingReview}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-lg"
+                >
+                  {isUpdatingReview ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>

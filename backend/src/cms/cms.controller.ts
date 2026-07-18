@@ -134,6 +134,23 @@ export class CmsController {
     return this.cmsService.verifyReview(id, body.isVerified, body.verifiedProduct);
   }
 
+  @Delete('reviews/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  async deleteReview(@Param('id') id: string) {
+    return this.cmsService.deleteReview(id);
+  }
+
+  @Patch('reviews/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  async updateReview(
+    @Param('id') id: string,
+    @Body() body: { authorName?: string; rating?: number; comment?: string; verifiedProduct?: string }
+  ) {
+    return this.cmsService.updateReview(id, body);
+  }
+
   @Post('reviews')
   async submitReview(@Body() body: SubmitReviewDto) {
     return this.cmsService.submitReview(body.authorName, body.rating, body.comment, body.verifiedProduct);
