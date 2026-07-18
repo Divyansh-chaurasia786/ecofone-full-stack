@@ -148,7 +148,8 @@ const MOCK_STORES: Store[] = [
     latitude: 26.8467,
     longitude: 80.9462,
     mapsUrl: 'https://maps.google.com',
-    status: 'LIVE'
+    type: 'LIVE',
+    createdAt: new Date().toISOString()
   },
   {
     id: 's-2',
@@ -158,7 +159,8 @@ const MOCK_STORES: Store[] = [
     latitude: 26.8496,
     longitude: 80.9984,
     mapsUrl: 'https://maps.google.com',
-    status: 'LIVE'
+    type: 'LIVE',
+    createdAt: new Date().toISOString()
   }
 ];
 
