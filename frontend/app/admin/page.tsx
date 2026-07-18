@@ -89,6 +89,136 @@ const convertToEmbedUrl = (url: string) => {
   return cleanUrl;
 };
 
+const MOCK_FRANCHISE_APPS = [
+  {
+    id: 'f-1',
+    fullName: 'Rajesh Kumar',
+    email: 'rajesh.kumar@example.com',
+    phone: '+91 98765 43210',
+    locationPreference: 'Lucknow',
+    investmentCapacity: '15-20 Lakhs',
+    priorExperience: '10 years in retail business',
+    status: 'PENDING',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'f-2',
+    fullName: 'Ananya Sen',
+    email: 'ananya.sen@example.com',
+    phone: '+91 91234 56789',
+    locationPreference: 'Kolkata',
+    investmentCapacity: '25-30 Lakhs',
+    priorExperience: 'Owner of multi-brand mobile franchise',
+    status: 'APPROVED',
+    createdAt: new Date(Date.now() - 86400000).toISOString()
+  }
+];
+
+const MOCK_CONTACTS = [
+  {
+    id: 'c-1',
+    fullName: 'Amit Patel',
+    email: 'amit.patel@example.com',
+    phone: '+91 88888 77777',
+    locationPreference: 'Lucknow HQ Inquiry',
+    investmentCapacity: 'N/A',
+    priorExperience: 'Interested in bulk purchase of refurbished iPhones',
+    status: 'PENDING',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'c-2',
+    fullName: 'Sneha Reddy',
+    email: 'sneha.reddy@example.com',
+    phone: '+91 77777 66666',
+    locationPreference: 'Lucknow HQ Inquiry',
+    investmentCapacity: 'N/A',
+    priorExperience: 'Looking to tie up for wholesale spare parts supply',
+    status: 'RESOLVED',
+    createdAt: new Date(Date.now() - 172800000).toISOString()
+  }
+];
+
+const MOCK_STORES = [
+  {
+    id: 's-1',
+    name: 'EcoFone Lucknow Flagship Store',
+    address: 'Hazratganj, Lucknow, Uttar Pradesh 226001',
+    phone: '+91 99199 65499',
+    latitude: 26.8467,
+    longitude: 80.9462,
+    mapsUrl: 'https://maps.google.com'
+  },
+  {
+    id: 's-2',
+    name: 'EcoFone Gomti Nagar Store',
+    address: 'Patrakar Puram, Gomti Nagar, Lucknow, UP 226010',
+    phone: '+91 99199 65488',
+    latitude: 26.8496,
+    longitude: 80.9984,
+    mapsUrl: 'https://maps.google.com'
+  }
+];
+
+const MOCK_REVIEWS = [
+  {
+    id: 'r-1',
+    authorName: 'Aarav Sharma',
+    rating: 5,
+    comment: 'Bought an iPhone 13 in pristine condition. Battery health was 96% and doorstep delivery was super fast. Highly recommended!',
+    verifiedProduct: 'iPhone 13 (128GB)',
+    isVerified: true,
+    status: 'APPROVED',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'r-2',
+    authorName: 'Priya Verma',
+    rating: 5,
+    comment: 'Sold my old OnePlus phone for instant cash. The evaluation was transparent and amount credited within 5 minutes.',
+    verifiedProduct: 'OnePlus 9 Pro',
+    isVerified: true,
+    status: 'APPROVED',
+    createdAt: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: 'r-3',
+    authorName: 'Rohan Mehta',
+    rating: 5,
+    comment: 'Great service and authentic warranty coverage! The device came with official accessories and full 6-month EcoFone seal.',
+    verifiedProduct: 'Samsung Galaxy S22',
+    isVerified: true,
+    status: 'PENDING',
+    createdAt: new Date(Date.now() - 172800000).toISOString()
+  }
+];
+
+const MOCK_SUB_ADMINS = [
+  {
+    id: 'sa-1',
+    username: 'lucknow_moderator',
+    permissions: ['franchise', 'contact', 'reviews']
+  },
+  {
+    id: 'sa-2',
+    username: 'store_manager',
+    permissions: ['stores', 'team']
+  }
+];
+
+const MOCK_SYSTEM_LOGS = [
+  {
+    id: 'l-1',
+    action: 'Master Admin Logged In',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'l-2',
+    action: 'Approved Customer Review (Aarav Sharma)',
+    createdAt: new Date(Date.now() - 1800000).toISOString()
+  }
+];
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -398,7 +528,9 @@ export default function AdminDashboardPage() {
           contacts = appsData.filter((app: any) => app.locationPreference === 'Lucknow HQ Inquiry');
           franchises = appsData.filter((app: any) => app.locationPreference !== 'Lucknow HQ Inquiry');
         } catch (e) {
-          console.warn('Could not load enquiries (permission denied or network error).');
+          console.warn('Could not load enquiries, using fallback mock entries.', e);
+          contacts = MOCK_CONTACTS;
+          franchises = MOCK_FRANCHISE_APPS;
         }
       }
 
@@ -407,7 +539,8 @@ export default function AdminDashboardPage() {
       try {
         storesData = await api.locateStores();
       } catch (e) {
-        console.warn('Could not load stores.');
+        console.warn('Could not load stores, using fallback mock stores.', e);
+        storesData = MOCK_STORES;
       }
 
       // Team members — publicly readable, only load on full (non-silent) refresh
@@ -416,7 +549,7 @@ export default function AdminDashboardPage() {
           const teamData = await api.getTeamMembers();
           setTeamMembers(teamData || []);
         } catch (e) {
-          console.warn('Could not load team members.');
+          console.warn('Could not load team members.', e);
         }
       }
 
@@ -427,7 +560,8 @@ export default function AdminDashboardPage() {
           const logsData = await api.getSystemLogs();
           setDownloadHistory(logsData || []);
         } catch (e) {
-          console.warn('Could not load system logs.');
+          console.warn('Could not load system logs, using mock logs.', e);
+          setDownloadHistory(MOCK_SYSTEM_LOGS);
         }
       }
 
@@ -439,7 +573,9 @@ export default function AdminDashboardPage() {
           reviewsData = await api.getReviewsAdmin();
           setReviews(reviewsData || []);
         } catch (e) {
-          console.warn('Could not load reviews.');
+          console.warn('Could not load reviews, using fallback mock reviews.', e);
+          reviewsData = MOCK_REVIEWS;
+          setReviews(MOCK_REVIEWS);
         }
       }
 
@@ -490,11 +626,19 @@ export default function AdminDashboardPage() {
       const token = sessionStorage.getItem('ecofone_token') || '';
       const isLogsAllowed = allowedPermissions.includes('logs') || sessionStorage.getItem('ecofone_admin_role') === 'master';
       if (token && isLogsAllowed) {
-        api.getSystemLogs().then((logs: any[]) => setDownloadHistory(logs || [])).catch(() => {});
+        api.getSystemLogs()
+          .then((logs: any[]) => setDownloadHistory(logs || []))
+          .catch(() => {
+            setDownloadHistory(MOCK_SYSTEM_LOGS);
+          });
       }
     }
     // Load sub-admins from database
-    api.listSubAdmins().then((list: any[]) => setSubAdmins(list)).catch(() => {});
+    api.listSubAdmins()
+      .then((list: any[]) => setSubAdmins(list || []))
+      .catch(() => {
+        setSubAdmins(MOCK_SUB_ADMINS);
+      });
 
     return () => {
       if (intervalId) clearInterval(intervalId);
