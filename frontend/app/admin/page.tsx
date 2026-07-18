@@ -1850,7 +1850,7 @@ export default function AdminDashboardPage() {
       <aside className={`fixed inset-y-0 left-0 w-64 bg-[#111827] border-r border-slate-800 flex flex-col justify-between z-50 shrink-0 transform transition-transform duration-300 lg:transform-none lg:relative lg:flex ${
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex flex-col pt-6">
+        <div className="flex flex-col pt-6 overflow-y-auto min-h-0 flex-1">
           
           {/* Logo Header */}
           <div className="px-6 pb-6 border-b border-slate-800/80">
