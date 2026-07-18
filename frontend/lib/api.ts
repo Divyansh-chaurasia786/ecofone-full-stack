@@ -1,4 +1,7 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
+    ? 'https://ecofone-backend.vercel.app/api/v1' 
+    : 'http://localhost:4000/api/v1');
 
 export async function apiRequest(endpoint: string, options: RequestInit = {}) {
   // Read stored client JWT token
@@ -13,18 +16,25 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
     ...options.headers,
   };
 
-  const response = await fetch(`${BASE_URL}/${endpoint}`, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(`${BASE_URL}/${endpoint}`, {
+      ...options,
+      headers,
+    });
 
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Something went wrong');
+    }
+
+    return data;
+  } catch (err: any) {
+    if (err.name === 'TypeError' || err.message?.includes('fetch')) {
+      throw new Error(`API server connection unavailable (${BASE_URL})`);
+    }
+    throw err;
   }
-
-  return data;
 }
 
 export const api = {
