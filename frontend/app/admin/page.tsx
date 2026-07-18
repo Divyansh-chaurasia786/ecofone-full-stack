@@ -188,6 +188,14 @@ export default function AdminDashboardPage() {
   const [replyInputText, setReplyInputText] = useState('');
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
+  // Business Owner Review Modal States
+  const [ownerReviewOpen, setOwnerReviewOpen] = useState(false);
+  const [ownerAuthorName, setOwnerAuthorName] = useState('EcoFone Store Owner');
+  const [ownerRole, setOwnerRole] = useState('Verified Business Owner');
+  const [ownerRating, setOwnerRating] = useState<number>(5);
+  const [ownerComment, setOwnerComment] = useState('');
+  const [isSubmittingOwnerReview, setIsSubmittingOwnerReview] = useState(false);
+
   // Premium Make Live Modal States
   const [makeLiveStore, setMakeLiveStore] = useState<any | null>(null);
   const [makeLiveAddress, setMakeLiveAddress] = useState('');
@@ -892,6 +900,40 @@ export default function AdminDashboardPage() {
       alert(`Failed to toggle verification: ${err.message || 'Server error'}`);
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const handleCreateOwnerReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ownerAuthorName.trim() || !ownerComment.trim()) {
+      alert('Please fill in your author name and review content.');
+      return;
+    }
+    setIsSubmittingOwnerReview(true);
+    try {
+      const created = await api.submitReview({
+        authorName: ownerAuthorName.trim(),
+        rating: ownerRating,
+        comment: ownerComment.trim(),
+        verifiedProduct: ownerRole.trim() || 'Verified Business Owner',
+      });
+
+      if (created && created.id) {
+        await api.updateReviewStatus(created.id, 'APPROVED');
+        await api.verifyReview(created.id, true, ownerRole.trim() || 'Verified Business Owner');
+      }
+
+      addToHistoryLog(`Published Business Owner Review: ${ownerAuthorName.trim()}`);
+      await loadDashboardData();
+      setOwnerReviewOpen(false);
+      setOwnerComment('');
+      setOwnerAuthorName('EcoFone Store Owner');
+      setOwnerRole('Verified Business Owner');
+      setOwnerRating(5);
+    } catch (err: any) {
+      alert(`Failed to create business owner review: ${err.message || 'Error occurred'}`);
+    } finally {
+      setIsSubmittingOwnerReview(false);
     }
   };
 
@@ -2865,9 +2907,16 @@ export default function AdminDashboardPage() {
                       <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
                         <span>⭐ Reviews Moderation Registry</span>
                       </h3>
-                      <p className="text-[10px] text-slate-400">Moderators must review and approve newly submitted client reviews to allow them live on the storefront.</p>
+                      <p className="text-[10px] text-slate-400">Moderate existing client feedback or post official Business Owner reviews to feature on the storefront.</p>
                     </div>
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex items-center flex-wrap gap-2.5 shrink-0">
+                      <button
+                        onClick={() => setOwnerReviewOpen(true)}
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition-all shadow flex items-center gap-1.5"
+                        title="Publish an official Business Owner Review"
+                      >
+                        <span>🏢 Write Business Owner Review</span>
+                      </button>
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Show Status:</span>
                         <select
@@ -2908,6 +2957,7 @@ export default function AdminDashboardPage() {
                               : 'Unknown Date';
                             const showHeader = revDate !== lastDate;
                             lastDate = revDate;
+                            const isOwner = rev.verifiedProduct?.toLowerCase().includes('owner') || rev.verifiedProduct?.toLowerCase().includes('business');
                             return (
                               <React.Fragment key={rev.id}>
                                 {showHeader && (
@@ -2922,8 +2972,12 @@ export default function AdminDashboardPage() {
                                     <div className="flex items-center gap-2">
                                       <span className="font-bold text-white block text-sm">{rev.authorName}</span>
                                       {rev.isVerified && (
-                                        <span className="text-[9px] font-extrabold bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 px-1.5 py-0.5 rounded uppercase tracking-wider">
-                                          ✓ Verified Buyer
+                                        <span className={`text-[9px] font-extrabold border px-1.5 py-0.5 rounded uppercase tracking-wider ${
+                                          isOwner
+                                            ? 'bg-blue-500/10 border-blue-500/25 text-blue-400'
+                                            : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-450'
+                                        }`}>
+                                          {isOwner ? '🏢 Verified Business Owner' : '✓ Verified Buyer'}
                                         </span>
                                       )}
                                     </div>
@@ -3762,6 +3816,101 @@ export default function AdminDashboardPage() {
                   className="flex-1 bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-lg shadow-rose-600/20"
                 >
                   {isRevoking ? 'Revoking...' : 'Confirm Revoke'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* J. CREATE BUSINESS OWNER REVIEW MODAL */}
+      {ownerReviewOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 animate-scale-up">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                <span>🏢 Write Business Owner Review</span>
+              </h3>
+              <button 
+                onClick={() => setOwnerReviewOpen(false)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Post an official review or statement as a Store Owner / Franchise Partner. This review will be tagged with <strong className="text-emerald-400">🏢 Verified Business Owner</strong> on the live storefront.
+            </p>
+
+            <form onSubmit={handleCreateOwnerReviewSubmit} className="space-y-3.5 text-xs text-slate-300">
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Owner / Franchise Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. EcoFone Lucknow Store Owner"
+                  value={ownerAuthorName}
+                  onChange={(e) => setOwnerAuthorName(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Business Role / Tag</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Verified Business Owner"
+                  value={ownerRole}
+                  onChange={(e) => setOwnerRole(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Star Rating (1 to 5)</label>
+                <div className="flex items-center gap-1.5 py-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setOwnerRating(star)}
+                      className="text-xl focus:outline-none transition-transform hover:scale-125"
+                    >
+                      <span className={star <= ownerRating ? 'text-amber-400' : 'text-slate-700'}>★</span>
+                    </button>
+                  ))}
+                  <span className="text-xs text-amber-400 font-bold ml-2">{ownerRating} / 5 Stars</span>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Review Content / Message</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Write your review or owner statement to display on the storefront..."
+                  value={ownerComment}
+                  onChange={(e) => setOwnerComment(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none focus:border-emerald-500 resize-none leading-relaxed"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setOwnerReviewOpen(false)}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs py-2.5 rounded-xl transition-colors border border-slate-750"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingOwnerReview}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-lg shadow-emerald-600/10"
+                >
+                  {isSubmittingOwnerReview ? 'Publishing...' : 'Publish Business Review'}
                 </button>
               </div>
             </form>

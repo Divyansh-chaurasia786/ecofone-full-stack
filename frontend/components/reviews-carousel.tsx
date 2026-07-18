@@ -150,11 +150,21 @@ export default function ReviewsCarousel() {
         <div className="flex items-center justify-between border-t border-slate-100 pt-4">
           <div>
             <h4 className="font-bold text-slate-900 text-sm">{reviews[currentIndex].authorName}</h4>
-            {reviews[currentIndex].isVerified && (
-              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-bold mt-1 inline-block border border-emerald-100">
-                ✓ {reviews[currentIndex].verifiedProduct ? `Verified Purchaser of ${reviews[currentIndex].verifiedProduct}` : 'Verified Customer'}
-              </span>
-            )}
+            {reviews[currentIndex].isVerified && (() => {
+              const prod = reviews[currentIndex].verifiedProduct || '';
+              const isOwner = prod.toLowerCase().includes('owner') || prod.toLowerCase().includes('business');
+              return (
+                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold mt-1 inline-block border ${
+                  isOwner
+                    ? 'text-blue-700 bg-blue-50 border-blue-100'
+                    : 'text-emerald-700 bg-emerald-50 border-emerald-100'
+                }`}>
+                  {isOwner 
+                    ? `🏢 Verified Business Owner${prod && !prod.toLowerCase().includes('verified') ? ` (${prod})` : ''}` 
+                    : `✓ ${prod ? `Verified Purchaser of ${prod}` : 'Verified Customer'}`}
+                </span>
+              );
+            })()}
           </div>
         </div>
       </div>
