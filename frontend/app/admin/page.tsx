@@ -1718,29 +1718,29 @@ export default function AdminDashboardPage() {
       <main className="flex-1 h-screen overflow-y-auto flex flex-col relative z-10">
         
         {/* Top Header Bar */}
-        <header className="h-16 border-b border-slate-800 bg-[#0F172A]/40 backdrop-blur-md px-4 sm:px-8 flex items-center justify-between shrink-0 sticky top-0 z-30">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+        <header className="h-16 border-b border-slate-800 bg-[#0F172A]/40 backdrop-blur-md px-3 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 sticky top-0 z-30">
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 min-w-0">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl bg-slate-850 hover:bg-slate-800 text-white mr-1.5 transition-all border border-slate-800"
+              className="lg:hidden p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white mr-1 transition-all border border-slate-700 shrink-0"
               title="Open Navigation Menu"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <span className="hidden sm:inline">EcoFone Console</span>
-            <span className="text-slate-600 hidden sm:inline">/</span>
-            <span className="text-white capitalize">
+            <span className="hidden sm:inline shrink-0">EcoFone Console</span>
+            <span className="text-slate-600 hidden sm:inline shrink-0">/</span>
+            <span className="text-white capitalize truncate">
               {activeTab === 'stores' ? 'outlets' : activeTab === 'franchise' ? 'franchise applications' : activeTab === 'contact' ? 'contact inquiries' : activeTab === 'reviews' ? 'reviews moderation' : activeTab === 'logs' ? 'export logs' : 'security settings'}
             </span>
           </div>
 
           {/* Export Actions Hub */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <button
               onClick={handleExcelExport}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] sm:text-[11px] px-2.5 sm:px-3.5 py-2.5 rounded-xl transition-all shadow flex items-center gap-1.5"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] sm:text-[11px] px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl transition-all shadow flex items-center gap-1 sm:gap-1.5"
               title="Export complete database backup as .xlsx file"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1751,7 +1751,7 @@ export default function AdminDashboardPage() {
             </button>
              <button
               onClick={handleShareLinkWhatsApp}
-              className="bg-emerald-500/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 font-bold text-[10px] sm:text-[11px] px-2.5 sm:px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-1.5"
+              className="bg-emerald-500/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 font-bold text-[10px] sm:text-[11px] px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl transition-all flex items-center gap-1 sm:gap-1.5"
               title="Share CSV report download URL via WhatsApp"
             >
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -1762,7 +1762,7 @@ export default function AdminDashboardPage() {
             </button>
              <button
               onClick={handleShareLinkEmail}
-              className="bg-blue-500/10 hover:bg-blue-600 text-blue-405 hover:text-white border border-blue-500/20 font-bold text-[10px] sm:text-[11px] px-2.5 sm:px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-1.5"
+              className="bg-blue-500/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 font-bold text-[10px] sm:text-[11px] px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl transition-all flex items-center gap-1 sm:gap-1.5"
               title="Share CSV report download URL via Email"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1775,36 +1775,36 @@ export default function AdminDashboardPage() {
         </header>
 
         {/* Dashboard Workspace Padding */}
-        <div className="p-8 space-y-6">
+        <div className="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
 
           {/* Dashboard KPIs Summary Blocks */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div className="bg-[#111827]/85 border border-slate-800/80 p-5 rounded-2xl shadow-sm">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black block">Franchise Requests</span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <p className="text-3xl font-extrabold text-white">{kpis.franchiseCount}</p>
-                <span className="text-[9px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full font-bold border border-emerald-500/15">Active</span>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-[#111827]/85 border border-slate-800/80 p-3.5 sm:p-5 rounded-2xl shadow-sm">
+              <span className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest font-black block truncate">Franchise Requests</span>
+              <div className="flex items-baseline justify-between sm:justify-start gap-1.5 sm:gap-2 mt-1">
+                <p className="text-xl sm:text-3xl font-extrabold text-white">{kpis.franchiseCount}</p>
+                <span className="text-[8px] sm:text-[9px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full font-bold border border-emerald-500/15">Active</span>
               </div>
             </div>
-            <div className="bg-[#111827]/85 border border-slate-800/80 p-5 rounded-2xl shadow-sm">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black block">Customer Inquiries</span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <p className="text-3xl font-extrabold text-white">{kpis.contactCount}</p>
-                <span className="text-[9px] text-orange-400 bg-orange-500/10 px-1.5 py-0.5 rounded-full font-bold border border-orange-500/15">Inbox</span>
+            <div className="bg-[#111827]/85 border border-slate-800/80 p-3.5 sm:p-5 rounded-2xl shadow-sm">
+              <span className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest font-black block truncate">Customer Inquiries</span>
+              <div className="flex items-baseline justify-between sm:justify-start gap-1.5 sm:gap-2 mt-1">
+                <p className="text-xl sm:text-3xl font-extrabold text-white">{kpis.contactCount}</p>
+                <span className="text-[8px] sm:text-[9px] text-orange-400 bg-orange-500/10 px-1.5 py-0.5 rounded-full font-bold border border-orange-500/15">Inbox</span>
               </div>
             </div>
-            <div className="bg-[#111827]/85 border border-slate-800/80 p-5 rounded-2xl shadow-sm">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black block">Registered Outlets</span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <p className="text-3xl font-extrabold text-emerald-400">{kpis.storesCount}</p>
-                <span className="text-[9px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full font-bold border border-emerald-500/15">Verified</span>
+            <div className="bg-[#111827]/85 border border-slate-800/80 p-3.5 sm:p-5 rounded-2xl shadow-sm">
+              <span className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest font-black block truncate">Registered Outlets</span>
+              <div className="flex items-baseline justify-between sm:justify-start gap-1.5 sm:gap-2 mt-1">
+                <p className="text-xl sm:text-3xl font-extrabold text-emerald-400">{kpis.storesCount}</p>
+                <span className="text-[8px] sm:text-[9px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full font-bold border border-emerald-500/15">Verified</span>
               </div>
             </div>
-            <div className="bg-[#111827]/85 border border-slate-800/80 p-5 rounded-2xl shadow-sm">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest font-black block">Pending Reviews</span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <p className="text-3xl font-extrabold text-amber-400">{kpis.pendingReviewsCount}</p>
-                <span className="text-[9px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded-full font-bold border border-amber-500/15">Moderate</span>
+            <div className="bg-[#111827]/85 border border-slate-800/80 p-3.5 sm:p-5 rounded-2xl shadow-sm">
+              <span className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest font-black block truncate">Pending Reviews</span>
+              <div className="flex items-baseline justify-between sm:justify-start gap-1.5 sm:gap-2 mt-1">
+                <p className="text-xl sm:text-3xl font-extrabold text-amber-400">{kpis.pendingReviewsCount}</p>
+                <span className="text-[8px] sm:text-[9px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded-full font-bold border border-amber-500/15">Moderate</span>
               </div>
             </div>
           </div>
@@ -1822,7 +1822,7 @@ export default function AdminDashboardPage() {
               let lastDate = '';
               const sortedApps = [...applications].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
               return (
-                <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
+                <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
                   <div className="pb-3 border-b border-slate-800/80 flex items-center justify-between">
                     <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">Franchise Lead Registry</h3>
                     <div className="flex items-center gap-2">
@@ -2049,20 +2049,20 @@ export default function AdminDashboardPage() {
 
             {/* C. OUTLET REGISTERS & MAP VIEW */}
             {activeTab === 'stores' && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-start">
                 
                 {/* Left (2/3 width) - Outlets list */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                   
                   {/* Live Stores */}
-                  <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
+                  <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
                     <h4 className="text-xs text-emerald-450 font-extrabold uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-slate-800">
                       <span>🟢 Active Live Outlets</span>
                       <span className="text-[10px] bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-black">
                         {stores.filter((s) => s.type === 'LIVE').length}
                       </span>
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       {stores.filter((s) => s.type === 'LIVE').map((store) => (
                         <div key={store.id} className="bg-slate-900/30 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between space-y-3">
                           <div className="space-y-1.5">
@@ -2102,14 +2102,14 @@ export default function AdminDashboardPage() {
                   </div>
 
                   {/* Upcoming Stores */}
-                  <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
+                  <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
                     <h4 className="text-xs text-orange-400 font-extrabold uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-slate-800">
                       <span>🟠 Upcoming Outlets (Launching Soon)</span>
                       <span className="text-[10px] bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded-full font-black">
                         {stores.filter((s) => s.type !== 'LIVE').length}
                       </span>
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       {stores.filter((s) => s.type !== 'LIVE').map((store) => (
                         <div key={store.id} className="bg-slate-900/30 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between space-y-3">
                           <div className="space-y-1.5">
@@ -3401,7 +3401,7 @@ export default function AdminDashboardPage() {
       {/* G. CLEAR ENQUIRIES CUSTOM MODAL (DROPDOWN AGE FILTER) */}
       {deleteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 animate-scale-up">
+          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
                 <span>🧹 Clear {deleteModalType === 'franchise' ? 'Franchise Leads' : 'Support Tickets'}</span>
@@ -3480,7 +3480,7 @@ export default function AdminDashboardPage() {
       {/* H. EDIT SUB-ADMIN ACCESS PERMISSIONS CUSTOM MODAL */}
       {editSubAdminOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl space-y-4 animate-scale-up">
+          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 sm:p-6 w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 className="text-sm font-extrabold text-white uppercase tracking-wider">
                 🔑 Edit Access: {editSubAdminName}
@@ -3500,7 +3500,7 @@ export default function AdminDashboardPage() {
             <form onSubmit={handleUpdateSubAdminPermissionsSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Granted Access Levels</label>
-                <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-200">
                   <label className="flex items-center gap-2 bg-slate-900/50 hover:bg-slate-900 border border-slate-800 rounded-xl p-2.5 cursor-pointer transition-colors">
                     <input
                       type="checkbox"
@@ -3624,7 +3624,7 @@ export default function AdminDashboardPage() {
       {/* I. RESET SUB-ADMIN PASSWORD CUSTOM MODAL */}
       {resetSubAdminOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl space-y-4 animate-scale-up">
+          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 sm:p-6 w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
                 <span>🔒 Reset Password: {resetSubAdminName}</span>
@@ -3694,7 +3694,7 @@ export default function AdminDashboardPage() {
       )}
       {revokeConfirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl space-y-4 animate-scale-up">
+          <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 sm:p-6 w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl space-y-4 animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
                 <span>🚫 Revoke Access: {revokeTargetName}</span>
