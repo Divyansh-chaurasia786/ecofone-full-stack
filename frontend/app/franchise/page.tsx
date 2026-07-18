@@ -35,90 +35,7 @@ export default function FranchisePage() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // ROI Calculator states
-  const [roiParams, setRoiParams] = useState({
-    investmentSize: 2000000,
-    businessModel: 'FICO' as 'FIFO' | 'FICO',
-  });
-  const [roiResults, setRoiResults] = useState<any>(null);
-  const [isCalculating, setIsCalculating] = useState(false);
-  const [showRoiModal, setShowRoiModal] = useState(false);
 
-  const handleInvestmentChange = (val: number) => {
-    setRoiParams((prev) => ({
-      ...prev,
-      investmentSize: val,
-    }));
-  };
-
-  const handleApplySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (step < 3) {
-      setStep(step + 1);
-      return;
-    }
-    setIsSubmitting(true);
-    setErrorMsg('');
-    try {
-      await api.applyFranchise(formData);
-      await submitToGoogleForm('Franchise', formData);
-      setSubmitSuccess(true);
-      if (typeof window !== 'undefined') {
-        const bc = new BroadcastChannel('ecofone_crm');
-        bc.postMessage('new_query_submitted');
-        bc.close();
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Failed to submit application. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCalculateRoi = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsCalculating(true);
-    setTimeout(() => {
-      const model = roiParams.businessModel;
-      const capital = roiParams.investmentSize;
-      
-      // Core calculation logic provided by user
-      const monthlyNetProfit = model === 'FIFO'
-        ? Math.round((capital * 0.15) / 12)  // FIFO: 15% Annualized
-        : Math.round(capital * 0.03);        // FICO: 3% Monthly Fixed
-        
-      const paybackPeriodText = model === 'FIFO'
-        ? "24 - 30"
-        : "24 - 30";  // Target capital recovery window
-        
-      const projections = [];
-      let currentProfit = monthlyNetProfit * 12;
-      let cumulativeCashFlow = -capital;
-      
-      for (let year = 1; year <= 3; year++) {
-        if (year > 1) {
-          currentProfit = currentProfit * 1.12;
-        }
-        cumulativeCashFlow += currentProfit;
-        
-        projections.push({
-          year,
-          netProfit: Math.round(currentProfit),
-          cumulativeCashFlow: Math.round(cumulativeCashFlow),
-        });
-      }
-      
-      setRoiResults({
-        monthlyMetrics: {
-          netProfit: monthlyNetProfit,
-        },
-        paybackPeriodText,
-        projections,
-      });
-      setShowRoiModal(true);
-      setIsCalculating(false);
-    }, 500);
-  };
 
   const roadmapSteps = [
     { num: "01", title: "Initial Inquiry", desc: "Submit your franchise application through our site. Our team will reach out within 24 hours to discuss the opportunity." },
@@ -235,10 +152,9 @@ export default function FranchisePage() {
         </div>
       </ScrollReveal>
 
-      {/* 5. Cost Breakdown & ROI Calculator */}
-      <ScrollReveal className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {/* Cost Breakdown */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 p-8 space-y-6 shadow-xl">
+      {/* 5. Cost Breakdown */}
+      <ScrollReveal className="max-w-3xl mx-auto w-full">
+        <div className="bg-white rounded-3xl border border-slate-100 p-8 space-y-6 shadow-xl">
           <h3 className="font-display font-bold text-xl text-slate-900">Setup Project Costing</h3>
           <p className="text-slate-500 text-xs leading-relaxed">
             Final costing depends on store size, city tier, and location survey. Transparent investment breakdown:
@@ -284,46 +200,6 @@ export default function FranchisePage() {
               <span className="font-black text-emerald-705 text-base">₹20 - 25 Lakhs</span>
             </div>
           </div>
-        </div>
-
-        {/* Right Column: ROI Calculator */}
-        <div id="calculator" className="lg:sticky lg:top-24 lg:col-span-1 bg-white rounded-3xl border border-slate-100 p-6 space-y-6 shadow-xl">
-          <div className="space-y-1">
-            <h3 className="font-display font-bold text-xl text-slate-900">ROI Calculator</h3>
-            <p className="text-xs text-slate-500">Calculate operational profit margins and capital payback timelines</p>
-          </div>
-
-          <form onSubmit={handleCalculateRoi} className="space-y-4">
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Business Model</label>
-                <div className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block flex-shrink-0"></span>
-                  FICO (Company Operated - 3%)
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Total Investment (INR): ₹{roiParams.investmentSize.toLocaleString('en-IN')}</label>
-                <input
-                  type="range"
-                  min="500000"
-                  max="5000000"
-                  step="100000"
-                  value={roiParams.investmentSize}
-                  onChange={(e) => handleInvestmentChange(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isCalculating}
-              className="w-full bg-ecoOrange-600 hover:bg-ecoOrange-500 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm"
-            >
-              {isCalculating ? 'Computing math...' : 'Generate ROI Cash Projections'}
-            </button>
-          </form>
         </div>
       </ScrollReveal>
 
@@ -578,67 +454,7 @@ export default function FranchisePage() {
         </div>
       </ScrollReveal>
 
-      {/* ROI Projections Modal */}
-      {showRoiModal && roiResults && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-100 shadow-2xl relative space-y-6 animate-in fade-in zoom-in-95 duration-200">
-            {/* Close button */}
-            <button
-              onClick={() => setShowRoiModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-650 p-1.5 rounded-full hover:bg-slate-100 transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
 
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <span className="text-[9px] text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full font-bold uppercase tracking-wider inline-block">
-                Financial Report
-              </span>
-              <h3 className="font-display font-black text-slate-900 text-xl">ROI Projection Estimate</h3>
-              <p className="text-[11px] text-slate-400">Generated based on selected capital and model config.</p>
-            </div>
-
-            {/* Metrics */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-emerald-50/40 border border-emerald-100 p-4 rounded-2xl text-center">
-                <span className="text-[9px] text-slate-500 font-bold uppercase block leading-none">Monthly Net Profit</span>
-                <p className="text-lg font-black text-emerald-700 mt-1.5 leading-none">₹{roiResults.monthlyMetrics.netProfit.toLocaleString('en-IN')}</p>
-              </div>
-              <div className="bg-slate-50 border border-slate-150 p-4 rounded-2xl text-center">
-                <span className="text-[9px] text-slate-500 font-bold uppercase block leading-none">ROI Payback Cycle</span>
-                <p className="text-lg font-black text-slate-900 mt-1.5 leading-none">{roiResults.paybackPeriodText} Months</p>
-              </div>
-            </div>
-
-            {/* 3-Year Projections */}
-            <div className="space-y-3">
-              <h4 className="font-bold text-slate-800 text-[10px] uppercase tracking-wider block text-center">3-Year Projected Net Profits</h4>
-              <div className="space-y-2">
-                {roiResults.projections.map((p: any) => (
-                  <div key={p.year} className="flex justify-between items-center text-xs bg-slate-50/50 border border-slate-100 px-4 py-3.5 rounded-xl">
-                    <span className="font-bold text-slate-800 font-display">Year {p.year}</span>
-                    <div className="text-right">
-                      <span className="text-slate-400 text-[9px] block">Cash Flow: ₹{p.cumulativeCashFlow.toLocaleString('en-IN')}</span>
-                      <span className="text-emerald-700 font-extrabold text-xs">Profit: ₹{p.netProfit.toLocaleString('en-IN')}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <button
-              onClick={() => setShowRoiModal(false)}
-              className="w-full bg-[#0a2d1a] hover:bg-emerald-950 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm"
-            >
-              Close Report
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
