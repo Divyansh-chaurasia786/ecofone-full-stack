@@ -66,40 +66,7 @@ export default function ServicesPage() {
             <p className="text-slate-500 text-xs sm:text-sm max-w-lg mx-auto">Explore the mechanics of our core retail service modules</p>
           </div>
 
-          {/* Premium Trust Seals Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto my-8">
-            {/* Warranty Card */}
-            <div className="bg-gradient-to-br from-white to-emerald-50/15 border border-slate-200/50 rounded-3xl p-6 space-y-4 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 text-lg border border-emerald-500/10 shadow-sm">
-                  🛡️
-                </div>
-                <div>
-                  <span className="text-[9px] text-emerald-600 font-extrabold uppercase tracking-wider block">Official Guarantee</span>
-                  <h4 className="font-display font-bold text-sm text-slate-900 leading-tight">6-Month Comprehensive Warranty</h4>
-                </div>
-              </div>
-              <p className="text-[11px] text-slate-555 leading-relaxed pl-1">
-                Every certified refurbished device undergoes a strict 32-point diagnostics check. If any hardware or technical issue arises, we cover complete diagnostic repair or replacement within 6 months.
-              </p>
-            </div>
 
-            {/* Replacement Card */}
-            <div className="bg-gradient-to-br from-white to-orange-50/15 border border-slate-200/50 rounded-3xl p-6 space-y-4 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-600 text-lg border border-orange-500/10 shadow-sm">
-                  🔄
-                </div>
-                <div>
-                  <span className="text-[9px] text-ecoOrange-600 font-extrabold uppercase tracking-wider block">No-Risk Trial</span>
-                  <h4 className="font-display font-bold text-sm text-slate-900 leading-tight">3-Day Hassle-Free Replacement</h4>
-                </div>
-              </div>
-              <p className="text-[11px] text-slate-555 leading-relaxed pl-1">
-                Shop with absolute peace of mind. If you are not completely satisfied with your refurbished smartphone, bring it back within 3 days for an instant exchange or upgrade.
-              </p>
-            </div>
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-4">
             {/* Column 1: Buy */}
