@@ -1,6 +1,7 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
-import { IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, Matches, MinLength, MaxLength } from 'class-validator';
 
 export class SendOtpDto {
   @IsNotEmpty()
@@ -30,10 +31,13 @@ export class GoogleLoginDto {
 export class MasterAdminLoginDto {
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
+  @MaxLength(100)
   password: string;
 }
 
 @Controller('auth')
+@UseGuards(ThrottlerGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
 

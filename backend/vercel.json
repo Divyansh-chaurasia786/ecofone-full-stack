@@ -3,7 +3,8 @@
   "env": {
     "DATABASE_URL": "postgresql://neondb_owner:npg_EB9knm7bFeCf@ep-blue-sun-adp2jl9q-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
     "POSTGRES_PRISMA_URL": "postgresql://neondb_owner:npg_EB9knm7bFeCf@ep-blue-sun-adp2jl9q-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
-    "JWT_SECRET": "ecofone_jwt_super_secret_key"
+    "JWT_SECRET": "ecofone_jwt_super_secret_key",
+    "MASTER_ADMIN_PASSWORD": "admin123"
   },
   "rewrites": [
     {

@@ -12,11 +12,12 @@ import {
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { SubAdminService } from './sub-admin.service';
 import { RolesGuard } from '../auth/guards/rbac.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
-import { IsNotEmpty, IsString, MinLength, IsArray, ArrayNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength, MaxLength, IsArray, ArrayNotEmpty } from 'class-validator';
 
 export class CreateSubAdminDto {
   @IsNotEmpty()
@@ -25,7 +26,8 @@ export class CreateSubAdminDto {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(6)
+  @MinLength(8)
+  @MaxLength(100)
   password: string;
 
   @IsArray()
@@ -36,19 +38,24 @@ export class CreateSubAdminDto {
 export class ResetSubAdminPasswordDto {
   @IsNotEmpty()
   @IsString()
-  @MinLength(6)
+  @MinLength(8)
+  @MaxLength(100)
   password: string;
 }
 
 export class SubAdminLoginDto {
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
+  @MaxLength(100)
   password: string;
 }
 
 export class VerifySubAdminPasswordDto {
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
+  @MaxLength(100)
   password: string;
 }
 
@@ -58,6 +65,7 @@ export class SubAdminController {
 
   /** POST /sub-admin/login  — password-only, returns JWT-like token */
   @Post('login')
+  @UseGuards(ThrottlerGuard)
   async login(@Body() body: SubAdminLoginDto) {
     return this.subAdminService.login(body.password);
   }
@@ -107,7 +115,7 @@ export class SubAdminController {
 
   /** POST /sub-admin/:id/verify-password — verify sub-admin password (master admin only) */
   @Post(':id/verify-password')
-  @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard, ThrottlerGuard)
   @Roles(Role.ADMIN)
   async verifyPassword(@Param('id') id: string, @Body() body: VerifySubAdminPasswordDto) {
     return this.subAdminService.verifyPassword(id, body.password);

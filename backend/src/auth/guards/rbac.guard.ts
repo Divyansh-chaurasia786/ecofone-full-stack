@@ -4,9 +4,14 @@ import { Role } from '@prisma/client';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import * as jwt from 'jsonwebtoken';
 
+import { ConfigService } from '@nestjs/config';
+
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private configService: ConfigService
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
@@ -29,7 +34,11 @@ export class RolesGuard implements CanActivate {
           const base64Payload = token.split('.')[1];
           decoded = JSON.parse(Buffer.from(base64Payload, 'base64').toString('utf-8'));
         } else {
-          decoded = jwt.verify(token, process.env.JWT_SECRET || 'ecofone_jwt_super_secret_key');
+          const secret = this.configService.get<string>('JWT_SECRET');
+          if (!secret) {
+            throw new Error('JWT_SECRET environment variable is missing');
+          }
+          decoded = jwt.verify(token, secret);
         }
         request.user = decoded;
       } catch (err) {

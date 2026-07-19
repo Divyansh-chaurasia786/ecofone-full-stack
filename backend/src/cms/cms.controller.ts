@@ -75,6 +75,26 @@ export class SubmitReviewDto {
   verifiedProduct?: string;
 }
 
+export class UpdateReviewDto {
+  @IsOptional()
+  @IsString()
+  authorName?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  rating?: number;
+
+  @IsOptional()
+  @IsString()
+  comment?: string;
+
+  @IsOptional()
+  @IsString()
+  verifiedProduct?: string;
+}
+
 export class ChatMessageDto {
   @IsNotEmpty()
   @IsString()
@@ -156,7 +176,7 @@ export class CmsController {
   @Roles(Role.ADMIN)
   async updateReview(
     @Param('id') id: string,
-    @Body() body: { authorName?: string; rating?: number; comment?: string; verifiedProduct?: string }
+    @Body() body: UpdateReviewDto
   ) {
     return this.cmsService.updateReview(id, body);
   }

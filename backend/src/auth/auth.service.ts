@@ -4,9 +4,14 @@ import * as jwt from 'jsonwebtoken';
 import { Role } from '@prisma/client';
 import axios from 'axios';
 
+import { ConfigService } from '@nestjs/config';
+
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService
+  ) {}
 
   async sendOtp(phone: string): Promise<{ success: boolean; message: string; debugCode?: string }> {
     if (!phone || !phone.match(/^\+?[1-9]\d{1,14}$/)) {
@@ -158,13 +163,20 @@ export class AuthService {
       phone: user.phone,
       role: user.role,
     };
-    return jwt.sign(payload, process.env.JWT_SECRET || 'ecofone_jwt_super_secret_key', {
+    const secret = this.configService.get<string>('JWT_SECRET');
+    if (!secret) {
+      throw new Error('JWT_SECRET environment variable is missing');
+    }
+    return jwt.sign(payload, secret, {
       expiresIn: '7d',
     });
   }
 
   masterAdminLogin(password: string): { token: string } {
-    const masterPassword = process.env.MASTER_ADMIN_PASSWORD || 'admin123';
+    const masterPassword = this.configService.get<string>('MASTER_ADMIN_PASSWORD');
+    if (!masterPassword) {
+      throw new Error('MASTER_ADMIN_PASSWORD environment variable is missing');
+    }
     if (password !== masterPassword) {
       throw new UnauthorizedException('Invalid master admin password.');
     }
@@ -175,7 +187,11 @@ export class AuthService {
       role: 'ADMIN',
       username: 'admin',
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'ecofone_jwt_super_secret_key', { expiresIn: '12h' });
+    const secret = this.configService.get<string>('JWT_SECRET');
+    if (!secret) {
+      throw new Error('JWT_SECRET environment variable is missing');
+    }
+    const token = jwt.sign(payload, secret, { expiresIn: '12h' });
     return { token };
   }
 }

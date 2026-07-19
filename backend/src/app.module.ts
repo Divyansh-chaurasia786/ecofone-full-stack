@@ -1,4 +1,6 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { PrismaService } from './prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { FranchiseModule } from './franchise/franchise.module';
@@ -11,6 +13,11 @@ import { XssMiddleware } from './common/middleware/xss.middleware';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
     AuthModule,
     FranchiseModule,
     TradeInModule,
