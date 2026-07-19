@@ -1,6 +1,6 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
-    ? 'https://ecofone-backend.vercel.app/api/v1' 
+    ? 'https://ecofone-backend-new.vercel.app/api/v1' 
     : 'http://localhost:4000/api/v1');
 
 export async function apiRequest(endpoint: string, options: RequestInit = {}) {
