@@ -48,6 +48,7 @@ export default function ReviewsCarousel() {
   const [reviews, setReviews] = useState<Review[]>(FALLBACK_REVIEWS);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [aggregateRating, setAggregateRating] = useState<any>(null);
+  const [isHovering, setIsHovering] = useState(false);
 
   async function loadReviews() {
     try {
@@ -64,6 +65,14 @@ export default function ReviewsCarousel() {
   useEffect(() => {
     loadReviews();
   }, []);
+
+  useEffect(() => {
+    if (reviews.length <= 1 || isHovering) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % reviews.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [reviews, isHovering]);
 
   const nextSlide = () => {
     if (reviews.length === 0) return;
@@ -119,7 +128,11 @@ export default function ReviewsCarousel() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="overflow-hidden bg-white rounded-3xl p-8 md:p-12 border border-slate-100 relative min-h-[220px] flex flex-col justify-between shadow-sm">
+      <div 
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        className="overflow-hidden bg-white rounded-3xl p-8 md:p-12 border border-slate-100 relative min-h-[220px] flex flex-col justify-between shadow-sm"
+      >
         <div className="transition-all duration-500 ease-in-out">
           {/* Star rating rendering */}
           <div className="flex items-center gap-1 mb-4">
