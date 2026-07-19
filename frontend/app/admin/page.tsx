@@ -3783,6 +3783,9 @@ export default function AdminDashboardPage() {
                               </td>
                               <td className="py-3 px-4 text-right space-y-1">
                                 <div className="flex flex-col items-end gap-1.5">
+                                  <span className="text-[9px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full tracking-wider uppercase flex items-center gap-1">
+                                    🔒 Official Record
+                                  </span>
                                   <button
                                     onClick={() => handleCopyVerificationLink(cert.uid)}
                                     className="text-xs font-bold text-slate-300 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-slate-700 w-full text-center"
@@ -3797,12 +3800,6 @@ export default function AdminDashboardPage() {
                                   >
                                     👁️ Test View
                                   </a>
-                                  <button
-                                    onClick={() => handleDeleteCertificate(cert.id)}
-                                    className="text-xs font-bold text-rose-500 hover:text-rose-400 transition-colors w-full text-center"
-                                  >
-                                    Delete
-                                  </button>
                                 </div>
                               </td>
                             </tr>

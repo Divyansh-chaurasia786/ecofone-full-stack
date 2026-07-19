@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -66,16 +66,7 @@ export class CertificateService {
   }
 
   async delete(id: string) {
-    const existing = await this.prisma.certificate.findUnique({
-      where: { id },
-    });
-    if (!existing) {
-      throw new NotFoundException(`Certificate with ID ${id} not found.`);
-    }
-
-    return this.prisma.certificate.delete({
-      where: { id },
-    });
+    throw new ForbiddenException('Registered certificate verification records are immutable official records and cannot be deleted via API. Deletion can only be performed manually via direct database operations.');
   }
 
   async verify(uid: string) {
