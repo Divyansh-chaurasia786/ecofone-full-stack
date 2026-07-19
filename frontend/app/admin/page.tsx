@@ -3323,7 +3323,7 @@ export default function AdminDashboardPage() {
                                         Reject
                                       </button>
                                       <button
-                                        disabled={updatingId !== null}
+                                        disabled={updatingId !== null || rev.isVerified}
                                         onClick={() => handleToggleReviewVerified(rev.id, rev.isVerified)}
                                         className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all disabled:opacity-50 uppercase tracking-wider ${
                                           rev.isVerified 
