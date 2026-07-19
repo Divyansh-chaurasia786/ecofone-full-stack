@@ -1,13 +1,11 @@
 const { execSync } = require('child_process');
 
-// Map environment variable for Vercel Serverless Build
-if (!process.env.DATABASE_URL && process.env.POSTGRES_PRISMA_URL) {
-  process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL;
-} else if (!process.env.DATABASE_URL && process.env.POSTGRES_URL) {
-  process.env.DATABASE_URL = process.env.POSTGRES_URL;
+// Map environment variable for Vercel Serverless Build / Local Fallbacks
+if (!process.env.POSTGRES_PRISMA_URL) {
+  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL || '';
 }
 
-console.log('Using DATABASE_URL:', process.env.DATABASE_URL ? 'PRESENT (hidden)' : 'MISSING');
+console.log('Using POSTGRES_PRISMA_URL:', process.env.POSTGRES_PRISMA_URL ? 'PRESENT (hidden)' : 'MISSING');
 
 // Run prisma generate
 console.log('Running prisma generate...');

@@ -5,8 +5,11 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { XssMiddleware } from './common/middleware/xss.middleware';
 import * as express from 'express';
 
+if (!process.env.POSTGRES_PRISMA_URL) {
+  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL || '';
+}
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL || '';
+  process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL;
 }
 
 async function bootstrap() {

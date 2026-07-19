@@ -1,5 +1,8 @@
+if (!process.env.POSTGRES_PRISMA_URL) {
+  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL || '';
+}
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL || '';
+  process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL;
 }
 
 import { NestFactory } from '@nestjs/core';
