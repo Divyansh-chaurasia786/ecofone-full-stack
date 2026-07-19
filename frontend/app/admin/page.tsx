@@ -296,15 +296,17 @@ export default function AdminDashboardPage() {
   const [newCertUid, setNewCertUid] = useState(() => `EVG-INT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
   const [newCertName, setNewCertName] = useState('');
   const [newCertRole, setNewCertRole] = useState('Web Development & Social Media Handling Intern');
+  const todayStr = new Date().toISOString().split('T')[0];
   const [newCertStartDate, setNewCertStartDate] = useState('2024-05-01');
   const [newCertEndDate, setNewCertEndDate] = useState('2024-06-30');
-  const [newCertIssueDate, setNewCertIssueDate] = useState('2024-07-01');
-  const [newCertDesc, setNewCertDesc] = useState('During the internship, the intern demonstrated dedication, creativity, and a willingness to learn while contributing to website development and social media activities. We appreciate the efforts and commitment shown throughout the internship period.');
-  const [newCertSignatory, setNewCertSignatory] = useState('Rahul Verma');
-  const [newCertOffice, setNewCertOffice] = useState('4th Floor, Statesman House, 148, Barakhamba Road, Connaught Place, New Delhi - 110001, India');
-  const [newCertWebsite, setNewCertWebsite] = useState('www.ecovistaglobal.com');
-  const [newCertEmail, setNewCertEmail] = useState('info@ecovistaglobal.com');
+  const [newCertIssueDate, setNewCertIssueDate] = useState(todayStr);
+  const [newCertDesc, setNewCertDesc] = useState('Successfully completed term at Ecovista Global Private Limited.');
+  const [newCertSignatory, setNewCertSignatory] = useState('Ecovista Global Private Limited');
+  const [newCertOffice, setNewCertOffice] = useState('505, JB Metro Heights, Kanpur Road, Lucknow – 226012');
+  const [newCertWebsite, setNewCertWebsite] = useState('www.ecofone.co.in');
+  const [newCertEmail, setNewCertEmail] = useState('support@ecofone.co.in');
   const [newCertCin, setNewCertCin] = useState('U70109UP2020PTC138839');
+  const [dateFilter, setDateFilter] = useState<string>(todayStr);
 
   // Print preview modal states
   const [printModalOpen, setPrintModalOpen] = useState(false);
@@ -3737,6 +3739,7 @@ export default function AdminDashboardPage() {
                         <input
                           type="date"
                           required
+                          max={todayStr}
                           value={newCertStartDate}
                           onChange={(e) => setNewCertStartDate(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
@@ -3747,6 +3750,7 @@ export default function AdminDashboardPage() {
                         <input
                           type="date"
                           required
+                          max={todayStr}
                           value={newCertEndDate}
                           onChange={(e) => setNewCertEndDate(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
@@ -3759,6 +3763,7 @@ export default function AdminDashboardPage() {
                       <input
                         type="date"
                         required
+                        max={todayStr}
                         value={newCertIssueDate}
                         onChange={(e) => setNewCertIssueDate(e.target.value)}
                         className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
@@ -3779,18 +3784,58 @@ export default function AdminDashboardPage() {
 
                 {/* Verification Records & QR Registry */}
                 <div className="lg:col-span-2 bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4 font-sans">
-                  <div className="pb-3 border-b border-slate-800/80 flex items-center justify-between">
+                  <div className="pb-3 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
                         <span>📋 Verification Records & QR Registry</span>
                       </h3>
-                      <p className="text-[10px] text-slate-400 mt-1">Download generated QR code images to paste onto your physical certificates.</p>
+                      <p className="text-[10px] text-slate-400 mt-1">
+                        {dateFilter ? (dateFilter === todayStr ? "Showing today's registered records only" : `Showing records for ${dateFilter}`) : 'Showing all historical records'}
+                      </p>
+                    </div>
+
+                    {/* Date Filter Bar */}
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Filter Date:</label>
+                      <input
+                        type="date"
+                        max={todayStr}
+                        value={dateFilter}
+                        onChange={(e) => setDateFilter(e.target.value)}
+                        className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1 text-slate-200 text-xs focus:outline-none focus:border-emerald-500 font-mono"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setDateFilter(todayStr)}
+                        className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${dateFilter === todayStr ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+                      >
+                        Today
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDateFilter('')}
+                        className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${!dateFilter ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+                      >
+                        Show All
+                      </button>
                     </div>
                   </div>
 
-                  {certificates.length === 0 ? (
+                  {certificates.filter((cert) => {
+                    if (!dateFilter) return true;
+                    try {
+                      const certDate = new Date(cert.issueDate || cert.createdAt).toISOString().split('T')[0];
+                      return certDate === dateFilter;
+                    } catch {
+                      return true;
+                    }
+                  }).length === 0 ? (
                     <div className="py-12 text-center text-xs text-slate-500 border border-dashed border-slate-850 rounded-2xl bg-slate-900/10">
-                      No verification records created yet. Register an entry to generate its QR code.
+                      {dateFilter === todayStr 
+                        ? "No verification records registered today. Register a new entry above to generate its QR code."
+                        : dateFilter 
+                          ? `No verification records found for ${dateFilter}.`
+                          : "No verification records created yet."}
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
@@ -3805,7 +3850,17 @@ export default function AdminDashboardPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-850/60 text-slate-300">
-                          {certificates.map((cert) => (
+                          {certificates
+                            .filter((cert) => {
+                              if (!dateFilter) return true;
+                              try {
+                                const certDate = new Date(cert.issueDate || cert.createdAt).toISOString().split('T')[0];
+                                return certDate === dateFilter;
+                              } catch {
+                                return true;
+                              }
+                            })
+                            .map((cert) => (
                             <tr key={cert.id} className="hover:bg-slate-900/20">
                               <td className="py-3 px-4">
                                 <img
