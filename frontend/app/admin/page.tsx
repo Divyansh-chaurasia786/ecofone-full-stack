@@ -637,32 +637,34 @@ export default function AdminDashboardPage() {
     setCertFormLoading(true);
 
     try {
+      const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
+      // Auto-generate guaranteed unique UID (EVG-{TYPE}-{YEAR}-{TIME_RANDOM})
+      const autoUid = `EVG-${typeCode}-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}${Math.floor(100 + Math.random() * 900)}`;
+
       const payload = {
-        uid: newCertUid.trim().toUpperCase(),
+        uid: autoUid,
         recipientName: newCertName.trim(),
         type: newCertType,
         role: newCertRole.trim(),
         startDate: newCertStartDate,
         endDate: newCertEndDate,
         issueDate: newCertIssueDate,
-        description: newCertDesc.trim(),
-        authorizedSignatory: newCertSignatory.trim(),
-        registeredOffice: newCertOffice.trim(),
-        website: newCertWebsite.trim(),
-        email: newCertEmail.trim(),
-        cin: newCertCin.trim(),
+        description: 'Successfully completed term at Ecovista Global Private Limited.',
+        authorizedSignatory: 'Ecovista Global Private Limited',
+        registeredOffice: newCertOffice.trim() || '4th Floor, Statesman House, 148, Barakhamba Road, Connaught Place, New Delhi - 110001, India',
+        website: newCertWebsite.trim() || 'www.ecovistaglobal.com',
+        email: newCertEmail.trim() || 'info@ecovistaglobal.com',
+        cin: newCertCin.trim() || 'U70109UP2020PTC138839',
       };
 
       const result = await api.createCertificate(payload);
       setCertificates(prev => [result, ...prev]);
 
-      // Reset form fields and generate fresh auto UID
-      const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
-      setNewCertUid(`EVG-${typeCode}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
       setNewCertName('');
-      setCertFormSuccess('Certificate generated and registered successfully!');
+      setNewCertRole('');
+      setCertFormSuccess('Entry registered & QR Code generated successfully!');
     } catch (err: any) {
-      setCertFormError(err.message || 'Failed to create certificate.');
+      setCertFormError(err.message || 'Failed to create verification record.');
     } finally {
       setCertFormLoading(false);
     }
@@ -3638,33 +3640,6 @@ export default function AdminDashboardPage() {
                     )}
 
                     <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate UID (Auto-Generated) *</label>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
-                            setNewCertUid(`EVG-${typeCode}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
-                          }}
-                          className="text-[9px] text-emerald-400 hover:text-emerald-300 font-bold uppercase tracking-wider transition-colors"
-                        >
-                          🔄 Refresh UID
-                        </button>
-                      </div>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. EVG-INT-2024-0001"
-                        value={newCertUid}
-                        onChange={(e) => {
-                          setNewCertUid(e.target.value.toUpperCase());
-                          setCertFormError('');
-                        }}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-mono focus:outline-none focus:border-emerald-500"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
                       <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Full Name of Employee/Intern *</label>
                       <input
                         type="text"
@@ -3724,38 +3699,14 @@ export default function AdminDashboardPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Issue Date *</label>
-                        <input
-                          type="date"
-                          required
-                          value={newCertIssueDate}
-                          onChange={(e) => setNewCertIssueDate(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Authorized Signatory *</label>
-                        <input
-                          type="text"
-                          required
-                          value={newCertSignatory}
-                          onChange={(e) => setNewCertSignatory(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                        />
-                      </div>
-                    </div>
-
                     <div className="space-y-1">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scope of Work & Assessment *</label>
-                      <textarea
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Issue Date *</label>
+                      <input
+                        type="date"
                         required
-                        rows={3}
-                        placeholder="Description of the intern/employee's work and performance..."
-                        value={newCertDesc}
-                        onChange={(e) => setNewCertDesc(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500 resize-none leading-relaxed"
+                        value={newCertIssueDate}
+                        onChange={(e) => setNewCertIssueDate(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
                       />
                     </div>
 
