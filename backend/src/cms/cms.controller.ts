@@ -88,6 +88,16 @@ export class ChatMessageDto {
 export class CmsController {
   constructor(private cmsService: CmsService) {}
 
+  @Get('env-check')
+  async checkEnv() {
+    return {
+      hasDatabaseUrl: !!process.env.DATABASE_URL,
+      hasPostgresPrismaUrl: !!process.env.POSTGRES_PRISMA_URL,
+      hasPostgresUrl: !!process.env.POSTGRES_URL,
+      nodeEnv: process.env.NODE_ENV || 'undefined'
+    };
+  }
+
   @Get('blogs')
   async getBlogs() {
     return this.cmsService.getBlogPosts();
