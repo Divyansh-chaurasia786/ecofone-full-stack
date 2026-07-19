@@ -3331,7 +3331,9 @@ export default function AdminDashboardPage() {
                                             : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
                                         }`}
                                       >
-                                        {rev.isVerified ? '✓ Verified' : 'Verify Buyer'}
+                                        {rev.isVerified 
+                                          ? (isOwner ? '✓ Verified Owner' : '✓ Verified') 
+                                          : (isOwner ? 'Verify Owner' : 'Verify Buyer')}
                                       </button>
                                       <button
                                         onClick={() => {
