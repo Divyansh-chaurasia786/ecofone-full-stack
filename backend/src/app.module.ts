@@ -9,6 +9,7 @@ import { EcommerceModule } from './ecommerce/ecommerce.module';
 import { CmsModule } from './cms/cms.module';
 import { SubAdminModule } from './sub-admin/sub-admin.module';
 import { SystemLogModule } from './system-log/system-log.module';
+import { CertificateModule } from './certificate/certificate.module';
 import { XssMiddleware } from './common/middleware/xss.middleware';
 
 @Module({
@@ -25,6 +26,7 @@ import { XssMiddleware } from './common/middleware/xss.middleware';
     CmsModule,
     SubAdminModule,
     SystemLogModule,
+    CertificateModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

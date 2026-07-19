@@ -121,4 +121,9 @@ export const api = {
     if (endDate) url += `&endDate=${encodeURIComponent(endDate)}`;
     return apiRequest(url, { method: 'DELETE' });
   },
+
+  // Certificates management
+  getCertificates: () => apiRequest('certificate'),
+  createCertificate: (payload: any) => apiRequest('certificate', { method: 'POST', body: JSON.stringify(payload) }),
+  deleteCertificate: (id: string) => apiRequest(`certificate/${id}`, { method: 'DELETE' }),
 };

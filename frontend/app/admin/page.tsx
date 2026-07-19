@@ -274,16 +274,41 @@ export default function AdminDashboardPage() {
   const [subAdminPassword, setSubAdminPassword] = useState('');
   const [subAdminError, setSubAdminError] = useState('');
   const [subAdminSuccess, setSubAdminSuccess] = useState('');
-  const [newAdminPermissions, setNewAdminPermissions] = useState<string[]>(['franchise', 'contact', 'reviews']);
-  const [allowedPermissions, setAllowedPermissions] = useState<string[]>(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews']);
+  const [newAdminPermissions, setNewAdminPermissions] = useState<string[]>(['franchise', 'contact', 'reviews', 'certificates']);
+  const [allowedPermissions, setAllowedPermissions] = useState<string[]>(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews', 'certificates']);
   
   const [adminLoginError, setAdminLoginError] = useState('');
   const [adminPhoneDisplay, setAdminPhoneDisplay] = useState('+91 99199 65499');
   const [adminEmailDisplay, setAdminEmailDisplay] = useState('business@ecofone.co.in');
 
   // Active Tab & Sidebar mobile states
-  const [activeTab, setActiveTab] = useState<'franchise' | 'contact' | 'stores' | 'team' | 'logs' | 'security' | 'reviews'>('franchise');
+  const [activeTab, setActiveTab] = useState<'franchise' | 'contact' | 'stores' | 'team' | 'logs' | 'security' | 'reviews' | 'certificates'>('franchise');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Certificate Management states
+  const [certificates, setCertificates] = useState<any[]>([]);
+  const [certFormLoading, setCertFormLoading] = useState(false);
+  const [certFormError, setCertFormError] = useState('');
+  const [certFormSuccess, setCertFormSuccess] = useState('');
+
+  // Certificate Form inputs
+  const [newCertUid, setNewCertUid] = useState('');
+  const [newCertName, setNewCertName] = useState('');
+  const [newCertType, setNewCertType] = useState('INTERNSHIP');
+  const [newCertRole, setNewCertRole] = useState('');
+  const [newCertStartDate, setNewCertStartDate] = useState('');
+  const [newCertEndDate, setNewCertEndDate] = useState('');
+  const [newCertIssueDate, setNewCertIssueDate] = useState('');
+  const [newCertDesc, setNewCertDesc] = useState('');
+  const [newCertSignatory, setNewCertSignatory] = useState('Rahul Verma');
+  const [newCertOffice, setNewCertOffice] = useState('4th Floor, Statesman House, 148, Barakhamba Road, Connaught Place, New Delhi - 110001, India');
+  const [newCertWebsite, setNewCertWebsite] = useState('www.ecovistaglobal.com');
+  const [newCertEmail, setNewCertEmail] = useState('info@ecovistaglobal.com');
+  const [newCertCin, setNewCertCin] = useState('U70109UP2020PTC138839');
+
+  // Print preview modal states
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [activePrintCert, setActivePrintCert] = useState<any | null>(null);
 
   // Dashboard datasets
   const [applications, setApplications] = useState<FranchiseApp[]>([]);
@@ -524,7 +549,7 @@ export default function AdminDashboardPage() {
               if (payload.email) setAdminEmailDisplay(payload.email);
 
               if (storedRole === 'master') {
-                setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews']);
+                setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews', 'certificates']);
               } else {
                 // Permissions are embedded in the JWT for sub-admins
                 const permissions = payload.permissions || ['franchise', 'contact'];
@@ -543,7 +568,7 @@ export default function AdminDashboardPage() {
         setAdminRole(storedRole);
         
         if (storedRole === 'master') {
-          setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews']);
+          setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews', 'certificates']);
         } else {
           try {
             const tokenParts = token.split('.');
@@ -563,6 +588,61 @@ export default function AdminDashboardPage() {
     }
     setIsAdmin(false);
     return false;
+  };
+
+  const handleCreateCertificateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCertFormError('');
+    setCertFormSuccess('');
+    setCertFormLoading(true);
+
+    try {
+      const payload = {
+        uid: newCertUid.trim().toUpperCase(),
+        recipientName: newCertName.trim(),
+        type: newCertType,
+        role: newCertRole.trim(),
+        startDate: newCertStartDate,
+        endDate: newCertEndDate,
+        issueDate: newCertIssueDate,
+        description: newCertDesc.trim(),
+        authorizedSignatory: newCertSignatory.trim(),
+        registeredOffice: newCertOffice.trim(),
+        website: newCertWebsite.trim(),
+        email: newCertEmail.trim(),
+        cin: newCertCin.trim(),
+      };
+
+      const result = await api.createCertificate(payload);
+      setCertificates(prev => [result, ...prev]);
+
+      // Reset form fields
+      setNewCertUid('');
+      setNewCertName('');
+      setNewCertRole('');
+      setNewCertStartDate('');
+      setNewCertEndDate('');
+      setNewCertIssueDate('');
+      setNewCertDesc('');
+      setCertFormSuccess('Certificate generated and registered successfully!');
+    } catch (err: any) {
+      setCertFormError(err.message || 'Failed to create certificate.');
+    } finally {
+      setCertFormLoading(false);
+    }
+  };
+
+  const handleDeleteCertificate = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this certificate? This will invalidate verification scans.')) {
+      return;
+    }
+
+    try {
+      await api.deleteCertificate(id);
+      setCertificates(prev => prev.filter(c => c.id !== id));
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete certificate.');
+    }
   };
 
   const loadDashboardData = async (silent = false) => {
@@ -628,6 +708,17 @@ export default function AdminDashboardPage() {
           console.warn('Could not load reviews, using fallback mock reviews.', e);
           reviewsData = MOCK_REVIEWS;
           setReviews(MOCK_REVIEWS);
+        }
+      }
+
+      const isCertificatesAllowed = allowedPermissions.includes('certificates') || (typeof window !== 'undefined' && sessionStorage.getItem('ecofone_admin_role') === 'master');
+      if (isCertificatesAllowed) {
+        try {
+          const certsData = await api.getCertificates();
+          setCertificates(certsData || []);
+        } catch (e) {
+          console.warn('Could not load certificates from API:', e);
+          setCertificates([]);
         }
       }
 
@@ -1551,7 +1642,7 @@ export default function AdminDashboardPage() {
         sessionStorage.setItem('ecofone_admin_role', 'master');
 
         setAdminRole('master');
-        setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews']);
+        setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews', 'certificates']);
         setIsAdmin(true);
         setAdminPasswordInput('');
         setAdminLoginError('');
@@ -1564,7 +1655,7 @@ export default function AdminDashboardPage() {
         sessionStorage.setItem('ecofone_phone', '+91 99199 65499');
         sessionStorage.setItem('ecofone_admin_role', 'master');
         setAdminRole('master');
-        setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews']);
+        setAllowedPermissions(['franchise', 'contact', 'stores', 'team', 'logs', 'security', 'reviews', 'certificates']);
         setIsAdmin(true);
         setAdminPasswordInput('');
         setAdminLoginError('');
@@ -2033,6 +2124,19 @@ export default function AdminDashboardPage() {
                 <span>Customer Reviews ({reviews.length})</span>
               </button>
             )}
+            {allowedPermissions.includes('certificates') && (
+              <button
+                onClick={() => { setActiveTab('certificates'); setIsSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all border-l-2 ${
+                  activeTab === 'certificates'
+                    ? 'bg-emerald-500/5 text-emerald-400 border-emerald-500'
+                    : 'bg-transparent text-slate-400 hover:text-slate-200 border-transparent'
+                }`}
+              >
+                <span className="text-sm">🎓</span>
+                <span>Certificates ({certificates.length})</span>
+              </button>
+            )}
             {allowedPermissions.includes('security') && (
               <button
                 onClick={() => { setActiveTab('security'); setIsSidebarOpen(false); }}
@@ -2091,7 +2195,7 @@ export default function AdminDashboardPage() {
             <span className="hidden sm:inline shrink-0">EcoFone Console</span>
             <span className="text-slate-600 hidden sm:inline shrink-0">/</span>
             <span className="text-white capitalize truncate">
-              {activeTab === 'stores' ? 'outlets' : activeTab === 'franchise' ? 'franchise applications' : activeTab === 'contact' ? 'contact inquiries' : activeTab === 'reviews' ? 'reviews moderation' : activeTab === 'logs' ? 'export logs' : 'security settings'}
+              {activeTab === 'stores' ? 'outlets' : activeTab === 'franchise' ? 'franchise applications' : activeTab === 'contact' ? 'contact inquiries' : activeTab === 'reviews' ? 'reviews moderation' : activeTab === 'logs' ? 'export logs' : activeTab === 'certificates' ? 'certificates generator' : 'security settings'}
             </span>
           </div>
 
@@ -3446,6 +3550,214 @@ export default function AdminDashboardPage() {
               );
             })()}
 
+            {activeTab === 'certificates' && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+                {/* Certificate creation form */}
+                <div className="lg:col-span-1 bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
+                  <div className="pb-3 border-b border-slate-800/80">
+                    <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                      <span>🎓 Certificate Generator</span>
+                    </h3>
+                    <p className="text-[10px] text-slate-400 mt-1">Issue verified internship or experience certificates for employees/interns.</p>
+                  </div>
+
+                  <form onSubmit={handleCreateCertificateSubmit} className="space-y-3.5 text-xs text-slate-350">
+                    {certFormError && (
+                      <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold">
+                        {certFormError}
+                      </div>
+                    )}
+                    {certFormSuccess && (
+                      <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-semibold">
+                        {certFormSuccess}
+                      </div>
+                    )}
+
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate UID *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. EVG-INT-2024-0001"
+                        value={newCertUid}
+                        onChange={(e) => {
+                          setNewCertUid(e.target.value.toUpperCase());
+                          setCertFormError('');
+                        }}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipient Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Rajesh Kumar"
+                        value={newCertName}
+                        onChange={(e) => setNewCertName(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate Type *</label>
+                      <select
+                        value={newCertType}
+                        onChange={(e) => setNewCertType(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500 animate-none"
+                      >
+                        <option value="INTERNSHIP">Internship Certificate</option>
+                        <option value="EXPERIENCE">Experience Certificate</option>
+                        <option value="EXCELLENCE">Certificate of Excellence</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Role / Designation *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Web Development & Social Media Intern"
+                        value={newCertRole}
+                        onChange={(e) => setNewCertRole(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Start Date *</label>
+                        <input
+                          type="date"
+                          required
+                          value={newCertStartDate}
+                          onChange={(e) => setNewCertStartDate(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">End Date *</label>
+                        <input
+                          type="date"
+                          required
+                          value={newCertEndDate}
+                          onChange={(e) => setNewCertEndDate(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Issue Date *</label>
+                        <input
+                          type="date"
+                          required
+                          value={newCertIssueDate}
+                          onChange={(e) => setNewCertIssueDate(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Authorized Signer *</label>
+                        <input
+                          type="text"
+                          required
+                          value={newCertSignatory}
+                          onChange={(e) => setNewCertSignatory(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Scope of Work & Assessment *</label>
+                      <textarea
+                        required
+                        rows={3}
+                        placeholder="Description of the intern/employee's behavior, work, and achievements..."
+                        value={newCertDesc}
+                        onChange={(e) => setNewCertDesc(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500 resize-none leading-relaxed"
+                      />
+                    </div>
+
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        disabled={certFormLoading}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-lg"
+                      >
+                        {certFormLoading ? 'Generating...' : 'Issue Certificate'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {/* Certificate List Registry */}
+                <div className="lg:col-span-2 bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4 font-sans">
+                  <div className="pb-3 border-b border-slate-800/80">
+                    <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                      <span>📋 Issued Certificates Registry</span>
+                    </h3>
+                    <p className="text-[10px] text-slate-400 mt-1">Review, delete, or print/preview issued certificates.</p>
+                  </div>
+
+                  {certificates.length === 0 ? (
+                    <div className="py-12 text-center text-xs text-slate-500 border border-dashed border-slate-850 rounded-2xl bg-slate-900/10">
+                      No certificates issued yet. Fill the form to create one.
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs">
+                        <thead>
+                          <tr className="border-b border-slate-800 text-slate-450 uppercase font-extrabold text-[10px] tracking-wider">
+                            <th className="py-3 px-4">UID</th>
+                            <th className="py-3 px-4">Recipient</th>
+                            <th className="py-3 px-4">Type & Role</th>
+                            <th className="py-3 px-4">Issue Date</th>
+                            <th className="py-3 px-4 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-850/60 text-slate-355">
+                          {certificates.map((cert) => (
+                            <tr key={cert.id} className="hover:bg-slate-900/20">
+                              <td className="py-3 px-4 font-mono font-bold text-slate-200">{cert.uid}</td>
+                              <td className="py-3 px-4 font-bold text-slate-100">{cert.recipientName}</td>
+                              <td className="py-3 px-4">
+                                <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded mr-2 uppercase tracking-wide">
+                                  {cert.type}
+                                </span>
+                                <span className="text-slate-400">{cert.role}</span>
+                              </td>
+                              <td className="py-3 px-4 text-slate-400">
+                                {new Date(cert.issueDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              </td>
+                              <td className="py-3 px-4 text-right space-x-3.5">
+                                <button
+                                  onClick={() => { setActivePrintCert(cert); setPrintModalOpen(true); }}
+                                  className="text-emerald-400 hover:text-emerald-350 transition-colors font-bold text-xs"
+                                >
+                                  🖨️ Print
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteCertificate(cert.id)}
+                                  className="text-rose-500 hover:text-rose-455 transition-colors font-bold text-xs"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
           </div>
 
         </div>
@@ -4343,6 +4655,163 @@ export default function AdminDashboardPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {printModalOpen && activePrintCert && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 flex items-center justify-center p-4 print:p-0 print:bg-white">
+          <style>{`
+            @media print {
+              body * {
+                visibility: hidden;
+              }
+              .print\\:block, .print\\:block * {
+                visibility: visible;
+              }
+              .fixed.inset-0.z-50 {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+              }
+              .fixed.inset-0.z-50 * {
+                visibility: visible;
+              }
+              .print\\:hidden {
+                display: none !important;
+              }
+            }
+          `}</style>
+          
+          <div className="absolute top-4 right-4 flex gap-3 print:hidden">
+            <button
+              onClick={() => window.print()}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all"
+            >
+              🖨️ Print
+            </button>
+            <button
+              onClick={() => { setPrintModalOpen(false); setActivePrintCert(null); }}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-350 font-bold text-xs rounded-xl shadow transition-all border border-slate-700"
+            >
+              ✕ Close
+            </button>
+          </div>
+
+          {/* High-fidelity Landscape Certificate container */}
+          <div className="w-[1000px] h-[640px] bg-white border-[12px] border-[#022c22] p-6 flex flex-col justify-between relative shadow-2xl overflow-hidden print:shadow-none print:border-[12px] print:border-[#022c22] font-serif" style={{ color: '#0f172a' }}>
+            {/* Inner gold border */}
+            <div className="absolute inset-2 border-2 border-amber-500/50 pointer-events-none" />
+
+            {/* Diagonal Corner Gold accents */}
+            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-amber-500/10 to-transparent pointer-events-none" style={{ clipPath: 'polygon(0 0, 100% 0, 0 100%)' }} />
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-amber-500/10 to-transparent pointer-events-none" style={{ clipPath: 'polygon(100% 100%, 100% 0, 0 100%)' }} />
+
+            {/* Top section: Logo */}
+            <div className="flex flex-col items-center mt-2 relative">
+              <div className="flex items-center gap-3">
+                {/* EF Styled Logo */}
+                <div className="flex items-center justify-center w-12 h-12 bg-[#022c22] text-white font-sans font-black text-2xl rounded-xl border border-amber-500 shadow">
+                  EF
+                </div>
+                <div className="text-left font-sans">
+                  <h1 className="text-xl font-extrabold tracking-tight text-[#022c22] leading-none">EcoFone</h1>
+                  <span className="text-[8px] font-bold text-amber-500 uppercase tracking-widest block mt-0.5">Luxury within reach</span>
+                </div>
+              </div>
+              <div className="mt-3 flex items-center justify-center gap-2 text-[9px] uppercase tracking-widest font-sans font-bold text-slate-500">
+                <div className="w-8 h-[1px] bg-slate-350" />
+                <span>AN INITIATIVE OF ECOVISTA GLOBAL PRIVATE LIMITED</span>
+                <div className="w-8 h-[1px] bg-slate-350" />
+              </div>
+            </div>
+
+            {/* Certificate Title */}
+            <div className="text-center mt-2">
+              <h2 className="text-3xl font-extrabold tracking-wider text-[#022c22] uppercase" style={{ fontFamily: 'Georgia, serif' }}>
+                Certificate of {activePrintCert.type.toLowerCase()}
+              </h2>
+              <div className="w-24 h-[1px] bg-amber-500 mx-auto mt-2" />
+            </div>
+
+            {/* Body content */}
+            <div className="text-center px-12 space-y-3 font-sans mt-3">
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">THIS IS TO CERTIFY THAT</p>
+              
+              <h3 className="text-3xl font-extrabold italic text-emerald-950 leading-none my-2" style={{ fontFamily: 'Georgia, serif' }}>
+                {activePrintCert.recipientName}
+              </h3>
+
+              <p className="text-xs text-slate-700 leading-relaxed max-w-2xl mx-auto">
+                has successfully completed an internship at <strong className="text-slate-900">Ecovista Global Private Limited</strong> as a <strong className="text-slate-900">{activePrintCert.role}</strong> from <strong className="text-slate-900">{new Date(activePrintCert.startDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> to <strong className="text-slate-900">{new Date(activePrintCert.endDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>.
+              </p>
+
+              <p className="text-xs text-slate-500 leading-relaxed italic max-w-xl mx-auto mt-2">
+                "{activePrintCert.description}"
+              </p>
+            </div>
+
+            {/* Signature, Stamp, QR Code & Footer grid */}
+            <div className="grid grid-cols-3 items-end px-8 mb-2 relative">
+              {/* Left Column: QR Verification card */}
+              <div className="flex flex-col items-center">
+                <div className="border border-slate-300 p-2 bg-white shadow-sm flex flex-col items-center rounded-lg max-w-[125px] text-center">
+                  <span className="text-[7px] font-black text-white bg-[#022c22] px-2 py-0.5 rounded tracking-wide mb-1 block w-full uppercase">SCAN TO VERIFY</span>
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=85x85&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${activePrintCert.uid}`}
+                    alt="Verification QR Code"
+                    className="w-16 h-16 object-contain"
+                  />
+                  <p className="text-[6px] text-slate-500 leading-tight mt-1">Scan to verify certificate authenticity on official site.</p>
+                </div>
+                <div className="font-mono text-[7px] text-slate-600 bg-slate-100 border border-slate-200 rounded px-2 py-0.5 mt-2 font-bold uppercase">
+                  UID: {activePrintCert.uid}
+                </div>
+              </div>
+
+              {/* Middle Column: Blank Physical Stamp area */}
+              <div className="flex flex-col items-center justify-center pb-2">
+                <div className="w-16 h-16 border border-dashed border-slate-300 rounded-full flex flex-col items-center justify-center text-[6px] text-slate-400 font-bold uppercase tracking-wider">
+                  <span>Stamp</span>
+                  <span>Here</span>
+                </div>
+                <div className="text-center mt-3">
+                  <span className="text-[8px] uppercase tracking-wider font-bold text-slate-500">Date of issue</span>
+                  <p className="text-xs font-bold text-slate-800 mt-0.5">{new Date(activePrintCert.issueDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                </div>
+              </div>
+
+              {/* Right Column: Blank Physical Signature area */}
+              <div className="flex flex-col items-center justify-center pb-2">
+                <div className="w-32 border-t border-slate-350 mt-8" />
+                <div className="text-center mt-2">
+                  <span className="text-[8px] uppercase tracking-wider font-bold text-slate-700">{activePrintCert.authorizedSignatory}</span>
+                  <p className="text-[7px] uppercase tracking-widest text-slate-500 font-bold mt-0.5">AUTHORIZED SIGNATORY</p>
+                  <p className="text-[6px] text-slate-400 mt-0.5">Ecovista Global Private Limited</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom corporate metadata footer bar */}
+            <div className="bg-[#022c22] text-white p-2.5 rounded-lg flex justify-between items-center text-[7px] font-sans font-semibold tracking-wide border-t border-amber-500/30">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[9px] text-amber-500">📍</span>
+                <span><strong>REGISTERED OFFICE:</strong> {activePrintCert.registeredOffice}</span>
+              </div>
+              <div className="flex items-center gap-4 text-slate-200 shrink-0">
+                <span className="flex items-center gap-1"><span className="text-[9px] text-amber-500">🌐</span> {activePrintCert.website}</span>
+                <span className="flex items-center gap-1"><span className="text-[9px] text-amber-500">✉️</span> {activePrintCert.email}</span>
+                <span className="flex items-center gap-1"><span className="text-[9px] text-amber-500">📄</span> CIN: {activePrintCert.cin}</span>
+              </div>
+            </div>
           </div>
         </div>
       )}

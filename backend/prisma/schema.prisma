@@ -316,3 +316,22 @@ model SystemLog {
   role      String
   createdAt DateTime @default(now())
 }
+
+model Certificate {
+  id                  String   @id @default(uuid())
+  uid                 String   @unique
+  recipientName       String
+  type                String   // e.g. INTERNSHIP, EXPERIENCE, EXCELLENCE
+  role                String   // e.g. Web Development & Social Media Handling Intern
+  startDate           DateTime
+  endDate             DateTime
+  issueDate           DateTime
+  description         String
+  authorizedSignatory String   // e.g. Rahul Verma
+  registeredOffice    String
+  website             String
+  email               String
+  cin                 String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
