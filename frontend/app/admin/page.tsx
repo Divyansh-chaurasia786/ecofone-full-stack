@@ -4798,20 +4798,23 @@ export default function AdminDashboardPage() {
 
             {/* Top Header Section */}
             <div className="flex flex-col items-center relative z-10 pt-1">
-              <div className="flex items-center gap-3">
-                {/* EF Gradient Circuit Logo */}
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 via-emerald-600 to-teal-800 p-0.5 shadow-md flex items-center justify-center">
-                  <div className="w-full h-full bg-[#063b28] rounded-[10px] flex items-center justify-center text-amber-400 font-extrabold text-xl tracking-tight" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
-                    EF
-                  </div>
-                </div>
+              <div className="flex items-center gap-2">
+                {/* EF Styled Monogram Logo with Circuit Lines */}
+                <svg viewBox="0 0 100 80" className="w-12 h-10 shrink-0">
+                  <path d="M 10,10 L 45,10 L 45,22 L 24,22 L 24,34 L 40,34 L 40,46 L 24,46 L 24,58 L 46,58 L 46,70 L 10,70 Z" fill="#053926" />
+                  <path d="M 50,10 L 85,10 L 85,22 L 64,22 L 64,34 L 80,34 L 80,46 L 64,46 L 64,70 L 50,70 Z" fill="#f37021" />
+                  <circle cx="72" cy="58" r="2.5" fill="#f59e0b" />
+                  <line x1="72" y1="58" x2="72" y2="28" stroke="#f59e0b" strokeWidth="2" />
+                  <line x1="72" y1="28" x2="78" y2="28" stroke="#f59e0b" strokeWidth="2" />
+                  <circle cx="78" cy="28" r="2" fill="#f59e0b" />
+                </svg>
                 <div className="text-left font-sans">
-                  <h1 className="text-2xl font-black tracking-tight text-[#063b28] leading-none" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>EcoFone</h1>
-                  <span className="text-[8px] font-extrabold text-amber-600 uppercase tracking-[0.25em] block mt-0.5">Luxury within reach</span>
+                  <h1 className="text-2xl font-black tracking-tight text-[#053926] leading-none" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>EcoFone</h1>
+                  <span className="text-[8px] font-extrabold text-[#f37021] uppercase tracking-[0.25em] block mt-0.5">Luxury within reach</span>
                 </div>
               </div>
 
-              <div className="mt-2 flex items-center justify-center gap-3 text-[9px] uppercase tracking-[0.2em] font-extrabold text-[#063b28]/80">
+              <div className="mt-2 flex items-center justify-center gap-3 text-[9px] uppercase tracking-[0.2em] font-extrabold text-[#053926]">
                 <div className="w-10 h-[1px] bg-[#d4af37]" />
                 <span>AN INITIATIVE OF ECOVISTA GLOBAL PRIVATE LIMITED</span>
                 <div className="w-10 h-[1px] bg-[#d4af37]" />
@@ -4820,7 +4823,7 @@ export default function AdminDashboardPage() {
 
             {/* Certificate Title */}
             <div className="text-center relative z-10 my-1">
-              <h2 className="text-3xl font-black tracking-[0.2em] text-[#063b28] uppercase" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
+              <h2 className="text-3xl font-black tracking-[0.2em] text-[#053926] uppercase" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
                 CERTIFICATE
               </h2>
               <div className="flex items-center justify-center gap-2 mt-1">
@@ -4839,12 +4842,12 @@ export default function AdminDashboardPage() {
               </p>
 
               {/* Recipient Name in Elegant Cursive Script */}
-              <h3 className="text-5xl font-normal text-[#063b28] leading-tight my-1 py-1" style={{ fontFamily: "'Great Vibes', cursive, Georgia, serif" }}>
+              <h3 className="text-5xl font-normal text-[#053926] leading-tight my-1 py-1" style={{ fontFamily: "'Great Vibes', cursive, Georgia, serif" }}>
                 {activePrintCert.recipientName}
               </h3>
 
               <p className="text-xs text-slate-700 leading-relaxed max-w-2xl mx-auto font-medium" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                has successfully completed an internship at <strong className="text-[#063b28] font-bold">Ecovista Global Private Limited</strong> as a <strong className="text-[#063b28] font-bold">{activePrintCert.role}</strong> from <strong className="text-slate-900 font-semibold">{new Date(activePrintCert.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</strong> to <strong className="text-slate-900 font-semibold">{new Date(activePrintCert.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</strong>.
+                has successfully completed an internship at <strong className="text-[#053926] font-bold">Ecovista Global Private Limited</strong> as a <strong className="text-[#053926] font-bold">{activePrintCert.role}</strong> from <strong className="text-slate-900 font-semibold">{new Date(activePrintCert.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</strong> to <strong className="text-slate-900 font-semibold">{new Date(activePrintCert.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</strong>.
               </p>
 
               <p className="text-[11px] text-slate-600 leading-relaxed italic max-w-2xl mx-auto font-normal" style={{ fontFamily: 'Montserrat, sans-serif' }}>
@@ -4861,7 +4864,7 @@ export default function AdminDashboardPage() {
               {/* Left Column: QR Verification card */}
               <div className="flex flex-col items-start">
                 <div className="border border-[#d4af37]/60 p-2 bg-white/90 shadow-sm flex flex-col items-center rounded-xl max-w-[130px] text-center backdrop-blur-sm">
-                  <span className="text-[7px] font-black text-white bg-[#063b28] px-2 py-0.5 rounded-md tracking-wider mb-1 block w-full uppercase">SCAN TO VERIFY</span>
+                  <span className="text-[7px] font-black text-white bg-[#053926] px-2 py-0.5 rounded-md tracking-wider mb-1 block w-full uppercase">SCAN TO VERIFY</span>
                   <img
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=85x85&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${activePrintCert.uid}`}
                     alt="Verification QR Code"
@@ -4869,38 +4872,30 @@ export default function AdminDashboardPage() {
                   />
                   <p className="text-[6px] text-slate-500 leading-tight mt-1 font-medium">Scan code to verify authenticity on official portal.</p>
                 </div>
-                <div className="font-mono text-[7px] text-[#063b28] bg-amber-500/10 border border-[#d4af37]/40 rounded-md px-2 py-0.5 mt-1.5 font-bold uppercase tracking-wider">
+                <div className="font-mono text-[7px] text-[#053926] bg-amber-500/10 border border-[#d4af37]/40 rounded-md px-2 py-0.5 mt-1.5 font-bold uppercase tracking-wider">
                   UID: {activePrintCert.uid}
                 </div>
               </div>
 
-              {/* Middle Column: Physical Stamp Area & Issue Date */}
+              {/* Middle Column: Blank Physical Stamp Area & Issue Date */}
               <div className="flex flex-col items-center justify-end pb-1">
-                {/* Physical Stamp circle outline */}
-                <div className="w-16 h-16 border-2 border-dashed border-[#d4af37]/60 rounded-full flex flex-col items-center justify-center text-[6px] text-slate-400 font-bold uppercase tracking-wider bg-white/40">
+                {/* Physical Stamp Circle Outline */}
+                <div className="w-16 h-16 border-2 border-dashed border-[#d4af37]/60 rounded-full flex flex-col items-center justify-center text-[6px] text-slate-400 font-bold uppercase tracking-wider bg-white/40 mb-1">
                   <span>Physical</span>
                   <span>Stamp</span>
                 </div>
-                <div className="text-center mt-2">
+                <div className="text-center">
                   <span className="text-[8px] uppercase tracking-wider font-extrabold text-slate-500 block">DATE OF ISSUE</span>
-                  <p className="text-xs font-bold text-[#063b28] font-mono">{new Date(activePrintCert.issueDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                  <p className="text-xs font-bold text-[#053926] font-mono">{new Date(activePrintCert.issueDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                 </div>
               </div>
 
-              {/* Right Column: Gold Seal Badge & Authorized Signatory */}
+              {/* Right Column: Blank Physical Signature Line */}
               <div className="flex flex-col items-center justify-end pb-1">
-                {/* Gold Seal Badge */}
-                <div className="w-16 h-16 rounded-full border-2 border-amber-600 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-0.5 flex items-center justify-center shadow-md mb-1 relative overflow-hidden">
-                  <div className="w-full h-full rounded-full border border-amber-200/60 flex flex-col items-center justify-center text-center text-amber-950 p-1 bg-amber-400/90">
-                    <span className="text-[4.5px] font-black uppercase tracking-widest leading-none text-amber-950">ECOVISTA GLOBAL</span>
-                    <span className="text-xs font-black tracking-tighter my-0.5 text-[#063b28]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>EF</span>
-                    <span className="text-[4.5px] font-black uppercase tracking-widest leading-none text-amber-950">PRIVATE LIMITED</span>
-                  </div>
-                </div>
-
-                <div className="w-36 border-t-2 border-[#063b28] mt-1" />
+                {/* Blank space for physical signature */}
+                <div className="h-12 w-36" />
+                <div className="w-36 border-t-2 border-[#053926]" />
                 <div className="text-center w-36 mt-1">
-                  <span className="text-sm font-bold text-[#063b28] block" style={{ fontFamily: "'Great Vibes', cursive, Georgia, serif" }}>{activePrintCert.authorizedSignatory}</span>
                   <p className="text-[7px] uppercase tracking-widest text-amber-800 font-extrabold block">AUTHORIZED SIGNATORY</p>
                   <p className="text-[6px] text-slate-500 block">Ecovista Global Private Limited</p>
                 </div>
