@@ -65,15 +65,21 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
         {/* Header Logo section */}
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-3">
-            <span className="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-              ECOVISTA
-            </span>
-            <div className="w-[2px] h-6 bg-slate-700" />
-            <span className="text-sm font-semibold tracking-widest text-slate-400 uppercase">
-              Verification Portal
-            </span>
+            <img
+              src="/logo.png"
+              alt="EcoFone Logo"
+              className="h-14 sm:h-16 w-auto object-contain drop-shadow-md"
+            />
+            <div className="w-[2px] h-9 bg-slate-700/80" />
+            <div className="text-left">
+              <span className="text-sm sm:text-base font-extrabold tracking-widest text-emerald-400 uppercase block leading-tight">
+                Verification Portal
+              </span>
+              <span className="text-[10px] text-slate-400 block font-semibold mt-0.5">
+                Ecovista Global Private Limited
+              </span>
+            </div>
           </div>
-          <p className="text-xs text-slate-500 mt-2">Ecovista Global Private Limited Authenticity Check</p>
         </div>
 
         {loading ? (
