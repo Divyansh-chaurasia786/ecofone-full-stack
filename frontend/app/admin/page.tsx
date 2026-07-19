@@ -651,9 +651,9 @@ export default function AdminDashboardPage() {
         issueDate: newCertIssueDate,
         description: 'Successfully completed term at Ecovista Global Private Limited.',
         authorizedSignatory: 'Ecovista Global Private Limited',
-        registeredOffice: newCertOffice.trim() || '4th Floor, Statesman House, 148, Barakhamba Road, Connaught Place, New Delhi - 110001, India',
-        website: newCertWebsite.trim() || 'www.ecovistaglobal.com',
-        email: newCertEmail.trim() || 'info@ecovistaglobal.com',
+        registeredOffice: newCertOffice.trim() || '505, JB Metro Heights, Kanpur Road, Lucknow – 226012',
+        website: newCertWebsite.trim() || 'www.ecofone.co.in',
+        email: newCertEmail.trim() || 'support@ecofone.co.in',
         cin: newCertCin.trim() || 'U70109UP2020PTC138839',
       };
 
