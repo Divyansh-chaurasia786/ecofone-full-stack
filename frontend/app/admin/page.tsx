@@ -3814,9 +3814,9 @@ export default function AdminDashboardPage() {
                   <div className="pb-3.5 border-b border-slate-800 flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                     <div>
                       <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
-                        <span>Verification Records & QR Registry</span>
+                        <span>Official Certificate Verification Registry</span>
                       </h3>
-                      <p className="text-[10px] text-slate-400 mt-1">Official immutable audit trail and high-resolution QR asset generation.</p>
+                      <p className="text-[10px] text-slate-400 mt-1">Immutable official audit database and QR asset management.</p>
                     </div>
 
                     {/* Formal From Date to To Date Range Filter */}
@@ -3883,7 +3883,7 @@ export default function AdminDashboardPage() {
                       <table className="w-full text-left border-collapse text-xs">
                         <thead>
                           <tr className="border-b border-slate-800 text-slate-400 uppercase font-extrabold text-[10px] tracking-wider">
-                            <th className="py-3 px-4">Verification QR</th>
+                            <th className="py-3 px-4">QR Asset</th>
                             <th className="py-3 px-4">UID & Recipient</th>
                             <th className="py-3 px-4">Category & Role</th>
                             <th className="py-3 px-4">Issue Date</th>
@@ -3914,44 +3914,44 @@ export default function AdminDashboardPage() {
                               </td>
                               <td className="py-3 px-4">
                                 <span className="font-mono text-emerald-400 font-bold block">{cert.uid}</span>
-                                <span className="font-extrabold text-slate-100 block text-sm mt-0.5 uppercase">{cert.recipientName?.toUpperCase()}</span>
+                                <span className="font-extrabold text-slate-100 block text-sm mt-0.5 uppercase tracking-wide">{cert.recipientName?.toUpperCase()}</span>
                               </td>
                               <td className="py-3 px-4">
                                 <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded uppercase tracking-wide">
                                   {cert.type}
                                 </span>
                                 {cert.startDate && cert.endDate && (
-                                  <span className="text-[9px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded ml-1.5 uppercase">
-                                    ⏱️ {calculateTenure(cert.startDate, cert.endDate)}
+                                  <span className="text-[9px] font-extrabold text-amber-400/90 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded ml-1.5 uppercase tracking-wide">
+                                    Tenure: {calculateTenure(cert.startDate, cert.endDate)}
                                   </span>
                                 )}
                                 <span className="text-slate-300 font-medium block mt-1">{cert.role}</span>
                               </td>
-                              <td className="py-3 px-4 text-slate-400 font-medium">
+                              <td className="py-3 px-4 text-slate-400 font-medium font-mono text-xs">
                                 {new Date(cert.issueDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
                               </td>
                               <td className="py-3 px-4 text-right">
-                                <div className="flex flex-col items-end gap-2">
+                                <div className="flex flex-col items-end gap-1.5 w-36 ml-auto">
                                   <button
                                     onClick={() => handleDownloadQrCode(cert.uid)}
-                                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-xs rounded-lg border border-slate-700 hover:border-slate-600 transition-all flex items-center gap-1.5 shadow-sm"
+                                    className="w-full px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-[11px] rounded-lg border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-center gap-1.5 shadow-sm"
                                   >
                                     <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                     </svg>
-                                    <span>Download QR</span>
+                                    <span>Download QR Asset</span>
                                   </button>
                                   <a
                                     href={`/verify-certificate/${cert.uid}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="px-3 py-1.5 bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 font-semibold text-xs rounded-lg border border-emerald-500/30 hover:border-emerald-500/60 transition-all flex items-center gap-1.5 shadow-sm"
+                                    className="w-full px-3 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 font-semibold text-[11px] rounded-lg border border-emerald-500/30 hover:border-emerald-500/60 transition-all flex items-center justify-center gap-1.5 shadow-sm"
                                   >
                                     <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>
-                                    <span>View Record</span>
+                                    <span>View Portal</span>
                                   </a>
                                 </div>
                               </td>
