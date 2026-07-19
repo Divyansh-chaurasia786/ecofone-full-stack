@@ -3920,11 +3920,6 @@ export default function AdminDashboardPage() {
                                 <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded uppercase tracking-wide">
                                   {cert.type}
                                 </span>
-                                {cert.startDate && cert.endDate && (
-                                  <span className="text-[9px] font-extrabold text-amber-400/90 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded ml-1.5 uppercase tracking-wide">
-                                    Tenure: {calculateTenure(cert.startDate, cert.endDate)}
-                                  </span>
-                                )}
                                 <span className="text-slate-300 font-medium block mt-1">{cert.role}</span>
                               </td>
                               <td className="py-3 px-4 text-slate-400 font-medium font-mono text-xs">

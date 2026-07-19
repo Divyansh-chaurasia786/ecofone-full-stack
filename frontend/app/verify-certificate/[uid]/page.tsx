@@ -167,59 +167,67 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
           </div>
         ) : (
           // Success State (Verified Certificate)
-          <div className="bg-slate-900/60 backdrop-blur-xl border border-emerald-950/40 rounded-2xl p-8 shadow-2xl relative">
-            {/* Stamp highlight */}
-            <div className="absolute top-4 right-4 bg-emerald-500/10 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/20 tracking-wider uppercase">
-              ✓ VERIFIED
+          <div className="bg-slate-900/60 backdrop-blur-xl border border-emerald-950/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative font-sans">
+            {/* Top Corporate Status Badge */}
+            <div className="absolute top-5 right-5 bg-emerald-950/60 text-emerald-400 text-[10px] font-extrabold px-3 py-1 rounded-md border border-emerald-500/30 tracking-widest uppercase flex items-center gap-1.5">
+              <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+              <span>VERIFIED RECORD</span>
             </div>
 
             {/* Content header */}
-            <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-16 h-16 bg-emerald-950/50 border border-emerald-500/30 rounded-full flex items-center justify-center mb-4 text-emerald-400 text-3xl">
-                ✓
+            <div className="flex flex-col items-center text-center mb-6 pt-2">
+              <div className="w-14 h-14 bg-emerald-950/40 border border-emerald-500/30 rounded-2xl flex items-center justify-center mb-4 text-emerald-400 shadow-lg shadow-emerald-950/30">
+                <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
               </div>
-              <h1 className="text-2xl font-extrabold text-emerald-400">Authentic Certificate</h1>
-              <p className="text-slate-400 text-xs mt-1">Verified on official Ecovista Database</p>
-              <div className="font-mono text-xs bg-slate-800 px-3 py-1 rounded mt-3 text-slate-300 border border-slate-700">
-                UID: {certificate?.uid}
+              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-wide uppercase">Official Record Authenticated</h1>
+              <p className="text-slate-400 text-xs mt-1">Ecovista Global Official Central Database Verification System</p>
+              <div className="font-mono text-xs bg-slate-950 px-3.5 py-1.5 rounded-lg mt-3.5 text-emerald-400 border border-slate-800 font-bold tracking-wider">
+                RECORD UID: {certificate?.uid}
               </div>
             </div>
 
             {/* Recipient Details */}
             <div className="border-t border-b border-slate-800/80 py-6 my-6 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Recipient Name</span>
-                  <span className="text-base font-bold text-slate-100 uppercase tracking-wide">{certificate?.recipientName?.toUpperCase()}</span>
+                  <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider block">Recipient Full Name</span>
+                  <span className="text-base font-extrabold text-slate-100 uppercase tracking-wide block mt-0.5">{certificate?.recipientName?.toUpperCase()}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Certificate Category</span>
-                  <span className="text-base font-bold text-emerald-400 uppercase">{certificate?.type} Certificate</span>
+                  <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider block">Certificate Category</span>
+                  <span className="text-base font-extrabold text-emerald-400 uppercase tracking-wide block mt-0.5">{certificate?.type} Certificate</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Role / Designation</span>
-                  <span className="text-base font-bold text-slate-200">{certificate?.role}</span>
+                  <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider block">Role / Designation</span>
+                  <span className="text-sm font-bold text-slate-200 block mt-0.5">{certificate?.role}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Duration & Total Experience</span>
-                  <span className="text-sm font-semibold text-slate-300 block">
+                  <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider block">Tenure Duration</span>
+                  <span className="text-sm font-semibold text-slate-300 block mt-0.5">
                     {formatDate(certificate?.startDate || '')} - {formatDate(certificate?.endDate || '')}
                   </span>
                   {certificate?.startDate && certificate?.endDate && (
-                    <span className="inline-block mt-1.5 text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-md uppercase tracking-wide">
-                      ⏱️ Experience: {calculateTenure(certificate.startDate, certificate.endDate)}
+                    <span className="inline-block mt-1.5 text-[10px] font-extrabold text-amber-400/90 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+                      Calculated Tenure: {calculateTenure(certificate.startDate, certificate.endDate)}
                     </span>
                   )}
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Date of Issue</span>
-                  <span className="text-sm font-semibold text-slate-300">{formatDate(certificate?.issueDate || '')}</span>
+                  <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider block">Date of Issue</span>
+                  <span className="text-sm font-semibold text-slate-300 block mt-0.5 font-mono">{formatDate(certificate?.issueDate || '')}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Verification Status</span>
-                  <span className="text-sm font-bold text-emerald-400 flex items-center gap-1.5 mt-0.5">
-                    <span>✓</span> Verified Official Entry
-                  </span>
+                  <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider block">Verification Status</span>
+                  <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-extrabold mt-1 uppercase tracking-wide">
+                    <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Authentic Active Record</span>
+                  </div>
                 </div>
               </div>
             </div>
