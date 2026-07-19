@@ -681,6 +681,34 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleDownloadQrCode = (uid: string) => {
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${uid}`;
+    fetch(qrUrl)
+      .then(res => res.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `QR_${uid}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(err => {
+        console.error('QR download failed:', err);
+        alert('Failed to download QR code image.');
+      });
+  };
+
+  const handleCopyVerificationLink = (uid: string) => {
+    const url = `https://ecofone-frontend-new.vercel.app/verify-certificate/${uid}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    alert(`Verification link copied to clipboard!\n${url}`);
+  };
+
   const loadDashboardData = async (silent = false) => {
     if (!silent) setIsLoading(true);
     try {
@@ -2170,7 +2198,7 @@ export default function AdminDashboardPage() {
                 }`}
               >
                 <span className="text-sm">🎓</span>
-                <span>Certificates ({certificates.length})</span>
+                <span>Verification Records ({certificates.length})</span>
               </button>
             )}
             {allowedPermissions.includes('security') && (
@@ -3588,13 +3616,13 @@ export default function AdminDashboardPage() {
 
             {activeTab === 'certificates' && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
-                {/* Certificate creation form */}
+                {/* Entry registration form */}
                 <div className="lg:col-span-1 bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
                   <div className="pb-3 border-b border-slate-800/80">
                     <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
-                      <span>🎓 Certificate Generator</span>
+                      <span>📝 Register Intern / Employee Entry</span>
                     </h3>
-                    <p className="text-[10px] text-slate-400 mt-1">Issue verified internship or experience certificates for employees/interns.</p>
+                    <p className="text-[10px] text-slate-400 mt-1">Add intern or employee details to register their verification entry and generate a QR code for their physical certificate.</p>
                   </div>
 
                   <form onSubmit={handleCreateCertificateSubmit} className="space-y-3.5 text-xs text-slate-350">
@@ -3620,7 +3648,7 @@ export default function AdminDashboardPage() {
                           }}
                           className="text-[9px] text-emerald-400 hover:text-emerald-300 font-bold uppercase tracking-wider transition-colors"
                         >
-                          🔄 Generate New UID
+                          🔄 Refresh UID
                         </button>
                       </div>
                       <input
@@ -3637,7 +3665,7 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipient Full Name *</label>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Full Name of Employee/Intern *</label>
                       <input
                         type="text"
                         required
@@ -3649,7 +3677,7 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate Type *</label>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate Category *</label>
                       <select
                         value={newCertType}
                         onChange={(e) => setNewCertType(e.target.value)}
@@ -3662,7 +3690,7 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Role / Designation *</label>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Role / Designation *</label>
                       <input
                         type="text"
                         required
@@ -3675,7 +3703,7 @@ export default function AdminDashboardPage() {
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Start Date *</label>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Start Date *</label>
                         <input
                           type="date"
                           required
@@ -3685,7 +3713,7 @@ export default function AdminDashboardPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">End Date *</label>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">End Date *</label>
                         <input
                           type="date"
                           required
@@ -3698,7 +3726,7 @@ export default function AdminDashboardPage() {
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Issue Date *</label>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Issue Date *</label>
                         <input
                           type="date"
                           required
@@ -3708,7 +3736,7 @@ export default function AdminDashboardPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Authorized Signer *</label>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Authorized Signatory *</label>
                         <input
                           type="text"
                           required
@@ -3720,11 +3748,11 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="block text-[10px] font-bold text-slate-405 uppercase tracking-wider">Scope of Work & Assessment *</label>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scope of Work & Assessment *</label>
                       <textarea
                         required
                         rows={3}
-                        placeholder="Description of the intern/employee's behavior, work, and achievements..."
+                        placeholder="Description of the intern/employee's work and performance..."
                         value={newCertDesc}
                         onChange={(e) => setNewCertDesc(e.target.value)}
                         className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500 resize-none leading-relaxed"
@@ -3735,66 +3763,96 @@ export default function AdminDashboardPage() {
                       <button
                         type="submit"
                         disabled={certFormLoading}
-                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-lg"
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2.5 rounded-xl transition-all disabled:opacity-50 shadow-lg flex items-center justify-center gap-2"
                       >
-                        {certFormLoading ? 'Generating...' : 'Issue Certificate'}
+                        <span>{certFormLoading ? 'Registering...' : 'Save Record & Generate QR'}</span>
                       </button>
                     </div>
                   </form>
                 </div>
 
-                {/* Certificate List Registry */}
+                {/* Verification Records & QR Registry */}
                 <div className="lg:col-span-2 bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4 font-sans">
-                  <div className="pb-3 border-b border-slate-800/80">
-                    <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
-                      <span>📋 Issued Certificates Registry</span>
-                    </h3>
-                    <p className="text-[10px] text-slate-400 mt-1">Review, delete, or print/preview issued certificates.</p>
+                  <div className="pb-3 border-b border-slate-800/80 flex items-center justify-between">
+                    <div>
+                      <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                        <span>📋 Verification Records & QR Registry</span>
+                      </h3>
+                      <p className="text-[10px] text-slate-400 mt-1">Download generated QR code images to paste onto your physical certificates.</p>
+                    </div>
                   </div>
 
                   {certificates.length === 0 ? (
                     <div className="py-12 text-center text-xs text-slate-500 border border-dashed border-slate-850 rounded-2xl bg-slate-900/10">
-                      No certificates issued yet. Fill the form to create one.
+                      No verification records created yet. Register an entry to generate its QR code.
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse text-xs">
                         <thead>
-                          <tr className="border-b border-slate-800 text-slate-450 uppercase font-extrabold text-[10px] tracking-wider">
-                            <th className="py-3 px-4">UID</th>
-                            <th className="py-3 px-4">Recipient</th>
-                            <th className="py-3 px-4">Type & Role</th>
+                          <tr className="border-b border-slate-800 text-slate-400 uppercase font-extrabold text-[10px] tracking-wider">
+                            <th className="py-3 px-4">Verification QR</th>
+                            <th className="py-3 px-4">UID & Recipient</th>
+                            <th className="py-3 px-4">Category & Role</th>
                             <th className="py-3 px-4">Issue Date</th>
                             <th className="py-3 px-4 text-right">Actions</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-850/60 text-slate-355">
+                        <tbody className="divide-y divide-slate-850/60 text-slate-300">
                           {certificates.map((cert) => (
                             <tr key={cert.id} className="hover:bg-slate-900/20">
-                              <td className="py-3 px-4 font-mono font-bold text-slate-200">{cert.uid}</td>
-                              <td className="py-3 px-4 font-bold text-slate-100">{cert.recipientName}</td>
                               <td className="py-3 px-4">
-                                <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded mr-2 uppercase tracking-wide">
+                                <div className="flex flex-col items-center gap-1">
+                                  <img
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${cert.uid}`}
+                                    alt="Verification QR"
+                                    className="w-14 h-14 object-contain bg-white p-1 rounded-lg border border-slate-700 shadow-sm"
+                                  />
+                                  <button
+                                    onClick={() => handleDownloadQrCode(cert.uid)}
+                                    className="text-[9px] font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded transition-all"
+                                    title="Download high-resolution QR PNG to print or paste on physical certificate"
+                                  >
+                                    📥 Download QR
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className="font-mono text-emerald-400 font-bold block">{cert.uid}</span>
+                                <span className="font-extrabold text-slate-100 block text-sm mt-0.5">{cert.recipientName}</span>
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded uppercase tracking-wide">
                                   {cert.type}
                                 </span>
-                                <span className="text-slate-400">{cert.role}</span>
+                                <span className="text-slate-300 font-medium block mt-1">{cert.role}</span>
                               </td>
-                              <td className="py-3 px-4 text-slate-400">
-                                {new Date(cert.issueDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              <td className="py-3 px-4 text-slate-400 font-medium">
+                                {new Date(cert.issueDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
                               </td>
-                              <td className="py-3 px-4 text-right space-x-3.5">
-                                <button
-                                  onClick={() => { setActivePrintCert(cert); setPrintModalOpen(true); }}
-                                  className="text-emerald-400 hover:text-emerald-350 transition-colors font-bold text-xs"
-                                >
-                                  🖨️ Print
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteCertificate(cert.id)}
-                                  className="text-rose-500 hover:text-rose-455 transition-colors font-bold text-xs"
-                                >
-                                  Delete
-                                </button>
+                              <td className="py-3 px-4 text-right space-y-1">
+                                <div className="flex flex-col items-end gap-1.5">
+                                  <button
+                                    onClick={() => handleCopyVerificationLink(cert.uid)}
+                                    className="text-xs font-bold text-slate-300 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-slate-700 w-full text-center"
+                                  >
+                                    🔗 Copy Link
+                                  </button>
+                                  <a
+                                    href={`/verify-certificate/${cert.uid}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors w-full text-center"
+                                  >
+                                    👁️ Test View
+                                  </a>
+                                  <button
+                                    onClick={() => handleDeleteCertificate(cert.id)}
+                                    className="text-xs font-bold text-rose-500 hover:text-rose-400 transition-colors w-full text-center"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -4703,217 +4761,6 @@ export default function AdminDashboardPage() {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {printModalOpen && activePrintCert && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 flex items-center justify-center p-4 print:p-0 print:bg-white">
-          <style>{`
-            @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap');
-            
-            @media print {
-              body * {
-                visibility: hidden;
-              }
-              .print\\:block, .print\\:block * {
-                visibility: visible;
-              }
-              .fixed.inset-0.z-50 {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-              }
-              .fixed.inset-0.z-50 * {
-                visibility: visible;
-              }
-              .print\\:hidden {
-                display: none !important;
-              }
-            }
-          `}</style>
-          
-          <div className="absolute top-4 right-4 flex gap-3 print:hidden z-50">
-            <button
-              onClick={handleDownloadPdf}
-              disabled={isExportingPdf}
-              className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5 disabled:opacity-50"
-            >
-              📥 {isExportingPdf ? 'Exporting PDF...' : 'Download PDF'}
-            </button>
-            <button
-              onClick={() => window.print()}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5"
-            >
-              🖨️ Print
-            </button>
-            <button
-              onClick={() => { setPrintModalOpen(false); setActivePrintCert(null); }}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl shadow transition-all border border-slate-700"
-            >
-              ✕ Close
-            </button>
-          </div>
-
-          {/* High-fidelity Landscape Certificate container matching authentic design */}
-          <div
-            id="printable-certificate-container"
-            className="w-[1020px] h-[660px] bg-[#fdfbf7] border-[14px] border-[#063b28] p-7 flex flex-col justify-between relative shadow-2xl overflow-hidden print:shadow-none font-sans"
-            style={{ color: '#0f172a' }}
-          >
-            {/* Subtle background EF watermark */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] select-none">
-              <span className="font-extrabold text-[320px] tracking-tighter text-[#063b28]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>EF</span>
-            </div>
-
-            {/* Inner Double Gold Border */}
-            <div className="absolute inset-3 border-2 border-[#d4af37] pointer-events-none" />
-            <div className="absolute inset-[16px] border border-[#d4af37]/60 pointer-events-none" />
-
-            {/* Top-Left Dark Green & Gold Corner Flourish */}
-            <div className="absolute top-0 left-0 w-36 h-36 pointer-events-none">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <polygon points="0,0 100,0 0,100" fill="#063b28" />
-                <line x1="0" y1="100" x2="100" y2="0" stroke="#d4af37" strokeWidth="3" />
-                <line x1="0" y1="92" x2="92" y2="0" stroke="#d4af37" strokeWidth="1" opacity="0.7" />
-              </svg>
-            </div>
-
-            {/* Bottom-Right Dark Green & Gold Corner Flourish */}
-            <div className="absolute bottom-0 right-0 w-36 h-36 pointer-events-none">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <polygon points="100,100 0,100 100,0" fill="#063b28" />
-                <line x1="0" y1="100" x2="100" y2="0" stroke="#d4af37" strokeWidth="3" />
-                <line x1="8" y1="100" x2="100" y2="8" stroke="#d4af37" strokeWidth="1" opacity="0.7" />
-              </svg>
-            </div>
-
-            {/* Top Header Section */}
-            <div className="flex flex-col items-center relative z-10 pt-1">
-              <div className="flex items-center gap-2">
-                {/* EF Styled Monogram Logo with Circuit Lines */}
-                <svg viewBox="0 0 100 80" className="w-12 h-10 shrink-0">
-                  <path d="M 10,10 L 45,10 L 45,22 L 24,22 L 24,34 L 40,34 L 40,46 L 24,46 L 24,58 L 46,58 L 46,70 L 10,70 Z" fill="#053926" />
-                  <path d="M 50,10 L 85,10 L 85,22 L 64,22 L 64,34 L 80,34 L 80,46 L 64,46 L 64,70 L 50,70 Z" fill="#f37021" />
-                  <circle cx="72" cy="58" r="2.5" fill="#f59e0b" />
-                  <line x1="72" y1="58" x2="72" y2="28" stroke="#f59e0b" strokeWidth="2" />
-                  <line x1="72" y1="28" x2="78" y2="28" stroke="#f59e0b" strokeWidth="2" />
-                  <circle cx="78" cy="28" r="2" fill="#f59e0b" />
-                </svg>
-                <div className="text-left font-sans">
-                  <h1 className="text-2xl font-black tracking-tight text-[#053926] leading-none" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>EcoFone</h1>
-                  <span className="text-[8px] font-extrabold text-[#f37021] uppercase tracking-[0.25em] block mt-0.5">Luxury within reach</span>
-                </div>
-              </div>
-
-              <div className="mt-2 flex items-center justify-center gap-3 text-[9px] uppercase tracking-[0.2em] font-extrabold text-[#053926]">
-                <div className="w-10 h-[1px] bg-[#d4af37]" />
-                <span>AN INITIATIVE OF ECOVISTA GLOBAL PRIVATE LIMITED</span>
-                <div className="w-10 h-[1px] bg-[#d4af37]" />
-              </div>
-            </div>
-
-            {/* Certificate Title */}
-            <div className="text-center relative z-10 my-1">
-              <h2 className="text-3xl font-black tracking-[0.2em] text-[#053926] uppercase" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
-                CERTIFICATE
-              </h2>
-              <div className="flex items-center justify-center gap-2 mt-1">
-                <span className="text-amber-600 text-xs">♦</span>
-                <span className="text-xs font-bold tracking-[0.25em] text-amber-700 uppercase" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
-                  OF {activePrintCert.type}
-                </span>
-                <span className="text-amber-600 text-xs">♦</span>
-              </div>
-            </div>
-
-            {/* Certificate Body Text */}
-            <div className="text-center px-14 space-y-2 relative z-10">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">
-                THIS IS TO CERTIFY THAT
-              </p>
-
-              {/* Recipient Name in Elegant Cursive Script */}
-              <h3 className="text-5xl font-normal text-[#053926] leading-tight my-1 py-1" style={{ fontFamily: "'Great Vibes', cursive, Georgia, serif" }}>
-                {activePrintCert.recipientName}
-              </h3>
-
-              <p className="text-xs text-slate-700 leading-relaxed max-w-2xl mx-auto font-medium" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                has successfully completed an internship at <strong className="text-[#053926] font-bold">Ecovista Global Private Limited</strong> as a <strong className="text-[#053926] font-bold">{activePrintCert.role}</strong> from <strong className="text-slate-900 font-semibold">{new Date(activePrintCert.startDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</strong> to <strong className="text-slate-900 font-semibold">{new Date(activePrintCert.endDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</strong>.
-              </p>
-
-              <p className="text-[11px] text-slate-600 leading-relaxed italic max-w-2xl mx-auto font-normal" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                "{activePrintCert.description}"
-              </p>
-
-              <p className="text-[10px] text-slate-500 font-medium pt-0.5" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                We wish them all the best for their future endeavors.
-              </p>
-            </div>
-
-            {/* Bottom Footer Section: Left QR card, Middle Stamp, Right Signature */}
-            <div className="grid grid-cols-3 items-end px-6 relative z-10 mb-1">
-              {/* Left Column: QR Verification card */}
-              <div className="flex flex-col items-start">
-                <div className="border border-[#d4af37]/60 p-2 bg-white/90 shadow-sm flex flex-col items-center rounded-xl max-w-[130px] text-center backdrop-blur-sm">
-                  <span className="text-[7px] font-black text-white bg-[#053926] px-2 py-0.5 rounded-md tracking-wider mb-1 block w-full uppercase">SCAN TO VERIFY</span>
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=85x85&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${activePrintCert.uid}`}
-                    alt="Verification QR Code"
-                    className="w-16 h-16 object-contain"
-                  />
-                  <p className="text-[6px] text-slate-500 leading-tight mt-1 font-medium">Scan code to verify authenticity on official portal.</p>
-                </div>
-                <div className="font-mono text-[7px] text-[#053926] bg-amber-500/10 border border-[#d4af37]/40 rounded-md px-2 py-0.5 mt-1.5 font-bold uppercase tracking-wider">
-                  UID: {activePrintCert.uid}
-                </div>
-              </div>
-
-              {/* Middle Column: Blank Physical Stamp Area & Issue Date */}
-              <div className="flex flex-col items-center justify-end pb-1">
-                {/* Physical Stamp Circle Outline */}
-                <div className="w-16 h-16 border-2 border-dashed border-[#d4af37]/60 rounded-full flex flex-col items-center justify-center text-[6px] text-slate-400 font-bold uppercase tracking-wider bg-white/40 mb-1">
-                  <span>Physical</span>
-                  <span>Stamp</span>
-                </div>
-                <div className="text-center">
-                  <span className="text-[8px] uppercase tracking-wider font-extrabold text-slate-500 block">DATE OF ISSUE</span>
-                  <p className="text-xs font-bold text-[#053926] font-mono">{new Date(activePrintCert.issueDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
-                </div>
-              </div>
-
-              {/* Right Column: Blank Physical Signature Line */}
-              <div className="flex flex-col items-center justify-end pb-1">
-                {/* Blank space for physical signature */}
-                <div className="h-12 w-36" />
-                <div className="w-36 border-t-2 border-[#053926]" />
-                <div className="text-center w-36 mt-1">
-                  <p className="text-[7px] uppercase tracking-widest text-amber-800 font-extrabold block">AUTHORIZED SIGNATORY</p>
-                  <p className="text-[6px] text-slate-500 block">Ecovista Global Private Limited</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom corporate metadata footer bar */}
-            <div className="bg-[#063b28] text-white py-2 px-4 rounded-xl flex justify-between items-center text-[7px] font-sans font-medium tracking-wide border border-[#d4af37]/60 shadow-inner relative z-10">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[9px] text-amber-400">📍</span>
-                <span><strong>REGISTERED OFFICE:</strong> {activePrintCert.registeredOffice}</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-200 shrink-0">
-                <span className="flex items-center gap-1"><span className="text-[9px] text-amber-400">🌐</span> {activePrintCert.website}</span>
-                <span className="flex items-center gap-1"><span className="text-[9px] text-amber-400">✉️</span> {activePrintCert.email}</span>
-                <span className="flex items-center gap-1"><span className="text-[9px] text-amber-400">📄</span> CIN: {activePrintCert.cin}</span>
-              </div>
-            </div>
           </div>
         </div>
       )}
