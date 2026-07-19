@@ -632,50 +632,58 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleCreateCertificateSubmit = async (e: React.FormEvent) => {
+  const [certConfirmModalOpen, setCertConfirmModalOpen] = useState(false);
+  const [pendingCertPayload, setPendingCertPayload] = useState<any>(null);
+
+  const handleCreateCertificateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!newCertName.trim() || !newCertRole.trim()) return;
 
-    const confirmed = window.confirm(
-      `🔒 OFFICIAL REGISTRATION NOTICE:\n\nOnce saved, this entry (${newCertName.trim().toUpperCase()}) will be permanently registered in Ecovista Global's official verification database.\n\nThis record CANNOT be deleted or modified after creation.\n\nDo you wish to confirm and generate the verification QR code?`
-    );
+    const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
+    // Auto-generate guaranteed unique UID (EVG-{TYPE}-{YEAR}-{TIME_RANDOM})
+    const autoUid = `EVG-${typeCode}-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}${Math.floor(100 + Math.random() * 900)}`;
 
-    if (!confirmed) return;
+    const payload = {
+      uid: autoUid,
+      recipientName: newCertName.trim().toUpperCase(),
+      type: newCertType,
+      role: newCertRole.trim(),
+      startDate: newCertStartDate,
+      endDate: newCertEndDate,
+      issueDate: newCertIssueDate,
+      description: 'Successfully completed term at Ecovista Global Private Limited.',
+      authorizedSignatory: 'Ecovista Global Private Limited',
+      registeredOffice: newCertOffice.trim() || '505, JB Metro Heights, Kanpur Road, Lucknow – 226012',
+      website: newCertWebsite.trim() || 'www.ecofone.co.in',
+      email: newCertEmail.trim() || 'support@ecofone.co.in',
+      cin: newCertCin.trim() || 'U70109UP2020PTC138839',
+    };
 
+    setPendingCertPayload(payload);
+    setCertConfirmModalOpen(true);
+  };
+
+  const handleConfirmCertificateSave = async () => {
+    if (!pendingCertPayload) return;
+    setCertConfirmModalOpen(false);
     setCertFormError('');
     setCertFormSuccess('');
     setCertFormLoading(true);
 
     try {
-      const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
-      // Auto-generate guaranteed unique UID (EVG-{TYPE}-{YEAR}-{TIME_RANDOM})
-      const autoUid = `EVG-${typeCode}-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}${Math.floor(100 + Math.random() * 900)}`;
-
-      const payload = {
-        uid: autoUid,
-        recipientName: newCertName.trim().toUpperCase(),
-        type: newCertType,
-        role: newCertRole.trim(),
-        startDate: newCertStartDate,
-        endDate: newCertEndDate,
-        issueDate: newCertIssueDate,
-        description: 'Successfully completed term at Ecovista Global Private Limited.',
-        authorizedSignatory: 'Ecovista Global Private Limited',
-        registeredOffice: newCertOffice.trim() || '505, JB Metro Heights, Kanpur Road, Lucknow – 226012',
-        website: newCertWebsite.trim() || 'www.ecofone.co.in',
-        email: newCertEmail.trim() || 'support@ecofone.co.in',
-        cin: newCertCin.trim() || 'U70109UP2020PTC138839',
-      };
-
-      const result = await api.createCertificate(payload);
+      const result = await api.createCertificate(pendingCertPayload);
       setCertificates(prev => [result, ...prev]);
 
       setNewCertName('');
       setNewCertRole('');
       setCertFormSuccess('✓ Entry officially registered & locked in database. Verification QR code is generated and ready for download.');
+      showCorporateToast('success', 'Official Registration Complete', `Record for ${pendingCertPayload.recipientName} registered and locked.`);
     } catch (err: any) {
       setCertFormError(err.message || 'Failed to create verification record.');
+      showCorporateToast('error', 'Registration Error', err.message || 'Failed to create record.');
     } finally {
       setCertFormLoading(false);
+      setPendingCertPayload(null);
     }
   };
 
@@ -4831,6 +4839,78 @@ export default function AdminDashboardPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* M. CUSTOM IN-APP REGISTRATION CONFIRMATION MODAL */}
+      {certConfirmModalOpen && pendingCertPayload && (
+        <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-[#111827] border border-amber-500/30 rounded-3xl p-6 sm:p-7 w-full max-w-md shadow-2xl space-y-5 animate-scale-up text-slate-100 font-sans">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-lg">
+                  🔒
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold text-white uppercase tracking-wider">
+                    Official Registration Notice
+                  </h3>
+                  <p className="text-[10px] text-amber-400/90 font-medium">Ecovista Global Permanent Records</p>
+                </div>
+              </div>
+              <button
+                onClick={() => { setCertConfirmModalOpen(false); setPendingCertPayload(null); }}
+                className="text-slate-400 hover:text-white transition-colors text-sm"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800 text-xs">
+              <div>
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Recipient Full Name</span>
+                <span className="text-sm font-extrabold text-slate-100 uppercase tracking-wide">{pendingCertPayload.recipientName}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Category</span>
+                  <span className="text-xs font-bold text-emerald-400 uppercase">{pendingCertPayload.type}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Issue Date</span>
+                  <span className="text-xs font-semibold text-slate-300">{pendingCertPayload.issueDate}</span>
+                </div>
+              </div>
+              <div className="pt-1">
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Role / Designation</span>
+                <span className="text-xs font-medium text-slate-300">{pendingCertPayload.role}</span>
+              </div>
+            </div>
+
+            <div className="bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-2xl text-[11px] text-amber-300 leading-relaxed flex items-start gap-2.5">
+              <span className="text-base leading-none">⚠️</span>
+              <p>
+                <strong>Important:</strong> Once saved, this record will be <strong>permanently locked</strong> in the official database and <strong>cannot be modified or deleted</strong>.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => { setCertConfirmModalOpen(false); setPendingCertPayload(null); }}
+                className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs py-3 rounded-xl transition-all border border-slate-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCertificateSave}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs py-3 rounded-xl transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2"
+              >
+                <span>Confirm & Register</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
