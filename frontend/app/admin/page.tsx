@@ -304,7 +304,7 @@ export default function AdminDashboardPage() {
   const [newCertSignatory, setNewCertSignatory] = useState('Ecovista Global Private Limited');
   const [newCertOffice, setNewCertOffice] = useState('505, JB Metro Heights, Kanpur Road, Lucknow – 226012');
   const [newCertWebsite, setNewCertWebsite] = useState('www.ecofone.co.in');
-  const [newCertEmail, setNewCertEmail] = useState('support@ecofone.co.in');
+  const [newCertEmail, setNewCertEmail] = useState('business@ecofone.co.in');
   const [filterFromDate, setFilterFromDate] = useState<string>('');
   const [filterToDate, setFilterToDate] = useState<string>('');
 
@@ -655,7 +655,7 @@ export default function AdminDashboardPage() {
       authorizedSignatory: 'Ecovista Global Private Limited',
       registeredOffice: '505, JB Metro Heights, Kanpur Road, Lucknow – 226012',
       website: 'www.ecofone.co.in',
-      email: 'support@ecofone.co.in',
+      email: 'business@ecofone.co.in',
       cin: 'U70109UP2020PTC138839',
     };
 

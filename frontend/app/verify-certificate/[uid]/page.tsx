@@ -249,8 +249,8 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
               <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-slate-500 pt-2 font-mono">
                 <span>CIN: {certificate?.cin || 'U70109UP2020PTC138839'}</span>
                 <span>•</span>
-                <a href="mailto:support@ecofone.co.in" className="hover:text-emerald-400 transition-colors">
-                  support@ecofone.co.in
+                <a href="mailto:business@ecofone.co.in" className="hover:text-emerald-400 transition-colors">
+                  business@ecofone.co.in
                 </a>
                 <span>•</span>
                 <a href="https://www.ecofone.co.in" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">

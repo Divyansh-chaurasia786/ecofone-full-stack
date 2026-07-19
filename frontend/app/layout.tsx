@@ -179,7 +179,7 @@ export default function RootLayout({
                 <div className="md:col-span-3">
                   <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Contact & Support</h4>
                   <ul className="space-y-2.5 text-xs text-slate-400">
-                    <li>Email: <a href="mailto:support@ecofone.co.in" className="hover:text-white transition-colors">support@ecofone.co.in</a></li>
+                    <li>Email: <a href="mailto:business@ecofone.co.in" className="hover:text-white transition-colors">business@ecofone.co.in</a></li>
                     <li>Phone: <a href="tel:+919919965499" className="hover:text-white transition-colors">+91 99199 65499</a></li>
                     <li>Lucknow HQ: 505, JB Metro Heights, Kanpur Road, Lucknow – 226012</li>
                   </ul>
