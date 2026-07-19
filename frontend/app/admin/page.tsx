@@ -718,6 +718,54 @@ export default function AdminDashboardPage() {
     alert(`Verification link copied to clipboard!\n${url}`);
   };
 
+  const calculateTenure = (startDateStr: string, endDateStr: string): string => {
+    if (!startDateStr || !endDateStr) return '';
+    const start = new Date(startDateStr);
+    const end = new Date(endDateStr);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return '';
+
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    if (days >= 15) {
+      months += 1;
+      if (months >= 12) {
+        years += 1;
+        months -= 12;
+      }
+    }
+
+    const parts = [];
+    if (years > 0) {
+      parts.push(`${years} ${years === 1 ? 'Year' : 'Years'}`);
+    }
+    if (months > 0) {
+      parts.push(`${months} ${months === 1 ? 'Month' : 'Months'}`);
+    }
+
+    if (parts.length === 0) {
+      if (days > 0) {
+        return `${days} ${days === 1 ? 'Day' : 'Days'}`;
+      }
+      return '1 Month';
+    }
+
+    return parts.join(' ');
+  };
+
   const loadDashboardData = async (silent = false) => {
     if (!silent) setIsLoading(true);
     try {
@@ -3774,6 +3822,11 @@ export default function AdminDashboardPage() {
                                 <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded uppercase tracking-wide">
                                   {cert.type}
                                 </span>
+                                {cert.startDate && cert.endDate && (
+                                  <span className="text-[9px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded ml-1.5 uppercase">
+                                    ⏱️ {calculateTenure(cert.startDate, cert.endDate)}
+                                  </span>
+                                )}
                                 <span className="text-slate-300 font-medium block mt-1">{cert.role}</span>
                               </td>
                               <td className="py-3 px-4 text-slate-400 font-medium">

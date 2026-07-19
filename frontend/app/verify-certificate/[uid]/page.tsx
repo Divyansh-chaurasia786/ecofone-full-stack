@@ -54,6 +54,54 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
     }
   };
 
+  const calculateTenure = (startDateStr: string, endDateStr: string): string => {
+    if (!startDateStr || !endDateStr) return '';
+    const start = new Date(startDateStr);
+    const end = new Date(endDateStr);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return '';
+
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    if (days >= 15) {
+      months += 1;
+      if (months >= 12) {
+        years += 1;
+        months -= 12;
+      }
+    }
+
+    const parts = [];
+    if (years > 0) {
+      parts.push(`${years} ${years === 1 ? 'Year' : 'Years'}`);
+    }
+    if (months > 0) {
+      parts.push(`${months} ${months === 1 ? 'Month' : 'Months'}`);
+    }
+
+    if (parts.length === 0) {
+      if (days > 0) {
+        return `${days} ${days === 1 ? 'Day' : 'Days'}`;
+      }
+      return '1 Month';
+    }
+
+    return parts.join(' ');
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between py-12 px-4 relative overflow-hidden font-sans">
       {/* Decorative gradients */}
@@ -153,10 +201,15 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
                   <span className="text-base font-bold text-slate-200">{certificate?.role}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Duration</span>
-                  <span className="text-base font-semibold text-slate-300">
+                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Duration & Total Experience</span>
+                  <span className="text-sm font-semibold text-slate-300 block">
                     {formatDate(certificate?.startDate || '')} - {formatDate(certificate?.endDate || '')}
                   </span>
+                  {certificate?.startDate && certificate?.endDate && (
+                    <span className="inline-block mt-1.5 text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-md uppercase tracking-wide">
+                      ⏱️ Experience: {calculateTenure(certificate.startDate, certificate.endDate)}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="text-xs text-slate-500 uppercase tracking-wider block">Date of Issue</span>
