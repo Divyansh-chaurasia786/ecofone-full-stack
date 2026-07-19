@@ -6,7 +6,7 @@ export class CertificateService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: {
-    uid: string;
+    uid?: string;
     recipientName: string;
     type: string;
     role: string;
@@ -20,17 +20,29 @@ export class CertificateService {
     email: string;
     cin: string;
   }) {
+    let finalUid = data.uid ? data.uid.trim().toUpperCase() : '';
+    if (!finalUid) {
+      const typeCode = (data.type || 'INTERNSHIP').substring(0, 3).toUpperCase();
+      const year = new Date(data.issueDate || Date.now()).getFullYear();
+      finalUid = `EVG-${typeCode}-${year}-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
     // Check if UID already exists
     const existing = await this.prisma.certificate.findUnique({
-      where: { uid: data.uid },
+      where: { uid: finalUid },
     });
     if (existing) {
-      throw new ConflictException(`Certificate with UID ${data.uid} already exists.`);
+      if (data.uid) {
+        throw new ConflictException(`Certificate with UID ${data.uid} already exists.`);
+      } else {
+        // Regenerate if auto-generated UID collided
+        finalUid = `EVG-${(data.type || 'INT').substring(0, 3).toUpperCase()}-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+      }
     }
 
     return this.prisma.certificate.create({
       data: {
-        uid: data.uid,
+        uid: finalUid,
         recipientName: data.recipientName,
         type: data.type.toUpperCase(),
         role: data.role,

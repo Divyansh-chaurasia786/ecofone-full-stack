@@ -292,14 +292,14 @@ export default function AdminDashboardPage() {
   const [certFormSuccess, setCertFormSuccess] = useState('');
 
   // Certificate Form inputs
-  const [newCertUid, setNewCertUid] = useState('');
-  const [newCertName, setNewCertName] = useState('');
   const [newCertType, setNewCertType] = useState('INTERNSHIP');
-  const [newCertRole, setNewCertRole] = useState('');
-  const [newCertStartDate, setNewCertStartDate] = useState('');
-  const [newCertEndDate, setNewCertEndDate] = useState('');
-  const [newCertIssueDate, setNewCertIssueDate] = useState('');
-  const [newCertDesc, setNewCertDesc] = useState('');
+  const [newCertUid, setNewCertUid] = useState(() => `EVG-INT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
+  const [newCertName, setNewCertName] = useState('');
+  const [newCertRole, setNewCertRole] = useState('Web Development & Social Media Handling Intern');
+  const [newCertStartDate, setNewCertStartDate] = useState('2024-05-01');
+  const [newCertEndDate, setNewCertEndDate] = useState('2024-06-30');
+  const [newCertIssueDate, setNewCertIssueDate] = useState('2024-07-01');
+  const [newCertDesc, setNewCertDesc] = useState('During the internship, the intern demonstrated dedication, creativity, and a willingness to learn while contributing to website development and social media activities. We appreciate the efforts and commitment shown throughout the internship period.');
   const [newCertSignatory, setNewCertSignatory] = useState('Rahul Verma');
   const [newCertOffice, setNewCertOffice] = useState('4th Floor, Statesman House, 148, Barakhamba Road, Connaught Place, New Delhi - 110001, India');
   const [newCertWebsite, setNewCertWebsite] = useState('www.ecovistaglobal.com');
@@ -656,14 +656,10 @@ export default function AdminDashboardPage() {
       const result = await api.createCertificate(payload);
       setCertificates(prev => [result, ...prev]);
 
-      // Reset form fields
-      setNewCertUid('');
+      // Reset form fields and generate fresh auto UID
+      const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
+      setNewCertUid(`EVG-${typeCode}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
       setNewCertName('');
-      setNewCertRole('');
-      setNewCertStartDate('');
-      setNewCertEndDate('');
-      setNewCertIssueDate('');
-      setNewCertDesc('');
       setCertFormSuccess('Certificate generated and registered successfully!');
     } catch (err: any) {
       setCertFormError(err.message || 'Failed to create certificate.');
@@ -3614,7 +3610,19 @@ export default function AdminDashboardPage() {
                     )}
 
                     <div className="space-y-1">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate UID *</label>
+                      <div className="flex items-center justify-between">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate UID (Auto-Generated) *</label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
+                            setNewCertUid(`EVG-${typeCode}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
+                          }}
+                          className="text-[9px] text-emerald-400 hover:text-emerald-300 font-bold uppercase tracking-wider transition-colors"
+                        >
+                          🔄 Generate New UID
+                        </button>
+                      </div>
                       <input
                         type="text"
                         required
@@ -3624,7 +3632,7 @@ export default function AdminDashboardPage() {
                           setNewCertUid(e.target.value.toUpperCase());
                           setCertFormError('');
                         }}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-mono focus:outline-none focus:border-emerald-500"
                       />
                     </div>
 
@@ -4879,12 +4887,21 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              {/* Right Column: Blank Physical Signature area */}
-              <div className="flex flex-col items-end justify-end pb-1">
-                <div className="w-36 border-t-2 border-[#063b28] mt-6" />
-                <div className="text-center w-36 mt-1.5">
-                  <span className="text-[9px] uppercase tracking-wider font-extrabold text-[#063b28] block">{activePrintCert.authorizedSignatory}</span>
-                  <p className="text-[7px] uppercase tracking-widest text-amber-700 font-bold block">AUTHORIZED SIGNATORY</p>
+              {/* Right Column: Gold Seal Badge & Authorized Signatory */}
+              <div className="flex flex-col items-center justify-end pb-1">
+                {/* Gold Seal Badge */}
+                <div className="w-16 h-16 rounded-full border-2 border-amber-600 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-0.5 flex items-center justify-center shadow-md mb-1 relative overflow-hidden">
+                  <div className="w-full h-full rounded-full border border-amber-200/60 flex flex-col items-center justify-center text-center text-amber-950 p-1 bg-amber-400/90">
+                    <span className="text-[4.5px] font-black uppercase tracking-widest leading-none text-amber-950">ECOVISTA GLOBAL</span>
+                    <span className="text-xs font-black tracking-tighter my-0.5 text-[#063b28]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>EF</span>
+                    <span className="text-[4.5px] font-black uppercase tracking-widest leading-none text-amber-950">PRIVATE LIMITED</span>
+                  </div>
+                </div>
+
+                <div className="w-36 border-t-2 border-[#063b28] mt-1" />
+                <div className="text-center w-36 mt-1">
+                  <span className="text-sm font-bold text-[#063b28] block" style={{ fontFamily: "'Great Vibes', cursive, Georgia, serif" }}>{activePrintCert.authorizedSignatory}</span>
+                  <p className="text-[7px] uppercase tracking-widest text-amber-800 font-extrabold block">AUTHORIZED SIGNATORY</p>
                   <p className="text-[6px] text-slate-500 block">Ecovista Global Private Limited</p>
                 </div>
               </div>

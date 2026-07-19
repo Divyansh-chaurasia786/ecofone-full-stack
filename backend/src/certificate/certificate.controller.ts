@@ -4,14 +4,14 @@ import { RolesGuard } from '../auth/guards/rbac.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { IsNotEmpty, IsString, IsDateString, IsEmail, Matches, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsDateString, IsEmail, Matches, MaxLength } from 'class-validator';
 
 export class CreateCertificateDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @MaxLength(50)
   @Matches(/^[A-Z0-9\-]+$/, { message: 'UID must be alphanumeric and uppercase, optionally containing dashes (e.g. EVG-INT-2024-0001)' })
-  uid: string;
+  uid?: string;
 
   @IsNotEmpty()
   @IsString()
