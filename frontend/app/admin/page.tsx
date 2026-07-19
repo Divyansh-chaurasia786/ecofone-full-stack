@@ -632,6 +632,13 @@ export default function AdminDashboardPage() {
 
   const handleCreateCertificateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const confirmed = window.confirm(
+      `🔒 OFFICIAL REGISTRATION NOTICE:\n\nOnce saved, this entry (${newCertName.trim().toUpperCase()}) will be permanently registered in Ecovista Global's official verification database.\n\nThis record CANNOT be deleted or modified after creation.\n\nDo you wish to confirm and generate the verification QR code?`
+    );
+
+    if (!confirmed) return;
+
     setCertFormError('');
     setCertFormSuccess('');
     setCertFormLoading(true);
@@ -662,7 +669,7 @@ export default function AdminDashboardPage() {
 
       setNewCertName('');
       setNewCertRole('');
-      setCertFormSuccess('Entry registered & QR Code generated successfully!');
+      setCertFormSuccess('✓ Entry officially registered & locked in database. Verification QR code is generated and ready for download.');
     } catch (err: any) {
       setCertFormError(err.message || 'Failed to create verification record.');
     } finally {
