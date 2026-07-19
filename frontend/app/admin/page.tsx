@@ -293,20 +293,20 @@ export default function AdminDashboardPage() {
 
   // Certificate Form inputs
   const [newCertType, setNewCertType] = useState('INTERNSHIP');
-  const [newCertUid, setNewCertUid] = useState(() => `EVG-INT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
+  const [newCertUid, setNewCertUid] = useState('');
   const [newCertName, setNewCertName] = useState('');
-  const [newCertRole, setNewCertRole] = useState('Web Development & Social Media Handling Intern');
+  const [newCertRole, setNewCertRole] = useState('');
   const todayStr = new Date().toISOString().split('T')[0];
-  const [newCertStartDate, setNewCertStartDate] = useState('2024-05-01');
-  const [newCertEndDate, setNewCertEndDate] = useState('2024-06-30');
-  const [newCertIssueDate, setNewCertIssueDate] = useState(todayStr);
+  const [newCertStartDate, setNewCertStartDate] = useState('');
+  const [newCertEndDate, setNewCertEndDate] = useState('');
+  const [newCertIssueDate, setNewCertIssueDate] = useState('');
   const [newCertDesc, setNewCertDesc] = useState('Successfully completed term at Ecovista Global Private Limited.');
   const [newCertSignatory, setNewCertSignatory] = useState('Ecovista Global Private Limited');
   const [newCertOffice, setNewCertOffice] = useState('505, JB Metro Heights, Kanpur Road, Lucknow – 226012');
   const [newCertWebsite, setNewCertWebsite] = useState('www.ecofone.co.in');
   const [newCertEmail, setNewCertEmail] = useState('support@ecofone.co.in');
-  const [filterFromDate, setFilterFromDate] = useState<string>(todayStr);
-  const [filterToDate, setFilterToDate] = useState<string>(todayStr);
+  const [filterFromDate, setFilterFromDate] = useState<string>('');
+  const [filterToDate, setFilterToDate] = useState<string>('');
 
   // Print preview modal states
   const [printModalOpen, setPrintModalOpen] = useState(false);
@@ -676,6 +676,9 @@ export default function AdminDashboardPage() {
 
       setNewCertName('');
       setNewCertRole('');
+      setNewCertStartDate('');
+      setNewCertEndDate('');
+      setNewCertIssueDate('');
       setCertFormSuccess('✓ Entry officially registered & locked in database. Verification QR code is generated and ready for download.');
       showCorporateToast('success', 'Official Registration Complete', `Record for ${pendingCertPayload.recipientName} registered and locked.`);
     } catch (err: any) {
