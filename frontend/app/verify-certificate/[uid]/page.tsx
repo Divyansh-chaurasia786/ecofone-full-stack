@@ -168,6 +168,15 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
         ) : (
           // Success State (Verified Certificate)
           <div className="bg-slate-900/60 backdrop-blur-xl border border-emerald-950/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative font-sans">
+            {/* Top Left Circular EcoFone Logo */}
+            <div className="absolute top-5 left-5 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950 border border-slate-700/80 flex items-center justify-center p-1.5 shadow-md shadow-slate-950">
+              <img
+                src="/logo.png"
+                alt="EcoFone Logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
+
             {/* Top Corporate Status Badge */}
             <div className="absolute top-5 right-5 bg-emerald-950/60 text-emerald-400 text-[10px] font-extrabold px-3 py-1 rounded-md border border-emerald-500/30 tracking-widest uppercase flex items-center gap-1.5">
               <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
