@@ -643,7 +643,7 @@ export default function AdminDashboardPage() {
 
       const payload = {
         uid: autoUid,
-        recipientName: newCertName.trim(),
+        recipientName: newCertName.trim().toUpperCase(),
         type: newCertType,
         role: newCertRole.trim(),
         startDate: newCertStartDate,
@@ -3770,7 +3770,7 @@ export default function AdminDashboardPage() {
                               </td>
                               <td className="py-3 px-4">
                                 <span className="font-mono text-emerald-400 font-bold block">{cert.uid}</span>
-                                <span className="font-extrabold text-slate-100 block text-sm mt-0.5">{cert.recipientName}</span>
+                                <span className="font-extrabold text-slate-100 block text-sm mt-0.5 uppercase">{cert.recipientName?.toUpperCase()}</span>
                               </td>
                               <td className="py-3 px-4">
                                 <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded uppercase tracking-wide">

@@ -142,7 +142,7 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <span className="text-xs text-slate-500 uppercase tracking-wider block">Recipient Name</span>
-                  <span className="text-base font-bold text-slate-100">{certificate?.recipientName}</span>
+                  <span className="text-base font-bold text-slate-100 uppercase tracking-wide">{certificate?.recipientName?.toUpperCase()}</span>
                 </div>
                 <div>
                   <span className="text-xs text-slate-500 uppercase tracking-wider block">Certificate Category</span>

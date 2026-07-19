@@ -43,7 +43,7 @@ export class CertificateService {
     return this.prisma.certificate.create({
       data: {
         uid: finalUid,
-        recipientName: data.recipientName,
+        recipientName: data.recipientName.trim().toUpperCase(),
         type: data.type.toUpperCase(),
         role: data.role,
         startDate: new Date(data.startDate),
