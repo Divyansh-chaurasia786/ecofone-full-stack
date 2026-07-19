@@ -24,11 +24,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
       if (typeof exceptionResponse === 'string') {
         message = exceptionResponse;
       } else if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
-        message = (exceptionResponse as any).message || message;
+        const rawMsg = (exceptionResponse as any).message;
+        if (Array.isArray(rawMsg)) {
+          message = rawMsg.join('. ');
+        } else if (typeof rawMsg === 'string') {
+          message = rawMsg;
+        }
         errors = (exceptionResponse as any).error || (exceptionResponse as any).errors || null;
       }
     } else if (exception instanceof Error) {
-      message = exception.message;
+      message = exception.message || 'An unexpected error occurred.';
+    }
+
+    // Professional fallback for unhandled 500 internal errors
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR && process.env.NODE_ENV === 'production') {
+      message = 'An internal system processing error occurred. Please try again or contact official support.';
     }
 
     response.status(status).json({

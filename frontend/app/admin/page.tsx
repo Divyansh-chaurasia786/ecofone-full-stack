@@ -692,8 +692,26 @@ export default function AdminDashboardPage() {
     }
   };
 
+  // Corporate Toast Notifications
+  interface CorporateToast {
+    id: string;
+    type: 'success' | 'error' | 'info' | 'warning';
+    title: string;
+    message: string;
+  }
+  const [corporateToasts, setCorporateToasts] = useState<CorporateToast[]>([]);
+
+  const showCorporateToast = (type: 'success' | 'error' | 'info' | 'warning', title: string, message: string) => {
+    const id = Date.now().toString() + Math.random().toString();
+    setCorporateToasts(prev => [...prev, { id, type, title, message }]);
+    setTimeout(() => {
+      setCorporateToasts(prev => prev.filter(t => t.id !== id));
+    }, 4500);
+  };
+
   const handleDownloadQrCode = (uid: string) => {
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${uid}`;
+    showCorporateToast('info', 'QR Image Request', `Generating high-resolution QR PNG for ${uid}...`);
     fetch(qrUrl)
       .then(res => res.blob())
       .then(blob => {
@@ -705,10 +723,11 @@ export default function AdminDashboardPage() {
         a.click();
         a.remove();
         window.URL.revokeObjectURL(url);
+        showCorporateToast('success', 'Download Ready', `File QR_${uid}.png saved to your device.`);
       })
       .catch(err => {
         console.error('QR download failed:', err);
-        alert('Failed to download QR code image.');
+        showCorporateToast('error', 'Download Error', 'Unable to download QR code image. Please try again.');
       });
   };
 
@@ -717,7 +736,7 @@ export default function AdminDashboardPage() {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
     }
-    alert(`Verification link copied to clipboard!\n${url}`);
+    showCorporateToast('success', 'Link Copied', `Verification portal URL for ${uid} copied to clipboard.`);
   };
 
   const calculateTenure = (startDateStr: string, endDateStr: string): string => {
@@ -4815,6 +4834,44 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
+
+      {/* L. FLOATING CORPORATE TOAST NOTIFICATION STACK */}
+      <div className="fixed top-6 right-6 z-[200] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+        {corporateToasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`pointer-events-auto p-4 rounded-2xl border shadow-2xl backdrop-blur-xl flex items-start justify-between gap-3 transition-all transform animate-fade-in ${
+              toast.type === 'success'
+                ? 'bg-slate-900/95 border-emerald-500/40 text-slate-100 shadow-emerald-950/50'
+                : toast.type === 'error'
+                  ? 'bg-slate-900/95 border-rose-500/40 text-slate-100 shadow-rose-950/50'
+                  : toast.type === 'warning'
+                    ? 'bg-slate-900/95 border-amber-500/40 text-slate-100 shadow-amber-950/50'
+                    : 'bg-slate-900/95 border-sky-500/40 text-slate-100 shadow-sky-950/50'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <span className="text-lg leading-none mt-0.5">
+                {toast.type === 'success' ? '✓' : toast.type === 'error' ? '⚠️' : toast.type === 'warning' ? '🔒' : 'ℹ️'}
+              </span>
+              <div>
+                <h4 className="text-xs font-extrabold uppercase tracking-wide text-slate-200">
+                  {toast.title}
+                </h4>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  {toast.message}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setCorporateToasts(prev => prev.filter(t => t.id !== toast.id))}
+              className="text-slate-400 hover:text-slate-200 text-sm leading-none p-1"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
 
     </div>
   );
