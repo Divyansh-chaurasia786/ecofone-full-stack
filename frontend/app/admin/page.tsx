@@ -3753,20 +3753,11 @@ export default function AdminDashboardPage() {
                           {certificates.map((cert) => (
                             <tr key={cert.id} className="hover:bg-slate-900/20">
                               <td className="py-3 px-4">
-                                <div className="flex flex-col items-center gap-1">
-                                  <img
-                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${cert.uid}`}
-                                    alt="Verification QR"
-                                    className="w-14 h-14 object-contain bg-white p-1 rounded-lg border border-slate-700 shadow-sm"
-                                  />
-                                  <button
-                                    onClick={() => handleDownloadQrCode(cert.uid)}
-                                    className="text-[9px] font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded transition-all"
-                                    title="Download high-resolution QR PNG to print or paste on physical certificate"
-                                  >
-                                    📥 Download QR
-                                  </button>
-                                </div>
+                                <img
+                                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${cert.uid}`}
+                                  alt="Verification QR"
+                                  className="w-12 h-12 object-contain bg-white p-1 rounded-lg border border-slate-700 shadow-sm"
+                                />
                               </td>
                               <td className="py-3 px-4">
                                 <span className="font-mono text-emerald-400 font-bold block">{cert.uid}</span>
@@ -3781,24 +3772,21 @@ export default function AdminDashboardPage() {
                               <td className="py-3 px-4 text-slate-400 font-medium">
                                 {new Date(cert.issueDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
                               </td>
-                              <td className="py-3 px-4 text-right space-y-1">
-                                <div className="flex flex-col items-end gap-1.5">
-                                  <span className="text-[9px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full tracking-wider uppercase flex items-center gap-1">
-                                    🔒 Official Record
-                                  </span>
+                              <td className="py-3 px-4 text-right">
+                                <div className="flex flex-col items-end gap-2">
                                   <button
-                                    onClick={() => handleCopyVerificationLink(cert.uid)}
-                                    className="text-xs font-bold text-slate-300 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-slate-700 w-full text-center"
+                                    onClick={() => handleDownloadQrCode(cert.uid)}
+                                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow transition-all flex items-center gap-1.5"
                                   >
-                                    🔗 Copy Link
+                                    📥 Download QR
                                   </button>
                                   <a
                                     href={`/verify-certificate/${cert.uid}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors w-full text-center"
+                                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow transition-all flex items-center gap-1.5"
                                   >
-                                    👁️ Test View
+                                    👁️ View
                                   </a>
                                 </div>
                               </td>
