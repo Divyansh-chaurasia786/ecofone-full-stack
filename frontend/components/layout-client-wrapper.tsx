@@ -14,8 +14,11 @@ export default function LayoutClientWrapper({
 }) {
   const pathname = usePathname();
   const isAdmin = pathname === '/admin';
+  const isVerify = pathname?.startsWith('/verify-certificate');
+  const hideNavAndFooter = isAdmin || isVerify;
   const hasHero = pathname === '/' || pathname === '/about' || pathname === '/services';
-  const mainPaddingClass = isAdmin 
+
+  const mainPaddingClass = hideNavAndFooter 
     ? "flex-grow" 
     : hasHero 
       ? "flex-grow pt-0" 
@@ -23,12 +26,12 @@ export default function LayoutClientWrapper({
 
   return (
     <>
-      <Navbar />
+      {!hideNavAndFooter && <Navbar />}
       <main className={mainPaddingClass}>
         {children}
       </main>
-      {!isAdmin && footer}
-      {!isAdmin && <WhatsAppWidget />}
+      {!hideNavAndFooter && footer}
+      {!hideNavAndFooter && <WhatsAppWidget />}
     </>
   );
 }

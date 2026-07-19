@@ -136,11 +136,11 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <span className="text-xs text-slate-500 uppercase tracking-wider block">Recipient Name</span>
-                  <span className="text-base font-bold text-slate-200">{certificate?.recipientName}</span>
+                  <span className="text-base font-bold text-slate-100">{certificate?.recipientName}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Certificate Type</span>
-                  <span className="text-base font-bold text-emerald-400 capitalize">{certificate?.type.toLowerCase()} Certificate</span>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Certificate Category</span>
+                  <span className="text-base font-bold text-emerald-400 uppercase">{certificate?.type} Certificate</span>
                 </div>
                 <div>
                   <span className="text-xs text-slate-500 uppercase tracking-wider block">Role / Designation</span>
@@ -157,33 +157,28 @@ export default function VerifyCertificatePage({ params }: { params: Promise<{ ui
                   <span className="text-sm font-semibold text-slate-300">{formatDate(certificate?.issueDate || '')}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Authorized Signatory</span>
-                  <span className="text-sm font-semibold text-slate-300">{certificate?.authorizedSignatory}</span>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Verification Status</span>
+                  <span className="text-sm font-bold text-emerald-400 flex items-center gap-1.5 mt-0.5">
+                    <span>✓</span> Verified Official Entry
+                  </span>
                 </div>
-              </div>
-
-              {/* Performance description */}
-              <div className="pt-4 border-t border-slate-800/50">
-                <span className="text-xs text-slate-500 uppercase tracking-wider block mb-1">Scope of Work & Assessment</span>
-                <p className="text-xs text-slate-400 leading-relaxed italic bg-slate-950/40 p-4 rounded-lg border border-slate-900">
-                  "{certificate?.description}"
-                </p>
               </div>
             </div>
 
             {/* Corporate Info */}
-            <div className="text-center space-y-1">
-              <p className="text-[10px] text-slate-500 font-semibold tracking-wider">ISSUING CORPORATION DETAILS</p>
-              <p className="text-xs text-slate-400">{certificate?.registeredOffice}</p>
-              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-slate-500 pt-2">
-                <span>CIN: {certificate?.cin}</span>
+            <div className="text-center space-y-1 pt-2">
+              <p className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase">ISSUING CORPORATION</p>
+              <p className="text-xs font-bold text-slate-300">Ecovista Global Private Limited</p>
+              <p className="text-xs text-slate-400">505, JB Metro Heights, Kanpur Road, Lucknow – 226012</p>
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-slate-500 pt-2 font-mono">
+                <span>CIN: {certificate?.cin || 'U70109UP2020PTC138839'}</span>
                 <span>•</span>
-                <a href={`mailto:${certificate?.email}`} className="hover:text-emerald-400 transition-colors">
-                  {certificate?.email}
+                <a href="mailto:support@ecofone.co.in" className="hover:text-emerald-400 transition-colors">
+                  support@ecofone.co.in
                 </a>
                 <span>•</span>
-                <a href={`https://${certificate?.website}`} target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">
-                  {certificate?.website}
+                <a href="https://www.ecofone.co.in" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">
+                  www.ecofone.co.in
                 </a>
               </div>
             </div>
