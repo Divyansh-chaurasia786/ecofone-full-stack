@@ -131,54 +131,65 @@ export default function ReviewsCarousel() {
       <div 
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        className="overflow-hidden bg-white rounded-3xl p-8 md:p-12 border border-slate-100 relative min-h-[220px] flex flex-col justify-between shadow-sm"
+        className="overflow-hidden bg-white rounded-3xl border border-slate-100 relative min-h-[220px] shadow-sm flex flex-col justify-between"
       >
-        <div className="transition-all duration-500 ease-in-out">
-          {/* Star rating rendering */}
-          <div className="flex items-center gap-1 mb-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span
-                key={i}
-                className={i < reviews[currentIndex].rating ? 'text-amber-500 text-lg' : 'text-slate-200 text-lg'}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-          <p className="text-slate-700 text-sm md:text-base italic leading-relaxed mb-4 font-medium">
-            "{reviews[currentIndex].comment}"
-          </p>
-          {reviews[currentIndex].adminReply && (
-            <div className="mb-6 p-4 bg-emerald-50/20 border border-emerald-500/10 rounded-2xl space-y-1">
-              <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">
-                Response from EcoFone:
-              </span>
-              <p className="text-xs text-slate-650 leading-relaxed italic">
-                "{reviews[currentIndex].adminReply}"
-              </p>
-            </div>
-          )}
-        </div>
+        <div 
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{ transform: `translate3d(-${currentIndex * 100}%, 0, 0)` }}
+        >
+          {reviews.map((rev) => {
+            const isOwner = rev.verifiedProduct?.toLowerCase().includes('owner') || rev.verifiedProduct?.toLowerCase().includes('business');
+            return (
+              <div key={rev.id} className="w-full flex-shrink-0 p-8 md:p-12 flex flex-col justify-between min-h-[220px]">
+                <div>
+                  {/* Star rating rendering */}
+                  <div className="flex items-center gap-1 mb-4">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={i < rev.rating ? 'text-amber-500 text-lg' : 'text-slate-200 text-lg'}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-slate-700 text-sm md:text-base italic leading-relaxed mb-4 font-medium">
+                    "{rev.comment}"
+                  </p>
+                  {rev.adminReply && (
+                    <div className="mb-6 p-4 bg-emerald-50/20 border border-emerald-500/10 rounded-2xl space-y-1">
+                      <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">
+                        Response from EcoFone:
+                      </span>
+                      <p className="text-xs text-slate-650 leading-relaxed italic">
+                        "{rev.adminReply}"
+                      </p>
+                    </div>
+                  )}
+                </div>
 
-        <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-          <div>
-            <h4 className="font-bold text-slate-900 text-sm">{reviews[currentIndex].authorName}</h4>
-            {reviews[currentIndex].isVerified && (() => {
-              const prod = reviews[currentIndex].verifiedProduct || '';
-              const isOwner = prod.toLowerCase().includes('owner') || prod.toLowerCase().includes('business');
-              return (
-                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold mt-1 inline-block border ${
-                  isOwner
-                    ? 'text-blue-700 bg-blue-50 border-blue-100'
-                    : 'text-emerald-700 bg-emerald-50 border-emerald-100'
-                }`}>
-                  {isOwner 
-                    ? `🏢 Verified Business Owner${prod && !prod.toLowerCase().includes('verified') ? ` (${prod})` : ''}` 
-                    : `✓ ${prod ? `Verified Purchaser of ${prod}` : 'Verified Customer'}`}
-                </span>
-              );
-            })()}
-          </div>
+                <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">{rev.authorName}</h4>
+                    {rev.isVerified && (() => {
+                      const prod = rev.verifiedProduct || '';
+                      return (
+                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold mt-1 inline-block border ${
+                          isOwner
+                            ? 'text-blue-700 bg-blue-50 border-blue-100'
+                            : 'text-emerald-700 bg-emerald-50 border-emerald-100'
+                        }`}>
+                          {isOwner 
+                            ? `🏢 Verified Business Owner${prod && !prod.toLowerCase().includes('verified') ? ` (${prod})` : ''}` 
+                            : `✓ ${prod ? `Verified Purchaser of ${prod}` : 'Verified Customer'}`}
+                        </span>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
