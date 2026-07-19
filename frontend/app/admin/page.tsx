@@ -305,8 +305,8 @@ export default function AdminDashboardPage() {
   const [newCertOffice, setNewCertOffice] = useState('505, JB Metro Heights, Kanpur Road, Lucknow – 226012');
   const [newCertWebsite, setNewCertWebsite] = useState('www.ecofone.co.in');
   const [newCertEmail, setNewCertEmail] = useState('support@ecofone.co.in');
-  const [newCertCin, setNewCertCin] = useState('U70109UP2020PTC138839');
-  const [dateFilter, setDateFilter] = useState<string>(todayStr);
+  const [filterFromDate, setFilterFromDate] = useState<string>(todayStr);
+  const [filterToDate, setFilterToDate] = useState<string>(todayStr);
 
   // Print preview modal states
   const [printModalOpen, setPrintModalOpen] = useState(false);
@@ -653,10 +653,10 @@ export default function AdminDashboardPage() {
       issueDate: newCertIssueDate,
       description: 'Successfully completed term at Ecovista Global Private Limited.',
       authorizedSignatory: 'Ecovista Global Private Limited',
-      registeredOffice: newCertOffice.trim() || '505, JB Metro Heights, Kanpur Road, Lucknow – 226012',
-      website: newCertWebsite.trim() || 'www.ecofone.co.in',
-      email: newCertEmail.trim() || 'support@ecofone.co.in',
-      cin: newCertCin.trim() || 'U70109UP2020PTC138839',
+      registeredOffice: '505, JB Metro Heights, Kanpur Road, Lucknow – 226012',
+      website: 'www.ecofone.co.in',
+      email: 'support@ecofone.co.in',
+      cin: 'U70109UP2020PTC138839',
     };
 
     setPendingCertPayload(payload);
@@ -3811,57 +3811,71 @@ export default function AdminDashboardPage() {
 
                 {/* Verification Records & QR Registry */}
                 <div className="lg:col-span-2 bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4 font-sans">
-                  <div className="pb-3 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="pb-3.5 border-b border-slate-800 flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                     <div>
                       <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest flex items-center gap-2">
-                        <span>📋 Verification Records & QR Registry</span>
+                        <span>Verification Records & QR Registry</span>
                       </h3>
-                      <p className="text-[10px] text-slate-400 mt-1">
-                        {dateFilter ? (dateFilter === todayStr ? "Showing today's registered records only" : `Showing records for ${dateFilter}`) : 'Showing all historical records'}
-                      </p>
+                      <p className="text-[10px] text-slate-400 mt-1">Official immutable audit trail and high-resolution QR asset generation.</p>
                     </div>
 
-                    {/* Date Filter Bar */}
-                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Filter Date:</label>
-                      <input
-                        type="date"
-                        max={todayStr}
-                        value={dateFilter}
-                        onChange={(e) => setDateFilter(e.target.value)}
-                        className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1 text-slate-200 text-xs focus:outline-none focus:border-emerald-500 font-mono"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setDateFilter(todayStr)}
-                        className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${dateFilter === todayStr ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
-                      >
-                        Today
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setDateFilter('')}
-                        className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${!dateFilter ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
-                      >
-                        Show All
-                      </button>
+                    {/* Formal From Date to To Date Range Filter */}
+                    <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800">
+                      <div className="flex items-center gap-1.5 px-2">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From:</span>
+                        <input
+                          type="date"
+                          max={todayStr}
+                          value={filterFromDate}
+                          onChange={(e) => setFilterFromDate(e.target.value)}
+                          className="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 text-xs focus:outline-none focus:border-emerald-500 font-mono"
+                        />
+                      </div>
+                      <div className="flex items-center gap-1.5 px-2">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">To:</span>
+                        <input
+                          type="date"
+                          max={todayStr}
+                          value={filterToDate}
+                          onChange={(e) => setFilterToDate(e.target.value)}
+                          className="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 text-xs focus:outline-none focus:border-emerald-500 font-mono"
+                        />
+                      </div>
+                      <div className="flex items-center gap-1 pl-1">
+                        <button
+                          type="button"
+                          onClick={() => { setFilterFromDate(todayStr); setFilterToDate(todayStr); }}
+                          className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${filterFromDate === todayStr && filterToDate === todayStr ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+                        >
+                          Today
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => { setFilterFromDate(''); setFilterToDate(''); }}
+                          className={`px-2.5 py-1 text-[10px] font-bold rounded-lg transition-all ${!filterFromDate && !filterToDate ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+                        >
+                          All Records
+                        </button>
+                      </div>
                     </div>
                   </div>
 
                   {certificates.filter((cert) => {
-                    if (!dateFilter) return true;
+                    if (!filterFromDate && !filterToDate) return true;
                     try {
                       const certDate = new Date(cert.issueDate || cert.createdAt).toISOString().split('T')[0];
-                      return certDate === dateFilter;
+                      if (filterFromDate && certDate < filterFromDate) return false;
+                      if (filterToDate && certDate > filterToDate) return false;
+                      return true;
                     } catch {
                       return true;
                     }
                   }).length === 0 ? (
                     <div className="py-12 text-center text-xs text-slate-500 border border-dashed border-slate-850 rounded-2xl bg-slate-900/10">
-                      {dateFilter === todayStr 
-                        ? "No verification records registered today. Register a new entry above to generate its QR code."
-                        : dateFilter 
-                          ? `No verification records found for ${dateFilter}.`
+                      {filterFromDate === todayStr && filterToDate === todayStr
+                        ? "No verification records registered today. Register an entry using the form on the left."
+                        : (filterFromDate || filterToDate)
+                          ? "No verification records found within the selected date range."
                           : "No verification records created yet."}
                     </div>
                   ) : (
@@ -3879,10 +3893,12 @@ export default function AdminDashboardPage() {
                         <tbody className="divide-y divide-slate-850/60 text-slate-300">
                           {certificates
                             .filter((cert) => {
-                              if (!dateFilter) return true;
+                              if (!filterFromDate && !filterToDate) return true;
                               try {
                                 const certDate = new Date(cert.issueDate || cert.createdAt).toISOString().split('T')[0];
-                                return certDate === dateFilter;
+                                if (filterFromDate && certDate < filterFromDate) return false;
+                                if (filterToDate && certDate > filterToDate) return false;
+                                return true;
                               } catch {
                                 return true;
                               }
@@ -3918,17 +3934,24 @@ export default function AdminDashboardPage() {
                                 <div className="flex flex-col items-end gap-2">
                                   <button
                                     onClick={() => handleDownloadQrCode(cert.uid)}
-                                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow transition-all flex items-center gap-1.5"
+                                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-xs rounded-lg border border-slate-700 hover:border-slate-600 transition-all flex items-center gap-1.5 shadow-sm"
                                   >
-                                    📥 Download QR
+                                    <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    <span>Download QR</span>
                                   </button>
                                   <a
                                     href={`/verify-certificate/${cert.uid}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow transition-all flex items-center gap-1.5"
+                                    className="px-3 py-1.5 bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 font-semibold text-xs rounded-lg border border-emerald-500/30 hover:border-emerald-500/60 transition-all flex items-center gap-1.5 shadow-sm"
                                   >
-                                    👁️ View
+                                    <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <span>View Record</span>
                                   </a>
                                 </div>
                               </td>
