@@ -1,5 +1,7 @@
+const HARDCODED_DB_URL = "postgresql://neondb_owner:npg_EB9knm7bFeCf@ep-blue-sun-adp2jl9q-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+
 if (!process.env.POSTGRES_PRISMA_URL) {
-  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL || '';
+  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL || HARDCODED_DB_URL;
 }
 if (!process.env.DATABASE_URL) {
   process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL;
