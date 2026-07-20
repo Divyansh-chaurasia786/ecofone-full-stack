@@ -287,14 +287,14 @@ export default function AboutPage() {
             {[
               {
                 name: "Mr. Gaurav Srivastava",
-                role: "Founder | EcoFone",
+                role: "Founder & CEO",
                 bio: "17+ years of industry experience, including 10+ years in the mobile industry and 7+ years in franchise business development, with expertise in sales, retail expansion, and team leadership.",
                 imageUrl: "/gaurav_srivastava.png",
                 linkedinUrl: "https://www.linkedin.com/in/gaurav-srivastava-69506a6b"
               },
               {
                 name: "Mr. Abhishek Deva",
-                role: "Co-Founder | EcoFone",
+                role: "Co-Founder",
                 bio: "5+ years of experience in startup building, technology, marketing, and team leadership.",
                 imageUrl: "/abhishek_deva.png",
                 linkedinUrl: "https://www.linkedin.com/in/abhishek-deva-62a824150"
