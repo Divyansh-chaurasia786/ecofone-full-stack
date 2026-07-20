@@ -33,10 +33,10 @@ export class SubAdminService {
       throw new ConflictException(`Sub-admin with username "${username}" already exists.`);
     }
 
-    // Count existing sub-admins — max 3
+    // Count existing sub-admins — max 4
     const count = await this.prisma.subAdmin.count();
-    if (count >= 3) {
-      throw new BadRequestException('Maximum limit of 3 sub-admins reached.');
+    if (count >= 4) {
+      throw new BadRequestException('Maximum limit of 4 sub-admins reached.');
     }
 
     const passwordHash = await bcrypt.hash(data.password, 10);

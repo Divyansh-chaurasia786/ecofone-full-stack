@@ -3327,12 +3327,12 @@ export default function AdminDashboardPage() {
                 <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
                   <div className="pb-3 border-b border-slate-800/80">
                     <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">Sub-Admin Management</h3>
-                    <p className="text-[10px] text-slate-400 mt-1">Create up to 3 sub-admin accounts and customize their administrative access levels.</p>
+                    <p className="text-[10px] text-slate-400 mt-1">Create up to 4 sub-admin accounts and customize their administrative access levels.</p>
                   </div>
 
                   {/* Sub-Admins list */}
                   <div className="space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active Sub-Admins ({subAdmins.length}/3)</h4>
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active Sub-Admins ({subAdmins.length}/4)</h4>
                     {subAdmins.length === 0 ? (
                       <p className="text-[10px] text-slate-550 italic py-2">No sub-admin accounts configured.</p>
                     ) : (
@@ -3376,7 +3376,7 @@ export default function AdminDashboardPage() {
                   </div>
 
                   {/* Create form (shown only if limit is not exceeded) */}
-                  {subAdmins.length < 3 ? (
+                  {subAdmins.length < 4 ? (
                     <form onSubmit={handleCreateSubAdmin} className="space-y-4 text-xs pt-2 border-t border-slate-800/80">
                       <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Add Sub-Admin Credentials</h4>
                       
@@ -3462,7 +3462,7 @@ export default function AdminDashboardPage() {
                     </form>
                   ) : (
                     <div className="bg-amber-500/5 border border-amber-500/10 text-amber-450 p-4 rounded-2xl text-[10px] text-center font-bold">
-                      ⚠ Maximum limit of 3 sub-admin credentials created. Remove an active credential to add a new account.
+                      ⚠ Maximum limit of 4 sub-admin credentials created. Remove an active credential to add a new account.
                     </div>
                   )}
                 </div>
