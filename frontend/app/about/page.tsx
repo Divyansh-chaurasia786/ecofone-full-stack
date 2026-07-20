@@ -286,16 +286,16 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-3xl mx-auto">
             {[
               {
-                name: "Gaurav Srivastava",
-                role: "Founder & CEO",
-                bio: "Franchise operations specialist who scaled 150+ offline retail outlets across North India.",
+                name: "Mr. Gaurav Srivastava",
+                role: "Founder | EcoFone",
+                bio: "17+ years of industry experience, including 10+ years in the mobile industry and 7+ years in franchise business development, with expertise in sales, retail expansion, and team leadership.",
                 imageUrl: "/gaurav_srivastava.png",
                 linkedinUrl: "https://www.linkedin.com/in/gaurav-srivastava-69506a6b"
               },
               {
-                name: "Abhishek Deva",
-                role: "Co-Founder",
-                bio: "Ex-retail tech strategist with 12+ years building enterprise logistics frameworks in India.",
+                name: "Mr. Abhishek Deva",
+                role: "Co-Founder | EcoFone",
+                bio: "5+ years of experience in startup building, technology, marketing, and team leadership.",
                 imageUrl: "/abhishek_deva.png",
                 linkedinUrl: "https://www.linkedin.com/in/abhishek-deva-62a824150"
               }
