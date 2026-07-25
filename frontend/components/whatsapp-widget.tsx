@@ -6,7 +6,7 @@ export default function WhatsAppWidget() {
   const whatsappUrl = "https://wa.me/919919965499?text=Hello%20EcoFone%2C%20I%20am%20interested%20in%20the%20Franchise%20business%20opportunity.%20Please%20guide%20me.";
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 group">
+    <div className="fixed bottom-[1.5rem] right-[1rem] sm:bottom-6 sm:right-6 z-[9999] group">
       {/* Tooltip Label */}
       <div className="absolute right-16 bottom-3 bg-slate-900 border border-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap shadow-lg">
         Chat on WhatsApp

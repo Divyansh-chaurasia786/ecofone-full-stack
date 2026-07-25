@@ -153,48 +153,50 @@ export default function HomePage() {
               <span>Franchise Program</span>
             </div>
             
-            <h1 className="font-display text-2xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.1]">
-              <span className="block text-slate-100">Partner with India's</span>
-              <span className="gradient-text-green mt-2 block min-h-[1.2em] break-words">
+            <h1 
+              style={{ fontSize: 'clamp(1.65rem, 6.5vw, 3rem)' }}
+              className="font-display font-extrabold tracking-tight text-white leading-[1.2] sm:leading-[1.1] text-left"
+            >
+              <span className="block text-slate-100 mb-1">Partner with India's</span>
+              <span className="gradient-text-green block min-h-[1.25em] break-words relative pr-4">
                 {text}
-                <span className="animate-pulse ml-1 text-emerald-400">|</span>
+                <span className="absolute animate-pulse ml-1 text-emerald-400">|</span>
               </span>
             </h1>
             
-            <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto sm:mx-0 font-medium bg-black/10 sm:bg-transparent p-3 sm:p-0 rounded-2xl">
+            <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl text-left font-medium bg-black/10 sm:bg-transparent p-3 sm:p-0 rounded-2xl">
               Build a highly profitable, sustainable smartphone retail store. Join the EcoFone certified refurbished franchise network and tap into a ₹70,000+ Crore annual tech market backed by complete corporate support.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-start gap-3 w-full pt-1">
               <Link 
                 href="/franchise?scroll=apply" 
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-ecoOrange-600 hover:bg-ecoOrange-500 text-white font-extrabold text-center transition-all duration-300 shadow-[0_8px_30px_rgba(234,88,12,0.3)] hover:scale-[1.03] text-sm"
+                className="w-full sm:w-auto px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-ecoOrange-600 hover:bg-ecoOrange-500 text-white font-extrabold text-center transition-all duration-300 shadow-[0_8px_30px_rgba(234,88,12,0.3)] hover:scale-[1.02] text-xs sm:text-sm min-h-[44px] flex items-center justify-center"
               >
                 Apply for Franchise
               </Link>
               <Link 
                 href="/franchise" 
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl border border-white/20 text-white hover:text-white font-bold text-center bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all text-sm"
+                className="w-full sm:w-auto px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl border border-white/20 text-white hover:text-white font-bold text-center bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all text-xs sm:text-sm min-h-[44px] flex items-center justify-center"
               >
                 Explore Details
               </Link>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-5 pt-6 border-t border-white/10 text-[10px] text-slate-400 font-bold">
-              <div className="flex items-center gap-1.5">
-                <span className="text-emerald-400 font-extrabold text-xs">★ 4.9 Rating</span>
+            {/* Responsive Trust Metric Pills */}
+            <div className="flex flex-wrap items-center justify-start gap-2 pt-6 border-t border-white/10 text-[10px] text-slate-300 font-bold w-full">
+              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <span className="text-emerald-450 font-extrabold">★ 4.9 Rating</span>
                 <span className="text-slate-400">Google Local</span>
               </div>
-              <span className="text-slate-700 hidden sm:inline">|</span>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-emerald-450" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 <span>₹20L – ₹25L Capital</span>
               </div>
-              <span className="text-slate-700 hidden sm:inline">|</span>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-emerald-450" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 <span>FICO & FIFO Models</span>
