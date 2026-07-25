@@ -124,12 +124,12 @@ export default function RootLayout({
       <body className="bg-dots min-h-screen flex flex-col font-sans relative">
         <LayoutClientWrapper
           footer={
-            <footer className="bg-[#061C0F] border-t border-white/10 py-12 text-sm text-slate-300 relative z-10">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8">
+            <footer className="bg-[#061C0F] border-t border-white/10 py-10 md:py-16 text-sm text-slate-300 relative z-10 w-full overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8">
                 {/* Column 1: Logo & Description */}
-                <div className="space-y-4 md:col-span-4">
+                <div className="space-y-4 col-span-1 sm:col-span-2 md:col-span-4">
                   <Link href="/" className="font-display font-bold text-2xl text-white flex flex-col gap-2 items-start">
-                    <img src="/logo.png" alt="EcoFone Logo" className="h-16 md:h-20 w-auto object-contain bg-transparent p-0 -ml-1" />
+                    <img src="/logo.png" alt="EcoFone Logo" className="h-12 sm:h-16 md:h-20 w-auto object-contain bg-transparent p-0 -ml-1" />
                     <span className="sr-only">EcoFone</span>
                   </Link>
                   <p className="text-xs leading-relaxed text-slate-400">
@@ -164,7 +164,7 @@ export default function RootLayout({
                 </div>
 
                 {/* Column 2: Quick Links */}
-                <div className="md:col-span-2 md:pl-4">
+                <div className="col-span-1 md:col-span-2 md:pl-4">
                   <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Quick Links</h4>
                   <ul className="space-y-2.5 text-xs">
                     <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
@@ -176,7 +176,7 @@ export default function RootLayout({
                 </div>
 
                 {/* Column 3: Contact & Support */}
-                <div className="md:col-span-3">
+                <div className="col-span-1 md:col-span-3">
                   <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Contact & Support</h4>
                   <ul className="space-y-2.5 text-xs text-slate-400">
                     <li>Email: <a href="mailto:business@ecofone.co.in" className="hover:text-white transition-colors">business@ecofone.co.in</a></li>
@@ -186,7 +186,7 @@ export default function RootLayout({
                 </div>
 
                 {/* Column 4: Map */}
-                <div className="md:col-span-3">
+                <div className="col-span-1 sm:col-span-2 md:col-span-3">
                   <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-wider">Our Location</h4>
                   <div className="h-32 w-full rounded-2xl overflow-hidden border border-white/10 shadow-md bg-white/5">
                     <iframe
