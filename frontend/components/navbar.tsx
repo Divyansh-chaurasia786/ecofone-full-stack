@@ -130,14 +130,14 @@ export default function Navbar() {
       }`}>
       {/* Navbar Container */}
       <div className="max-w-5xl mx-auto relative">
-        <nav className={`rounded-full px-4 sm:px-6 h-16 flex items-center justify-between transition-all duration-300 ${
+        <nav className={`rounded-full px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between transition-all duration-300 ${
           showGlass
             ? 'bg-black/20 bg-gradient-to-b from-white/[0.12] to-transparent backdrop-blur-[30px] backdrop-saturate-[160%] border border-white/20 shadow-[0_12px_40px_rgba(0,0,0,0.15)]'
             : 'bg-transparent border-transparent shadow-none'
         }`}>
           {/* Logo on Left */}
           <Link href="/" onClick={handleLogoClick} className="flex items-center py-1 -ml-1.5 sm:-ml-3">
-            <img src="/logo.png" alt="EcoFone Logo" className="h-8 md:h-12 w-auto object-contain bg-transparent p-0" />
+            <img src="/logo.png" alt="EcoFone Logo" className="h-7 sm:h-8 md:h-12 w-auto object-contain bg-transparent p-0" />
           </Link>
 
           {/* Desktop Navigation Links (Distributed) */}
