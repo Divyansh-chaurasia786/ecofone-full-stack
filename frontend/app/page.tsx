@@ -130,7 +130,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="relative space-y-24 pb-24 bg-[#FAF9F6] text-slate-800">
+    <div className="relative space-y-24 pb-28 md:pb-24 bg-[#FAF9F6] text-slate-800 overflow-x-hidden">
       
       {/* 1. Hero Section (Alabaster base, high-end editorial) */}
       {/* 1. Hero Section (Oxyplant Deep Forest Green Banner) */}
@@ -327,7 +327,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setInvestAmt(2000000)}
-                  className={`flex-1 text-[10px] font-bold py-1.5 rounded-lg border transition-all ${
+                  className={`flex-1 text-xs font-bold py-2.5 rounded-lg border transition-all min-h-[44px] flex items-center justify-center ${
                     investAmt === 2000000 
                       ? 'bg-emerald-500/20 border-emerald-400 text-white' 
                       : 'border-white/10 text-slate-400 hover:text-white hover:bg-white/5'
@@ -338,7 +338,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setInvestAmt(2500000)}
-                  className={`flex-1 text-[10px] font-bold py-1.5 rounded-lg border transition-all ${
+                  className={`flex-1 text-xs font-bold py-2.5 rounded-lg border transition-all min-h-[44px] flex items-center justify-center ${
                     investAmt === 2500000 
                       ? 'bg-emerald-500/20 border-emerald-400 text-white' 
                       : 'border-white/10 text-slate-400 hover:text-white hover:bg-white/5'
@@ -349,7 +349,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setInvestAmt(3000000)}
-                  className={`flex-1 text-[10px] font-bold py-1.5 rounded-lg border transition-all ${
+                  className={`flex-1 text-xs font-bold py-2.5 rounded-lg border transition-all min-h-[44px] flex items-center justify-center ${
                     investAmt === 3000000 
                       ? 'bg-emerald-500/20 border-emerald-400 text-white' 
                       : 'border-white/10 text-slate-400 hover:text-white hover:bg-white/5'
@@ -367,7 +367,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setIsFoco(true)}
-                  className={`flex-1 text-[10px] md:text-xs py-2 rounded-lg font-bold transition-all text-center ${
+                  className={`flex-1 text-[10px] md:text-xs py-2.5 rounded-lg font-bold transition-all text-center min-h-[44px] flex items-center justify-center ${
                     isFoco 
                       ? 'bg-ecoOrange-600 text-white shadow-md' 
                       : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -378,7 +378,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setIsFoco(false)}
-                  className={`flex-1 text-[10px] md:text-xs py-2 rounded-lg font-bold transition-all text-center ${
+                  className={`flex-1 text-[10px] md:text-xs py-2.5 rounded-lg font-bold transition-all text-center min-h-[44px] flex items-center justify-center ${
                     !isFoco 
                       ? 'bg-ecoOrange-600 text-white shadow-md' 
                       : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -485,49 +485,49 @@ export default function HomePage() {
         </div>
 
         {/* Premium Trust Seals Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto py-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto py-2">
           {/* Warranty Card */}
-          <div className="bg-gradient-to-br from-white to-emerald-50/15 border border-slate-200/50 rounded-3xl p-6 space-y-4 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+          <div className="bg-gradient-to-br from-white to-emerald-50/15 border border-slate-200/50 rounded-2xl p-5 space-y-3 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 text-lg border border-emerald-500/10 shadow-sm">
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 text-base border border-emerald-500/10 shadow-sm flex-shrink-0">
                 🛡️
               </div>
-              <div>
-                <span className="text-[9px] text-emerald-600 font-extrabold uppercase tracking-wider block">Official Guarantee</span>
-                <h4 className="font-display font-bold text-sm text-slate-900 leading-tight">6-Month Comprehensive Warranty</h4>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[8px] sm:text-[9px] text-emerald-600 font-extrabold uppercase tracking-wider block">Official Guarantee</span>
+                <h4 className="font-display font-bold text-xs sm:text-sm text-slate-900 leading-tight">6-Month Comprehensive Warranty</h4>
               </div>
             </div>
-            <p className="text-[11px] text-slate-550 leading-relaxed pl-1">
+            <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed pl-1">
               Every certified refurbished device undergoes a strict 32-point diagnostics check. If any hardware or technical issue arises, we cover complete diagnostic repair or replacement within 6 months.
             </p>
           </div>
 
           {/* Replacement Card */}
-          <div className="bg-gradient-to-br from-white to-orange-50/15 border border-slate-200/50 rounded-3xl p-6 space-y-4 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+          <div className="bg-gradient-to-br from-white to-orange-50/15 border border-slate-200/50 rounded-2xl p-5 space-y-3 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-600 text-lg border border-orange-500/10 shadow-sm">
+              <div className="w-9 h-9 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-600 text-base border border-orange-500/10 shadow-sm flex-shrink-0">
                 🔄
               </div>
-              <div>
-                <span className="text-[9px] text-ecoOrange-600 font-extrabold uppercase tracking-wider block">No-Risk Trial</span>
-                <h4 className="font-display font-bold text-sm text-slate-900 leading-tight">3-Day Hassle-Free Replacement</h4>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[8px] sm:text-[9px] text-ecoOrange-600 font-extrabold uppercase tracking-wider block">No-Risk Trial</span>
+                <h4 className="font-display font-bold text-xs sm:text-sm text-slate-900 leading-tight">3-Day Hassle-Free Replacement</h4>
               </div>
             </div>
-            <p className="text-[11px] text-slate-550 leading-relaxed pl-1">
+            <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed pl-1">
               Shop with absolute peace of mind. If you are not completely satisfied with your refurbished smartphone, bring it back within 3 days for an instant exchange or upgrade.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-md md:max-w-none mx-auto w-full">
           {/* Card 1: Buy */}
-          <div className="glassmorphism-card rounded-3xl p-8 border border-slate-100/50 flex flex-col justify-between min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
+          <div className="glassmorphism-card rounded-3xl p-5 sm:p-8 border border-slate-100/50 flex flex-col justify-between min-h-[320px] sm:min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
             <div className="space-y-4">
               <div className="w-14 h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
                 <img src="/service-buy.png" alt="Buy Icon" className="w-8 h-8 object-contain" />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Buy Used Smartphones</h3>
-              <p className="text-xs text-slate-555 leading-relaxed">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Buy Used Smartphones</h3>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 Purchase pre-owned mobile phones at competitive rates. Instantly check parameters to evaluate and acquire stock.
               </p>
 
@@ -535,7 +535,7 @@ export default function HomePage() {
               <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'buy' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
                 <div className="space-y-3 border-t border-slate-100 pt-4">
                   <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">Service Details:</span>
-                  <ul className="space-y-2 text-xs text-slate-655 pl-4 list-disc leading-relaxed">
+                  <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
                     <li><strong className="text-slate-900">On-the-spot Inspection:</strong> Our shop technician checks the display, touch response, buttons, camera, and battery health in minutes.</li>
                     <li><strong className="text-slate-900">Transparent Valuation:</strong> Payout prices are calculated based on the brand, model age, and actual working condition.</li>
                     <li><strong className="text-slate-900">Safe Factory Reset:</strong> Full device data format performed in front of the customer to verify your personal files are cleared.</li>
@@ -547,20 +547,20 @@ export default function HomePage() {
             
             <button 
               onClick={() => setExpandedCard(expandedCard === 'buy' ? null : 'buy')}
-              className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none"
+              className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
             >
               {expandedCard === 'buy' ? 'Show Less ↑' : 'Know More →'}
             </button>
           </div>
 
           {/* Card 2: Sell */}
-          <div className="glassmorphism-card rounded-3xl p-8 border border-slate-100/50 flex flex-col justify-between min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
+          <div className="glassmorphism-card rounded-3xl p-5 sm:p-8 border border-slate-100/50 flex flex-col justify-between min-h-[320px] sm:min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
             <div className="space-y-4">
               <div className="w-14 h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
                 <img src="/service-sell.png" alt="Sell Icon" className="w-8 h-8 object-contain" />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Sell Certified Refurbished</h3>
-              <p className="text-xs text-slate-555 leading-relaxed">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Sell Certified Refurbished</h3>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 Sell premium, warranty-backed devices. Build quick customer trust with certification seals and replacement assurances.
               </p>
 
@@ -568,7 +568,7 @@ export default function HomePage() {
               <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'sell' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
                 <div className="space-y-3 border-t border-slate-100 pt-4">
                   <span className="text-[10px] text-ecoOrange-600 font-extrabold uppercase tracking-wider block">Service Details:</span>
-                  <ul className="space-y-2 text-xs text-slate-655 pl-4 list-disc leading-relaxed">
+                  <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
                     <li><strong className="text-slate-900">Technician Component Check:</strong> Every phone is tested for network reception, speaker volume, mic clarity, and screen touch.</li>
                     <li><strong className="text-slate-905">6-Month Store Warranty:</strong> Standard store warranty coverage for any unexpected technical hardware faults.</li>
                     <li><strong className="text-slate-900">3-Day Exchange Window:</strong> Easy exchanges or upgrades if you notice any functional issues within 3 days.</li>
@@ -580,14 +580,14 @@ export default function HomePage() {
             
             <button 
               onClick={() => setExpandedCard(expandedCard === 'sell' ? null : 'sell')}
-              className="text-ecoOrange-600 hover:text-ecoOrange-700 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none"
+              className="text-ecoOrange-600 hover:text-ecoOrange-700 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
             >
               {expandedCard === 'sell' ? 'Show Less ↑' : 'Know More →'}
             </button>
           </div>
 
           {/* Card 3: Repair & Accessories */}
-          <div className="glassmorphism-card rounded-3xl p-8 border border-slate-100/50 flex flex-col justify-between min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
+          <div className="glassmorphism-card rounded-3xl p-5 sm:p-8 border border-slate-100/50 flex flex-col justify-between min-h-[320px] sm:min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
             <div className="space-y-4">
               <div className="w-14 h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -595,8 +595,8 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Repair & Accessories</h3>
-              <p className="text-xs text-slate-555 leading-relaxed">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Repair & Accessories</h3>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 Earn daily recurring income from walk-in repair diagnostics, battery replacements, and life-style accessories sales.
               </p>
 
@@ -604,7 +604,7 @@ export default function HomePage() {
               <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'repair' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
                 <div className="space-y-3 border-t border-slate-100 pt-4">
                   <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">Service Details:</span>
-                  <ul className="space-y-2 text-xs text-slate-655 pl-4 list-disc leading-relaxed">
+                  <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
                     <li><strong className="text-slate-900">Common Hardware Repairs:</strong> Quick screen glass replacement, fresh battery swaps, and charging port repairs.</li>
                     <li><strong className="text-slate-900">Tested Spare Parts:</strong> We use reliable, quality-tested screen displays, batteries, and camera modules.</li>
                     <li><strong className="text-slate-900">90-Day Spares Warranty:</strong> 3-month store warranty coverage on replaced components for peace of mind.</li>
@@ -616,7 +616,7 @@ export default function HomePage() {
             
             <button 
               onClick={() => setExpandedCard(expandedCard === 'repair' ? null : 'repair')}
-              className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none"
+              className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
             >
               {expandedCard === 'repair' ? 'Show Less ↑' : 'Know More →'}
             </button>
@@ -631,7 +631,7 @@ export default function HomePage() {
             <img 
               src="/home_values.jpg" 
               alt="EcoFone Team Collaboration" 
-              className="w-full h-auto rounded-2xl object-cover aspect-video lg:aspect-square"
+              className="w-full h-auto max-h-[300px] object-cover rounded-xl sm:rounded-2xl aspect-video lg:aspect-square"
             />
           </div>
 
@@ -723,7 +723,7 @@ export default function HomePage() {
       <ScrollReveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-white border border-slate-100 p-8 md:p-12 rounded-3xl shadow-md">
           <div className="rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 animate-scale-in">
-            <img src="/home_locator.jpg" alt="EcoFone Interactive Store Locator Map" className="w-full h-auto object-cover aspect-[16/10]" />
+            <img src="/home_locator.jpg" alt="EcoFone Interactive Store Locator Map" className="w-full h-auto max-h-[300px] object-cover rounded-xl aspect-[16/10]" />
           </div>
           <div className="space-y-4 animate-slide-up">
             <span className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-wider bg-[#0a2d1a] border border-emerald-800/30 px-3.5 py-1.5 rounded-full w-max block">

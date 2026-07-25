@@ -137,7 +137,7 @@ export default function Navbar() {
         }`}>
           {/* Logo on Left */}
           <Link href="/" onClick={handleLogoClick} className="flex items-center py-1 -ml-1.5 sm:-ml-3">
-            <img src="/logo.png" alt="EcoFone Logo" className="h-11 md:h-12 w-auto object-contain bg-transparent p-0" />
+            <img src="/logo.png" alt="EcoFone Logo" className="h-8 md:h-12 w-auto object-contain bg-transparent p-0" />
           </Link>
 
           {/* Desktop Navigation Links (Distributed) */}
@@ -162,7 +162,7 @@ export default function Navbar() {
           {/* Mobile Hamburger Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-full transition-all focus:outline-none text-white hover:text-white hover:bg-white/10 -mr-1.5"
+            className="md:hidden p-2 rounded-full transition-all focus:outline-none text-white hover:text-white hover:bg-white/10 -mr-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Toggle Navigation Menu"
           >
             {isOpen ? (
