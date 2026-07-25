@@ -215,3 +215,11 @@
   animation: cardFlash 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Hide scrollbar for carousel containers */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

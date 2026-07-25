@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../lib/api';
 import ScrollReveal from '../../components/scroll-reveal';
+import RoadmapCarousel from '../../components/roadmap-carousel';
 import { submitToGoogleForm } from '../../lib/google-forms';
 
 export default function FranchisePage() {
@@ -436,7 +437,11 @@ export default function FranchisePage() {
           <p className="text-slate-550 text-xs sm:text-sm max-w-lg mx-auto">Your step-by-step journey to becoming an EcoFone partner.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Mobile: Auto-play Roadmap Carousel */}
+        <RoadmapCarousel />
+
+        {/* Desktop: 3-column grid (hidden on mobile) */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {roadmapSteps.map((step) => (
             <div key={step.num} className="bg-white border border-slate-100 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-md transition-shadow relative">
               <span className="absolute top-4 right-6 font-display font-black text-2xl text-emerald-100">{step.num}</span>

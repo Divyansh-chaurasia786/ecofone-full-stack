@@ -4,6 +4,8 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import ReviewsCarousel from "../components/reviews-carousel";
 import ScrollReveal from "../components/scroll-reveal";
+import ServiceCarousel from "../components/service-carousel";
+import DifferentCarousel from "../components/different-carousel";
 
 const calculateRoiMetrics = (investAmt: number, isFico: boolean) => {
   // Calculation Core Logic
@@ -519,107 +521,104 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-8 max-w-sm md:max-w-none mx-auto w-full px-3 md:px-0">
-          {/* Card 1: Buy */}
-          <div className="glassmorphism-card rounded-3xl p-4 md:p-8 border border-slate-100/50 flex flex-col justify-between min-h-0 md:min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
-            <div className="space-y-2.5">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
-                <img src="/service-buy.png" alt="Buy Icon" className="w-7 h-7 md:w-8 md:h-8 object-contain" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-base">Buy Used Smartphones</h3>
-              <p className="text-xs text-slate-500 leading-snug">
-                Purchase pre-owned mobile phones at competitive rates. Instantly check parameters to evaluate and acquire stock.
-              </p>
+        {/* Mobile: horizontal scroll carousel | Desktop: 3-col grid */}
+        <div className="w-full overflow-hidden">
+          <ServiceCarousel expandedCard={expandedCard} setExpandedCard={setExpandedCard} />
 
-              {/* Expanded details */}
-              <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'buy' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
-                <div className="space-y-2.5 border-t border-slate-100 pt-3">
-                  <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">Service Details:</span>
-                  <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
-                    <li><strong className="text-slate-900">On-the-spot Inspection:</strong> Our shop technician checks the display, touch response, buttons, camera, and battery health in minutes.</li>
-                    <li><strong className="text-slate-900">Transparent Valuation:</strong> Payout prices are calculated based on the brand, model age, and actual working condition.</li>
-                    <li><strong className="text-slate-900">Safe Factory Reset:</strong> Full device data format performed in front of the customer to verify your personal files are cleared.</li>
-                    <li><strong className="text-slate-900">Instant UPI/Cash Settlement:</strong> Get paid directly via instant bank transfer or cash as soon as the deal is closed.</li>
-                  </ul>
+          {/* Desktop Grid (hidden on mobile) */}
+          <div className="hidden sm:grid sm:grid-cols-3 gap-6 w-full">
+            {/* Desktop Card 1: Buy */}
+            <div className="glassmorphism-card rounded-3xl p-8 border border-slate-100/50 flex flex-col justify-between min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
+              <div className="space-y-4">
+                <div className="w-14 h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
+                  <img src="/service-buy.png" alt="Buy Icon" className="w-8 h-8 object-contain" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Buy Used Smartphones</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Purchase pre-owned mobile phones at competitive rates. Instantly check parameters to evaluate and acquire stock.
+                </p>
+                <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'buy' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
+                  <div className="space-y-3 border-t border-slate-100 pt-4">
+                    <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">Service Details:</span>
+                    <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
+                      <li><strong className="text-slate-900">On-the-spot Inspection:</strong> Our shop technician checks the display, touch response, buttons, camera, and battery health in minutes.</li>
+                      <li><strong className="text-slate-900">Transparent Valuation:</strong> Payout prices are calculated based on the brand, model age, and actual working condition.</li>
+                      <li><strong className="text-slate-900">Safe Factory Reset:</strong> Full device data format performed in front of the customer to verify your personal files are cleared.</li>
+                      <li><strong className="text-slate-900">Instant UPI/Cash Settlement:</strong> Get paid directly via instant bank transfer or cash as soon as the deal is closed.</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={() => setExpandedCard(expandedCard === 'buy' ? null : 'buy')}
+                className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
+              >
+                {expandedCard === 'buy' ? 'Show Less ↑' : 'Know More →'}
+              </button>
             </div>
-            
-            <button 
-              onClick={() => setExpandedCard(expandedCard === 'buy' ? null : 'buy')}
-              className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-3 md:mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
-            >
-              {expandedCard === 'buy' ? 'Show Less ↑' : 'Know More →'}
-            </button>
-          </div>
 
-          {/* Card 2: Sell */}
-          <div className="glassmorphism-card rounded-3xl p-4 md:p-8 border border-slate-100/50 flex flex-col justify-between min-h-0 md:min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
-            <div className="space-y-2.5">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
-                <img src="/service-sell.png" alt="Sell Icon" className="w-7 h-7 md:w-8 md:h-8 object-contain" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-base">Sell Certified Refurbished</h3>
-              <p className="text-xs text-slate-550 leading-snug">
-                Sell premium, warranty-backed devices. Build quick customer trust with certification seals and replacement assurances.
-              </p>
-
-              {/* Expanded details */}
-              <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'sell' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
-                <div className="space-y-2.5 border-t border-slate-100 pt-3">
-                  <span className="text-[10px] text-ecoOrange-600 font-extrabold uppercase tracking-wider block">Service Details:</span>
-                  <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
-                    <li><strong className="text-slate-900">Technician Component Check:</strong> Every phone is tested for network reception, speaker volume, mic clarity, and screen touch.</li>
-                    <li><strong className="text-slate-905">6-Month Store Warranty:</strong> Standard store warranty coverage for any unexpected technical hardware faults.</li>
-                    <li><strong className="text-slate-900">3-Day Exchange Window:</strong> Easy exchanges or upgrades if you notice any functional issues within 3 days.</li>
-                    <li><strong className="text-slate-900">Top Brands Stock:</strong> Shop clean, certified iPhones, Samsung, and OnePlus models at up to 40% off retail prices.</li>
-                  </ul>
+            {/* Desktop Card 2: Sell */}
+            <div className="glassmorphism-card rounded-3xl p-8 border border-slate-100/50 flex flex-col justify-between min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
+              <div className="space-y-4">
+                <div className="w-14 h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
+                  <img src="/service-sell.png" alt="Sell Icon" className="w-8 h-8 object-contain" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Sell Certified Refurbished</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Sell premium, warranty-backed devices. Build quick customer trust with certification seals and replacement assurances.
+                </p>
+                <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'sell' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
+                  <div className="space-y-3 border-t border-slate-100 pt-4">
+                    <span className="text-[10px] text-ecoOrange-600 font-extrabold uppercase tracking-wider block">Service Details:</span>
+                    <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
+                      <li><strong className="text-slate-900">Technician Component Check:</strong> Every phone is tested for network reception, speaker volume, mic clarity, and screen touch.</li>
+                      <li><strong className="text-slate-900">6-Month Store Warranty:</strong> Standard store warranty coverage for any unexpected technical hardware faults.</li>
+                      <li><strong className="text-slate-900">3-Day Exchange Window:</strong> Easy exchanges or upgrades if you notice any functional issues within 3 days.</li>
+                      <li><strong className="text-slate-900">Top Brands Stock:</strong> Shop clean, certified iPhones, Samsung, and OnePlus models at up to 40% off retail prices.</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={() => setExpandedCard(expandedCard === 'sell' ? null : 'sell')}
+                className="text-ecoOrange-600 hover:text-ecoOrange-700 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
+              >
+                {expandedCard === 'sell' ? 'Show Less ↑' : 'Know More →'}
+              </button>
             </div>
-            
-            <button 
-              onClick={() => setExpandedCard(expandedCard === 'sell' ? null : 'sell')}
-              className="text-ecoOrange-600 hover:text-ecoOrange-700 font-bold text-xs text-left mt-3 md:mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
-            >
-              {expandedCard === 'sell' ? 'Show Less ↑' : 'Know More →'}
-            </button>
-          </div>
 
-          {/* Card 3: Repair & Accessories */}
-          <div className="glassmorphism-card rounded-3xl p-4 md:p-8 border border-slate-100/50 flex flex-col justify-between min-h-0 md:min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
-            <div className="space-y-2.5">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
-                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-900 text-base">Repair & Accessories</h3>
-              <p className="text-xs text-slate-500 leading-snug">
-                Earn daily recurring income from walk-in repair diagnostics, battery replacements, and life-style accessories sales.
-              </p>
-
-              {/* Expanded details */}
-              <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'repair' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
-                <div className="space-y-2.5 border-t border-slate-100 pt-3">
-                  <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">Service Details:</span>
-                  <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
-                    <li><strong className="text-slate-900">Common Hardware Repairs:</strong> Quick screen glass replacement, fresh battery swaps, and charging port repairs.</li>
-                    <li><strong className="text-slate-900">Tested Spare Parts:</strong> We use reliable, quality-tested screen displays, batteries, and camera modules.</li>
-                    <li><strong className="text-slate-900">90-Day Spares Warranty:</strong> 3-month store warranty coverage on replaced components for peace of mind.</li>
-                    <li><strong className="text-slate-900">Popular Accessories:</strong> Tempered glass screen guards, fast charging adapters, and durable back covers.</li>
-                  </ul>
+            {/* Desktop Card 3: Repair */}
+            <div className="glassmorphism-card rounded-3xl p-8 border border-slate-100/50 flex flex-col justify-between min-h-[360px] hover:-translate-y-2.5 transition-all duration-300 shadow-xl hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.18)]">
+              <div className="space-y-4">
+                <div className="w-14 h-14 bg-slate-50/50 rounded-2xl flex items-center justify-center border border-slate-100 transition-transform duration-300 hover:scale-110">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Repair & Accessories</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Earn daily recurring income from walk-in repair diagnostics, battery replacements, and life-style accessories sales.
+                </p>
+                <div className={`transition-all duration-300 overflow-hidden ${expandedCard === 'repair' ? 'max-h-[500px] opacity-100 pt-2' : 'max-h-0 opacity-0'}`}>
+                  <div className="space-y-3 border-t border-slate-100 pt-4">
+                    <span className="text-[10px] text-emerald-800 font-extrabold uppercase tracking-wider block">Service Details:</span>
+                    <ul className="space-y-2 text-xs text-slate-500 pl-4 list-disc leading-relaxed">
+                      <li><strong className="text-slate-900">Common Hardware Repairs:</strong> Quick screen glass replacement, fresh battery swaps, and charging port repairs.</li>
+                      <li><strong className="text-slate-900">Tested Spare Parts:</strong> We use reliable, quality-tested screen displays, batteries, and camera modules.</li>
+                      <li><strong className="text-slate-900">90-Day Spares Warranty:</strong> 3-month store warranty coverage on replaced components for peace of mind.</li>
+                      <li><strong className="text-slate-900">Popular Accessories:</strong> Tempered glass screen guards, fast charging adapters, and durable back covers.</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={() => setExpandedCard(expandedCard === 'repair' ? null : 'repair')}
+                className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
+              >
+                {expandedCard === 'repair' ? 'Show Less ↑' : 'Know More →'}
+              </button>
             </div>
-            
-            <button 
-              onClick={() => setExpandedCard(expandedCard === 'repair' ? null : 'repair')}
-              className="text-emerald-700 hover:text-emerald-800 font-bold text-xs text-left mt-3 md:mt-6 flex items-center gap-1 focus:outline-none min-h-[44px]"
-            >
-              {expandedCard === 'repair' ? 'Show Less ↑' : 'Know More →'}
-            </button>
           </div>
         </div>
       </ScrollReveal>
@@ -645,73 +644,86 @@ export default function HomePage() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-lg animate-slide-up hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300">
-                 <span className="font-bold text-slate-900 text-sm block flex items-center gap-2">
-                   <svg className="w-4 h-4 text-emerald-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                   </svg>
-                   <span>Certified Quality Process</span>
-                 </span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Every smartphone goes through multi-level technical quality diagnostic runs before storefront listing.
-                </p>
+            {/* Core Benefits 2-Column Responsive Grid */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-6 px-1 sm:px-0 py-2 sm:py-0 max-w-md sm:max-w-none mx-auto">
+              <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-1.5 sm:space-y-2 shadow-sm sm:shadow-lg animate-slide-up hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-bold text-slate-900 text-xs sm:text-sm md:text-base leading-tight block flex items-center gap-1.5 mb-1.5">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 inline-block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <span>Certified Quality</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                    Every smartphone goes through multi-level technical quality diagnostic runs before storefront listing.
+                  </p>
+                </div>
               </div>
-              <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-lg animate-slide-up animation-delay-100 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300">
-                 <span className="font-bold text-slate-900 text-sm block flex items-center gap-2">
-                   <svg className="w-4 h-4 text-ecoOrange-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M3 12l3 3m-3-3l-3 3" />
-                   </svg>
-                   <span>Multiple Revenue Channels</span>
-                 </span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Combine Buy, Sell, and Repair service points to ensure stable income and solid cash flow.
-                </p>
+              <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-1.5 sm:space-y-2 shadow-sm sm:shadow-lg animate-slide-up animation-delay-100 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-bold text-slate-900 text-xs sm:text-sm md:text-base leading-tight block flex items-center gap-1.5 mb-1.5">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-ecoOrange-500 inline-block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M3 12l3 3m-3-3l-3 3" />
+                    </svg>
+                    <span>Multiple Revenue</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                    Combine Buy, Sell, and Repair service points to ensure stable income and solid cash flow.
+                  </p>
+                </div>
               </div>
-              <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-lg animate-slide-up animation-delay-200 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300">
-                 <span className="font-bold text-ecoOrange-600 text-sm block flex items-center gap-2">
-                   <svg className="w-4 h-4 text-ecoOrange-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM9 5h6v2H9V5z" />
-                   </svg>
-                    <span>FICO Business Option</span>
-                 </span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Invest securely with our company-operated franchise model. We handle staffing, POS setup, and marketing.
-                </p>
+              <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-1.5 sm:space-y-2 shadow-sm sm:shadow-lg animate-slide-up animation-delay-200 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-bold text-ecoOrange-600 text-xs sm:text-sm md:text-base leading-tight block flex items-center gap-1.5 mb-1.5">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-ecoOrange-500 inline-block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM9 5h6v2H9V5z" />
+                    </svg>
+                    <span>FICO Option</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                    Invest securely with our company-operated franchise model. We handle staffing, POS setup, and marketing.
+                  </p>
+                </div>
               </div>
-              <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-lg animate-slide-up animation-delay-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300">
-                 <span className="font-bold text-emerald-700 text-sm block flex items-center gap-2">
-                   <svg className="w-4 h-4 text-emerald-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                   </svg>
-                   <span>Complete Corporate Support</span>
-                 </span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  From localized demographic site surveys to digital marketing programs and sales staff onboarding.
-                </p>
+              <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-1.5 sm:space-y-2 shadow-sm sm:shadow-lg animate-slide-up animation-delay-300 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-bold text-emerald-700 text-xs sm:text-sm md:text-base leading-tight block flex items-center gap-1.5 mb-1.5">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 inline-block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Corporate Support</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                    From localized demographic site surveys to digital marketing programs and sales staff onboarding.
+                  </p>
+                </div>
               </div>
-              <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-lg animate-slide-up animation-delay-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300">
-                 <span className="font-bold text-emerald-700 text-sm block flex items-center gap-2">
-                   <svg className="w-4 h-4 text-emerald-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                   </svg>
-                   <span>6-Month Comprehensive Warranty</span>
-                 </span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Every certified device undergoes strict diagnostics. We cover complete diagnostic repair or replacement within 6 months.
-                </p>
+              <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-1.5 sm:space-y-2 shadow-sm sm:shadow-lg animate-slide-up animation-delay-300 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-bold text-emerald-700 text-xs sm:text-sm md:text-base leading-tight block flex items-center gap-1.5 mb-1.5">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 inline-block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span>6-Month Warranty</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                    Every certified device undergoes strict diagnostics. Complete diagnostic repair or replacement within 6 months.
+                  </p>
+                </div>
               </div>
-              <div className="p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-lg animate-slide-up animation-delay-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300">
-                 <span className="font-bold text-ecoOrange-600 text-sm block flex items-center gap-2">
-                   <svg className="w-4 h-4 text-ecoOrange-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89l-2.786 2.787a4.995 4.995 0 10-1.745 5.589" />
-                   </svg>
-                   <span>3-Day Hassle-Free Replacement</span>
-                 </span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Shop with absolute peace of mind. Bring your smartphone back within 3 days for an instant exchange or upgrade.
-                </p>
+              <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-1.5 sm:space-y-2 shadow-sm sm:shadow-lg animate-slide-up animation-delay-300 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-bold text-ecoOrange-600 text-xs sm:text-sm md:text-base leading-tight block flex items-center gap-1.5 mb-1.5">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-ecoOrange-500 inline-block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89l-2.786 2.787a4.995 4.995 0 10-1.745 5.589" />
+                    </svg>
+                    <span>3-Day Replacement</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                    Shop with absolute peace of mind. Bring your smartphone back within 3 days for an instant exchange or upgrade.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

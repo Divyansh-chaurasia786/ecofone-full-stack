@@ -1,5 +1,6 @@
 import React from 'react';
 import ScrollReveal from '../../components/scroll-reveal';
+import ServiceCarousel from '../../components/service-carousel';
 
 export default function ServicesPage() {
   const rolloutSteps = [
@@ -28,8 +29,8 @@ export default function ServicesPage() {
   return (
     <div className="bg-[#FAF9F6] text-slate-800 min-h-screen">
       
-      {/* 1. Full-Width Hero Section (Like Homepage) */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-20 overflow-hidden bg-emerald-950">
+      {/* 1. Compact Hero Section */}
+      <section className="relative flex items-center justify-center pt-24 sm:pt-28 pb-10 sm:pb-14 overflow-hidden bg-emerald-950">
         <div className="absolute inset-0 z-0">
           <img 
             src="/services_hero.jpg" 
@@ -40,11 +41,11 @@ export default function ServicesPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#061C0F]/5 via-transparent to-[#FAF9F6]"></div>
         </div>
 
-        <div className="relative z-10 max-w-2xl mx-auto px-4 text-center space-y-4 mt-20">
+        <div className="relative z-10 max-w-2xl mx-auto px-4 text-center space-y-3.5 mt-4 sm:mt-6">
           <span className="text-[10px] text-emerald-300 font-extrabold uppercase tracking-wider bg-[#0a2d1a]/85 border border-emerald-800/20 px-3.5 py-1.5 rounded-full inline-block" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
             EcoFone Services
           </span>
-          <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white leading-tight" style={{ textShadow: '0 0 15px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.7)' }}>
+          <h1 className="font-display text-2xl sm:text-4xl font-extrabold text-white leading-tight" style={{ textShadow: '0 0 15px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.7)' }}>
             Triple Revenue <span className="text-emerald-300">Store Model</span>
           </h1>
           <p className="text-white/95 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto" style={{ textShadow: '0 0 10px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.7)' }}>
@@ -54,7 +55,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Main Content Workspace Container */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 space-y-12 sm:space-y-16">
         
         {/* 2. Services Grid (Three In-Store Income Streams) */}
         <ScrollReveal className="space-y-8">
@@ -68,7 +69,11 @@ export default function ServicesPage() {
 
 
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-4">
+          {/* Mobile: Auto-play carousel like Home Page */}
+          <ServiceCarousel />
+
+          {/* Desktop: 3-column grid (hidden on mobile) */}
+          <div className="hidden sm:grid sm:grid-cols-3 gap-8 pt-4">
             {/* Column 1: Buy */}
             <div className="space-y-4 hover:-translate-y-1 transition-all duration-300">
               <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/10 text-emerald-600 transition-transform duration-300 hover:scale-110">
@@ -119,14 +124,16 @@ export default function ServicesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 pt-2">
             {rolloutSteps.map((step, idx) => (
-              <div key={idx} className="space-y-4 text-center hover:-translate-y-1 transition-all duration-300">
-                <div className="w-16 h-16 mx-auto bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/10 transition-transform duration-300 hover:scale-110">
-                  <img src={step.img} alt={step.title} className="w-10 h-10 object-contain" />
+              <div key={idx} className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full text-center">
+                <div className="space-y-2">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 mx-auto bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/10 transition-transform duration-300 hover:scale-110 flex-shrink-0">
+                    <img src={step.img} alt={step.title} className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm md:text-base leading-tight">{step.title}</h4>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3 sm:line-clamp-none">{step.desc}</p>
                 </div>
-                <h4 className="font-bold text-slate-900 text-sm">{step.title}</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>

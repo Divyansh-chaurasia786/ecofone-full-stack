@@ -92,8 +92,8 @@ export default function AboutPage() {
   return (
     <div className="bg-[#FAF9F6] text-slate-850 min-h-screen">
       
-      {/* 1. Full-Width Hero Section (Like Homepage) */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-20 overflow-hidden bg-emerald-950">
+      {/* 1. Compact Hero Section */}
+      <section className="relative flex items-center justify-center pt-24 sm:pt-28 pb-10 sm:pb-14 overflow-hidden bg-emerald-950">
         <div className="absolute inset-0 z-0">
           <img 
             src="/about_hero.jpg" 
@@ -104,11 +104,11 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#061C0F]/60 via-[#061C0F]/40 to-[#FAF9F6]"></div>
         </div>
 
-        <div className="relative z-10 max-w-2xl mx-auto px-4 text-center space-y-4 mt-20">
+        <div className="relative z-10 max-w-2xl mx-auto px-4 text-center space-y-3.5 mt-4 sm:mt-6">
           <span className="text-[10px] text-emerald-300 font-extrabold uppercase tracking-wider bg-[#0a2d1a]/85 border border-emerald-800/20 px-3.5 py-1.5 rounded-full inline-block" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
             Our Story & Mission
           </span>
-          <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-wide" style={{ textShadow: '0 0 15px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.7)', fontVariantLigatures: 'none' }}>
+          <h1 className="font-display text-2xl sm:text-4xl font-extrabold text-white leading-tight tracking-wide" style={{ textShadow: '0 0 15px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.7)', fontVariantLigatures: 'none' }}>
             Redefining Smart and <span className="text-emerald-300">Profitable Retail</span>
           </h1>
           <p className="text-white/95 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto" style={{ textShadow: '0 0 10px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.7)' }}>
@@ -118,7 +118,7 @@ export default function AboutPage() {
       </section>
 
       {/* Main Content Workspace Container */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 space-y-12 sm:space-y-16">
         
         {/* Story details (Cardless sitting directly on background) */}
         <div className="max-w-3xl mx-auto text-center space-y-6">
@@ -127,111 +127,116 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* 2. What We Believe In */}
-        <ScrollReveal className="space-y-8">
+        {/* 2. What We Believe In & Vision / Mission */}
+        <ScrollReveal className="space-y-6">
           <div className="text-center space-y-2">
             <span className="text-[10px] text-ecoOrange-600 font-bold uppercase tracking-wider bg-orange-50 border border-orange-100 px-3 py-1 rounded-full w-max mx-auto block">
-              Core Beliefs
+              Core Beliefs & Vision
             </span>
             <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 leading-tight">What We Believe In</h2>
-            <p className="text-slate-500 text-xs sm:text-sm max-w-lg mx-auto">Our choices are guided by four core values that keep us grounded and focused on sustainable growth.</p>
+            <p className="text-slate-500 text-xs sm:text-sm max-w-lg mx-auto">Our choices are guided by core values, vision, and mission focused on sustainable growth.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-            <div className="space-y-3 hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 border border-emerald-500/10">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
-                </svg>
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-6">
+            <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+              <div className="space-y-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-500/10 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-slate-900 leading-tight">Trust Before Transactions</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                  We believe customer trust is the foundation of repeat business. We never cut corners on diagnostic checking or warranty fulfillment.
+                </p>
               </div>
-              <h3 className="font-display font-bold text-lg text-slate-900">Trust Before Transactions</h3>
-              <p className="text-slate-500 text-xs leading-relaxed">
-                We believe customer trust is the foundation of repeat business. We never cut corners on diagnostic checking, warranty fulfillment, or wholesale device pricing.
-              </p>
             </div>
 
-            <div className="space-y-3 hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 bg-ecoOrange-500/10 rounded-2xl flex items-center justify-center text-ecoOrange-600 border border-ecoOrange-500/10">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM9 5h6v2H9V5z" />
-                </svg>
+            <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+              <div className="space-y-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-ecoOrange-500/10 rounded-xl flex items-center justify-center text-ecoOrange-600 border border-ecoOrange-500/10 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM9 5h6v2H9V5z" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-slate-900 leading-tight">Partnership Mindset</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                  We treat franchisees as core business partners. Their profitability drives our corporate development strategies.
+                </p>
               </div>
-              <h3 className="font-display font-bold text-lg text-slate-900">Partnership Mindset</h3>
-              <p className="text-slate-500 text-xs leading-relaxed">
-                We do not treat franchisees as mere sales outlets — we treat them as core business partners. Their profitability drives our corporate development strategies.
-              </p>
             </div>
 
-            <div className="space-y-3 hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 border border-emerald-500/10">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <circle cx="12" cy="12" r="3" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
-                </svg>
+            <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+              <div className="space-y-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-500/10 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <circle cx="12" cy="12" r="3" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-slate-900 leading-tight">Systems Over Guesswork</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                  Our franchise model runs on structured operations and audited workflows to build steady, predictable returns.
+                </p>
               </div>
-              <h3 className="font-display font-bold text-lg text-slate-900">Systems Over Guesswork</h3>
-              <p className="text-slate-500 text-xs leading-relaxed">
-                Our franchise model runs on structured operations and audited workflows rather than random assumptions. This builds steady, predictable returns.
-              </p>
             </div>
 
-            <div className="space-y-3 hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 border border-emerald-500/10">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 9.8A7 7 0 0 1 11 20z" />
-                  <path d="M19 2c-2.26 4.33-5.27 7.14-8 8" />
-                </svg>
+            <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+              <div className="space-y-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-500/10 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 9.8A7 7 0 0 1 11 20z" />
+                    <path d="M19 2c-2.26 4.33-5.27 7.14-8 8" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-slate-900 leading-tight">Growth With Responsibility</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                  By extending device lifecycles, we actively reduce e-waste and promote green consumption behavior across India.
+                </p>
               </div>
-              <h3 className="font-display font-bold text-lg text-slate-900">Growth With Responsibility</h3>
-              <p className="text-slate-500 text-xs leading-relaxed">
-                By extending the lifecycle of premium mobile devices, we actively reduce e-waste and promote green consumption behavior across India.
-              </p>
             </div>
-          </div>
-        </ScrollReveal>
 
-        {/* 3. Our Vision & Mission */}
-        <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-4">
-          <div className="space-y-4 hover:-translate-y-1 transition-all duration-300">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 border border-emerald-500/10">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
+            <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+              <div className="space-y-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-500/10 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-slate-900 leading-tight">Our Vision</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-3">
+                  To build a nationwide network of EcoFone stores representing consistent quality, transparent pricing, and sustainable tech retail.
+                </p>
+              </div>
             </div>
-            <h2 className="font-display font-bold text-xl sm:text-2xl text-slate-900">Our Vision</h2>
-            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-              To build a nationwide network of EcoFone stores that represent consistent quality, transparent pricing, reliable service, and sustainable technology retail. We aim to become the trusted category leader in refurbished smartphone retail.
-            </p>
-          </div>
 
-          <div className="space-y-4 hover:-translate-y-1 transition-all duration-300">
-            <div className="w-12 h-12 bg-ecoOrange-500/10 rounded-2xl flex items-center justify-center text-ecoOrange-600 border border-ecoOrange-500/10">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <circle cx="12" cy="12" r="6" />
-                <circle cx="12" cy="12" r="2" />
-              </svg>
+            <div className="p-3 sm:p-5 bg-white border border-slate-100 rounded-2xl space-y-2 shadow-sm sm:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
+              <div className="space-y-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-ecoOrange-500/10 rounded-xl flex items-center justify-center text-ecoOrange-600 border border-ecoOrange-500/10 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-xs sm:text-sm md:text-base text-slate-900 leading-tight">Our Mission</h3>
+                <ul className="space-y-1 text-xs sm:text-sm text-slate-600 leading-snug">
+                  <li className="flex items-start gap-1">
+                    <span className="text-emerald-600 font-bold flex-shrink-0">✓</span>
+                    <span className="line-clamp-1">Certified, warranty-backed phones</span>
+                  </li>
+                  <li className="flex items-start gap-1">
+                    <span className="text-ecoOrange-600 font-bold flex-shrink-0">✓</span>
+                    <span className="line-clamp-1">Profitable franchise ecosystem</span>
+                  </li>
+                  <li className="flex items-start gap-1">
+                    <span className="text-emerald-600 font-bold flex-shrink-0">✓</span>
+                    <span className="line-clamp-1">Full operational support</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <h2 className="font-display font-bold text-xl sm:text-2xl text-slate-900">Our Mission</h2>
-            <ul className="space-y-3 text-xs text-slate-600">
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-600 font-bold">✓</span>
-                <span>To deliver certified, warranty-backed smartphones at fair prices.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-ecoOrange-600 font-bold">✓</span>
-                <span>To build a scalable and highly profitable franchise ecosystem.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-600 font-bold">✓</span>
-                <span>To support entrepreneurs with complete operational and marketing assistance.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-ecoOrange-600 font-bold">✓</span>
-                <span>To reduce e-waste by extending the lifecycle of consumer electronics.</span>
-              </li>
-            </ul>
           </div>
         </ScrollReveal>
 

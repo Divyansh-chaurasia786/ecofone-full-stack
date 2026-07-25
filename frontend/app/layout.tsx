@@ -141,7 +141,7 @@ export default function RootLayout({
                   </div>
                 </div>
 
-                {/* Mobile: compact 2-column links grid */}
+                {/* Mobile: balanced 2-column links grid */}
                 <div className="grid grid-cols-2 gap-4 w-full md:hidden">
                   {/* Quick Links */}
                   <div className="flex flex-col items-start text-left">
@@ -158,9 +158,9 @@ export default function RootLayout({
                   <div className="flex flex-col items-start text-left">
                     <h4 className="text-white font-semibold mb-2 text-xs uppercase tracking-wider">Contact Us</h4>
                     <ul className="space-y-1.5 text-xs text-slate-400">
-                      <li>Email: <a href="mailto:business@ecofone.co.in" className="hover:text-white transition-colors break-all">business@ecofone.co.in</a></li>
+                      <li className="text-[10px] sm:text-xs whitespace-nowrap">Email: <a href="mailto:business@ecofone.co.in" className="hover:text-white transition-colors">business@ecofone.co.in</a></li>
                       <li>Phone: <a href="tel:+919919965499" className="hover:text-white transition-colors">+91 99199 65499</a></li>
-                      <li>HQ: 505, JB Metro Heights, Lucknow – 226012</li>
+                      <li className="text-[11px] sm:text-xs">HQ: 505, JB Metro Heights, Lucknow – 226012</li>
                     </ul>
                   </div>
                 </div>

@@ -137,7 +137,7 @@ export default function Navbar() {
         }`}>
           {/* Logo on Left */}
           <Link href="/" onClick={handleLogoClick} className="flex items-center py-1 -ml-1.5 sm:-ml-3">
-            <img src="/logo.png" alt="EcoFone Logo" className="h-7 sm:h-8 md:h-12 w-auto object-contain bg-transparent p-0" />
+            <img src="/logo.png" alt="EcoFone Logo" className="h-10 sm:h-11 md:h-12 w-auto object-contain bg-transparent p-0" />
           </Link>
 
           {/* Desktop Navigation Links (Distributed) */}
