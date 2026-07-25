@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import LayoutClientWrapper from "../components/layout-client-wrapper";
 import WriteReviewButton from "../components/write-review-button";
+import CopyrightYear from "../components/copyright-year";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-display" });
@@ -140,29 +141,50 @@ export default function RootLayout({
                   </div>
                 </div>
 
-                {/* Grid container for Links & Contact on mobile, behaving as separate columns on desktop */}
-                <div className="grid grid-cols-2 gap-4 w-full md:contents">
-                  {/* Column 2: Quick Links */}
-                  <div className="col-span-1 flex flex-col items-start text-left md:col-span-2 md:pl-4">
-                    <h4 className="text-white font-semibold mb-2 text-xs md:text-sm uppercase tracking-wider">Quick Links</h4>
-                    <ul className="space-y-1.5 text-xs text-slate-450">
+                {/* Mobile: compact 2-column links grid */}
+                <div className="grid grid-cols-2 gap-4 w-full md:hidden">
+                  {/* Quick Links */}
+                  <div className="flex flex-col items-start text-left">
+                    <h4 className="text-white font-semibold mb-2 text-xs uppercase tracking-wider">Quick Links</h4>
+                    <ul className="space-y-1.5 text-xs text-slate-400">
                       <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
                       <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                       <li><Link href="/services" className="hover:text-white transition-colors">Our Services</Link></li>
-                      <li><Link href="/franchise" className="hover:text-white transition-colors">Franchise Program</Link></li>
+                      <li><Link href="/franchise" className="hover:text-white transition-colors">Franchise</Link></li>
                       <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
                     </ul>
                   </div>
-
-                  {/* Column 3: Contact & Support */}
-                  <div className="col-span-1 flex flex-col items-start text-left md:col-span-3">
-                    <h4 className="text-white font-semibold mb-2 text-xs md:text-sm uppercase tracking-wider">Contact Us</h4>
-                    <ul className="space-y-1.5 text-xs text-slate-450">
+                  {/* Contact */}
+                  <div className="flex flex-col items-start text-left">
+                    <h4 className="text-white font-semibold mb-2 text-xs uppercase tracking-wider">Contact Us</h4>
+                    <ul className="space-y-1.5 text-xs text-slate-400">
                       <li>Email: <a href="mailto:business@ecofone.co.in" className="hover:text-white transition-colors break-all">business@ecofone.co.in</a></li>
                       <li>Phone: <a href="tel:+919919965499" className="hover:text-white transition-colors">+91 99199 65499</a></li>
                       <li>HQ: 505, JB Metro Heights, Lucknow – 226012</li>
                     </ul>
                   </div>
+                </div>
+
+                {/* Desktop: Quick Links column */}
+                <div className="hidden md:flex col-span-2 md:pl-4 flex-col items-start text-left">
+                  <h4 className="text-white font-semibold mb-2 text-xs md:text-sm uppercase tracking-wider">Quick Links</h4>
+                  <ul className="space-y-2 text-xs text-slate-400">
+                    <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
+                    <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                    <li><Link href="/services" className="hover:text-white transition-colors">Our Services</Link></li>
+                    <li><Link href="/franchise" className="hover:text-white transition-colors">Franchise Program</Link></li>
+                    <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                  </ul>
+                </div>
+
+                {/* Desktop: Contact column */}
+                <div className="hidden md:flex col-span-3 flex-col items-start text-left">
+                  <h4 className="text-white font-semibold mb-2 text-xs md:text-sm uppercase tracking-wider">Contact Us</h4>
+                  <ul className="space-y-2 text-xs text-slate-400">
+                    <li>Email: <a href="mailto:business@ecofone.co.in" className="hover:text-white transition-colors">business@ecofone.co.in</a></li>
+                    <li>Phone: <a href="tel:+919919965499" className="hover:text-white transition-colors">+91 99199 65499</a></li>
+                    <li>Lucknow HQ: 505, JB Metro Heights, Kanpur Road, Lucknow – 226012</li>
+                  </ul>
                 </div>
 
                 {/* Column 4: Map */}
@@ -183,7 +205,7 @@ export default function RootLayout({
                 </div>
               </div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center text-[10px] md:text-xs text-slate-500">
-                <p>&copy; {new Date().getFullYear()} EcoFone Franchise Network. All rights reserved.</p>
+                <p>&copy; <CopyrightYear /> EcoFone Franchise Network. All rights reserved.</p>
                 {/* Working Social Media Links */}
                 <div className="flex items-center gap-4">
                   <a href="https://www.facebook.com/people/EcoFone/61583296272681/?mibextid=wwXIfr&rdid=3ro69EiPXA4Rlxf9&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F187RLSW1y4%2F%3Fmibextid%3DwwXIfr" target="_blank" rel="noopener noreferrer" className="text-slate-450 hover:text-white transition-colors" title="Facebook">
