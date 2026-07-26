@@ -2,20 +2,22 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { XssMiddleware } from './common/middleware/xss.middleware';
 import * as express from 'express';
+import helmet from 'helmet';
 
-const HARDCODED_DB_URL = "postgresql://neondb_owner:npg_EB9knm7bFeCf@ep-blue-sun-adp2jl9q-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
-
-if (!process.env.POSTGRES_PRISMA_URL) {
-  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL || HARDCODED_DB_URL;
+// Ensure environment variables are loaded for database connections
+if (!process.env.POSTGRES_PRISMA_URL && process.env.DATABASE_URL) {
+  process.env.POSTGRES_PRISMA_URL = process.env.DATABASE_URL;
 }
-if (!process.env.DATABASE_URL) {
+if (!process.env.DATABASE_URL && process.env.POSTGRES_PRISMA_URL) {
   process.env.DATABASE_URL = process.env.POSTGRES_PRISMA_URL;
 }
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Apply Helmet HTTP Security Headers
+  app.use(helmet());
 
   // Global prefixes
   app.setGlobalPrefix('api/v1');
@@ -24,14 +26,31 @@ async function bootstrap() {
   const path = require('path');
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-  // Request body parsing and XSS protection middleware registration
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+  // Enforce strict request body size limits to prevent memory exhaustion DoS
+  app.use(express.json({ limit: '100kb' }));
+  app.use(express.urlencoded({ extended: true, limit: '100kb' }));
   
-  // Register security headers/cors
+  // Register strict CORS origin policy
+  const allowedOrigins = [
+    'https://ecofone.co.in',
+    'https://www.ecofone.co.in',
+    'https://frontend-eight-rho-4qd8u2qedo.vercel.app',
+  ];
+  if (process.env.NODE_ENV !== 'production') {
+    allowedOrigins.push('http://localhost:3000', 'http://127.0.0.1:3000');
+  }
+
   app.enableCors({
-    origin: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS policy violation: Origin not allowed'));
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
 
   // Global validation pipe with class-validator settings

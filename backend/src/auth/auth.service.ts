@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma.service';
 import * as jwt from 'jsonwebtoken';
 import { Role } from '@prisma/client';
 import axios from 'axios';
-
+import * as crypto from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -13,12 +13,19 @@ export class AuthService {
     private configService: ConfigService
   ) {}
 
+  /** Cryptographically secure 6-digit OTP generator */
+  private generateSecureOtp(): string {
+    const buffer = crypto.randomBytes(4);
+    const num = (buffer.readUInt32BE(0) % 900000) + 100000;
+    return num.toString();
+  }
+
   async sendOtp(phone: string): Promise<{ success: boolean; message: string; debugCode?: string }> {
     if (!phone || !phone.match(/^\+?[1-9]\d{1,14}$/)) {
       throw new BadRequestException('Invalid international phone number format (E.164)');
     }
 
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = this.generateSecureOtp();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
 
     // Upsert OTP record in database
@@ -177,9 +184,20 @@ export class AuthService {
     if (!masterPassword) {
       throw new Error('MASTER_ADMIN_PASSWORD environment variable is missing');
     }
-    if (password !== masterPassword) {
+
+    // Protect against Long-Password DoS attacks
+    if (!password || Buffer.byteLength(password, 'utf8') > 128) {
+      throw new UnauthorizedException('Invalid master admin credentials.');
+    }
+
+    // Use constant-time comparison to prevent side-channel timing attacks
+    const inputBuffer = Buffer.from(password);
+    const masterBuffer = Buffer.from(masterPassword);
+
+    if (inputBuffer.length !== masterBuffer.length || !crypto.timingSafeEqual(inputBuffer, masterBuffer)) {
       throw new UnauthorizedException('Invalid master admin password.');
     }
+
     const payload = {
       id: 'master_admin',
       email: 'business@ecofone.co.in',
