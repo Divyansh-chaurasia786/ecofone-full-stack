@@ -11,6 +11,7 @@ import { SubAdminModule } from './sub-admin/sub-admin.module';
 import { SystemLogModule } from './system-log/system-log.module';
 import { CertificateModule } from './certificate/certificate.module';
 import { XssMiddleware } from './common/middleware/xss.middleware';
+import { BotProtectionMiddleware } from './common/middleware/bot-protection.middleware';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { XssMiddleware } from './common/middleware/xss.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // Apply security XSS middleware to all routes globally
-    consumer.apply(XssMiddleware).forRoutes('*');
+    // Apply security XSS and Anti-Bot fingerprinting middleware to all routes globally
+    consumer.apply(XssMiddleware, BotProtectionMiddleware).forRoutes('*');
   }
 }
