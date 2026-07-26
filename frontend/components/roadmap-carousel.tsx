@@ -1,17 +1,26 @@
 'use client';
 
+// ============================================================================
+// ROADMAP CAROUSEL COMPONENT (FRANCHISE ONBOARDING SLIDER)
+// ----------------------------------------------------------------------------
+// - Handles auto-sliding for the 6 onboarding steps on mobile devices.
+// - Auto-scrolls every 3.8s and pauses for 30s when a user taps any step card.
+// ============================================================================
+
 import { useRef, useEffect, useState, useCallback } from 'react';
 
+/** Interface for individual franchise roadmap onboarding steps */
 interface RoadmapStep {
-  num: string;
-  title: string;
-  desc: string;
+  num: string;   // Step number string (e.g. "01", "02")
+  title: string; // Step title
+  desc: string;  // Detailed description of the onboarding step
 }
 
-const TOTAL = 6;
-const INTERVAL_MS = 3800;
-const RESUME_DELAY_MS = 2500;
-const CLICK_PAUSE_MS = 30000;
+// Carousel Configuration Parameters
+const TOTAL = 6;             // 6 total onboarding steps
+const INTERVAL_MS = 3800;    // Slide change interval (3.8 seconds)
+const RESUME_DELAY_MS = 2500;// Touch-release resume delay
+const CLICK_PAUSE_MS = 30000;// 30-second pause on card tap
 
 const steps: RoadmapStep[] = [
   { num: "01", title: "Initial Inquiry", desc: "Submit your franchise application through our site. Our team will reach out within 24 hours to discuss the opportunity." },
@@ -23,11 +32,11 @@ const steps: RoadmapStep[] = [
 ];
 
 export default function RoadmapCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const isPausedRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);                    // Current active slide index
+  const carouselRef = useRef<HTMLDivElement>(null);                     // Container element ref
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null); // Interval timer ref
+  const isPausedRef = useRef(false);                                    // Pause boolean flag
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // Delay timeout ref
 
   const scrollToIndex = useCallback((idx: number) => {
     const el = carouselRef.current;

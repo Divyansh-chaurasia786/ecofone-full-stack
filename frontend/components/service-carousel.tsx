@@ -1,27 +1,36 @@
-'use client';
-
-import { useRef, useEffect, useState, useCallback } from 'react';
+// ============================================================================
+// SERVICE CAROUSEL COMPONENT (MOBILE AUTO-PLAY SLIDER)
+// ----------------------------------------------------------------------------
+// - Handles auto-sliding for Buy, Sell, and Repair service cards on mobile screens.
+// - Supports 30-second pause on card click / dot interaction.
+// - Features touch-swipe snap scrolling and smooth indicator dot synchronization.
+// ============================================================================
 
 interface ServiceCarouselProps {
+  /** Controlled state for expanded details card (optional) */
   expandedCard?: string | null;
+  /** State setter for expanded details card (optional) */
   setExpandedCard?: (card: string | null) => void;
 }
 
-const TOTAL = 3;
-const INTERVAL_MS = 3800;
-const RESUME_DELAY_MS = 2500;
-const CLICK_PAUSE_MS = 30000;
+// Configuration Constants
+const TOTAL = 3;             // Total number of service cards (Buy, Sell, Repair)
+const INTERVAL_MS = 3800;    // Auto-scroll step interval (3.8 seconds)
+const RESUME_DELAY_MS = 2500;// Delay before auto-play resumes after touch swipe
+const CLICK_PAUSE_MS = 30000;// Extended pause duration on card click (30 seconds)
 
 export default function ServiceCarousel({ expandedCard: propExpanded, setExpandedCard: propSetExpanded }: ServiceCarouselProps = {}) {
+  // Local fallback state if expandedCard prop is not passed by parent page
   const [localExpandedCard, setLocalExpandedCard] = useState<string | null>(null);
   const expandedCard = propExpanded !== undefined ? propExpanded : localExpandedCard;
   const setExpandedCard = propSetExpanded || setLocalExpandedCard;
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const isPausedRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Carousel State & Element Refs
+  const [activeIndex, setActiveIndex] = useState(0);                   // Active card index (0: Buy, 1: Sell, 2: Repair)
+  const carouselRef = useRef<HTMLDivElement>(null);                    // Reference to scrollable carousel container
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);// Main auto-scroll interval timer ref
+  const isPausedRef = useRef(false);                                   // Pause flag (avoids stale state in setInterval closure)
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null); // Ref for delay timers (pauseFor30s / resumeAfterDelay)
 
   /* ─── Scroll to a specific card index ─── */
   const scrollToIndex = useCallback((idx: number) => {
