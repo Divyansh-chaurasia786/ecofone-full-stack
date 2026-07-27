@@ -315,8 +315,8 @@ export default function AdminDashboardPage() {
   // Dashboard datasets
   const [applications, setApplications] = useState<FranchiseApp[]>([]);
   const [contactQueries, setContactQueries] = useState<FranchiseApp[]>([]);
-  const [franchiseCategoryFilter, setFranchiseCategoryFilter] = useState<'ALL' | 'OPEN' | 'CLOSED'>('ALL');
-  const [contactCategoryFilter, setContactCategoryFilter] = useState<'ALL' | 'OPEN' | 'CLOSED'>('ALL');
+  const [franchiseCategoryFilter, setFranchiseCategoryFilter] = useState<'ALL' | 'PENDING' | 'CLOSED'>('ALL');
+  const [contactCategoryFilter, setContactCategoryFilter] = useState<'ALL' | 'PENDING' | 'CLOSED'>('ALL');
   const [stores, setStores] = useState<Store[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewFilterStatus, setReviewFilterStatus] = useState<'PENDING' | 'APPROVED' | 'REJECTED'>('PENDING');
@@ -882,8 +882,8 @@ export default function AdminDashboardPage() {
       setStores(storesData);
 
       setKpis({
-        franchiseCount: franchises.filter((app: any) => getCleanStatusLabel(app.status) === 'OPEN').length,
-        contactCount: contacts.filter((app: any) => getCleanStatusLabel(app.status) === 'OPEN').length,
+        franchiseCount: franchises.filter((app: any) => getCleanStatusLabel(app.status) === 'PENDING').length,
+        contactCount: contacts.filter((app: any) => getCleanStatusLabel(app.status) === 'PENDING').length,
         storesCount: storesData.length,
         pendingReviewsCount: reviewsData.filter((r: any) => r.status === 'PENDING').length,
       });
@@ -2053,7 +2053,7 @@ export default function AdminDashboardPage() {
     if (s === 'CLOSED' || s === 'APPROVED' || s === 'RESOLVED' || s === 'COMPLETED') {
       return 'CLOSED';
     }
-    return 'OPEN';
+    return 'PENDING';
   };
 
   const getStatusStyle = (status: string) => {
@@ -2439,12 +2439,12 @@ export default function AdminDashboardPage() {
             {activeTab === 'franchise' && (() => {
               let lastDate = '';
               const sortedApps = [...applications].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-              const openCount = applications.filter((a) => getCleanStatusLabel(a.status) === 'OPEN').length;
+              const openCount = applications.filter((a) => getCleanStatusLabel(a.status) === 'PENDING').length;
               const closedCount = applications.filter((a) => getCleanStatusLabel(a.status) === 'CLOSED').length;
 
               const filteredApps = sortedApps.filter((app) => {
                 const label = getCleanStatusLabel(app.status);
-                if (franchiseCategoryFilter === 'OPEN') return label === 'OPEN';
+                if (franchiseCategoryFilter === 'PENDING') return label === 'PENDING';
                 if (franchiseCategoryFilter === 'CLOSED') return label === 'CLOSED';
                 return true;
               });
@@ -2466,7 +2466,7 @@ export default function AdminDashboardPage() {
                           className="bg-transparent text-emerald-400 font-extrabold text-xs focus:outline-none cursor-pointer"
                         >
                           <option value="ALL" className="bg-[#111827] text-white">All Records ({applications.length})</option>
-                          <option value="OPEN" className="bg-[#111827] text-amber-400">Open ({openCount})</option>
+                          <option value="PENDING" className="bg-[#111827] text-amber-400">Pending ({openCount})</option>
                           <option value="CLOSED" className="bg-[#111827] text-emerald-400">Closed ({closedCount})</option>
                         </select>
                       </div>
@@ -2549,7 +2549,7 @@ export default function AdminDashboardPage() {
                             <td className="py-4 px-2 text-right">
                               <select
                                 value={getCleanStatusLabel(app.status)}
-                                onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'OPEN' ? 'PENDING' : 'CLOSED')}
+                                onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'PENDING' ? 'PENDING' : 'CLOSED')}
                                 disabled={updatingId !== null}
                                 className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider cursor-pointer focus:outline-none border transition-all ${
                                   getCleanStatusLabel(app.status) === 'CLOSED'
@@ -2557,7 +2557,7 @@ export default function AdminDashboardPage() {
                                     : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
                                 }`}
                               >
-                                <option value="OPEN" className="bg-[#111827] text-amber-400 font-bold">OPEN</option>
+                                <option value="PENDING" className="bg-[#111827] text-amber-400 font-bold">PENDING</option>
                                 <option value="CLOSED" className="bg-[#111827] text-emerald-400 font-bold">CLOSED</option>
                               </select>
                             </td>
@@ -2577,12 +2577,12 @@ export default function AdminDashboardPage() {
             {activeTab === 'contact' && (() => {
               let lastDate = '';
               const sortedContacts = [...contactQueries].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-              const openCount = contactQueries.filter((a) => getCleanStatusLabel(a.status) === 'OPEN').length;
+              const openCount = contactQueries.filter((a) => getCleanStatusLabel(a.status) === 'PENDING').length;
               const closedCount = contactQueries.filter((a) => getCleanStatusLabel(a.status) === 'CLOSED').length;
 
               const filteredContacts = sortedContacts.filter((app) => {
                 const label = getCleanStatusLabel(app.status);
-                if (contactCategoryFilter === 'OPEN') return label === 'OPEN';
+                if (contactCategoryFilter === 'PENDING') return label === 'PENDING';
                 if (contactCategoryFilter === 'CLOSED') return label === 'CLOSED';
                 return true;
               });
@@ -2604,7 +2604,7 @@ export default function AdminDashboardPage() {
                           className="bg-transparent text-emerald-400 font-extrabold text-xs focus:outline-none cursor-pointer"
                         >
                           <option value="ALL" className="bg-[#111827] text-white">All Tickets ({contactQueries.length})</option>
-                          <option value="OPEN" className="bg-[#111827] text-amber-400">Open ({openCount})</option>
+                          <option value="PENDING" className="bg-[#111827] text-amber-400">Pending ({openCount})</option>
                           <option value="CLOSED" className="bg-[#111827] text-emerald-400">Closed ({closedCount})</option>
                         </select>
                       </div>
@@ -2687,7 +2687,7 @@ export default function AdminDashboardPage() {
                             <td className="py-4 px-2 text-right">
                               <select
                                 value={getCleanStatusLabel(app.status)}
-                                onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'OPEN' ? 'PENDING' : 'CLOSED')}
+                                onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'PENDING' ? 'PENDING' : 'CLOSED')}
                                 disabled={updatingId !== null}
                                 className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider cursor-pointer focus:outline-none border transition-all ${
                                   getCleanStatusLabel(app.status) === 'CLOSED'
@@ -2695,7 +2695,7 @@ export default function AdminDashboardPage() {
                                     : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
                                 }`}
                               >
-                                <option value="OPEN" className="bg-[#111827] text-amber-400 font-bold">OPEN</option>
+                                <option value="PENDING" className="bg-[#111827] text-amber-400 font-bold">PENDING</option>
                                 <option value="CLOSED" className="bg-[#111827] text-emerald-400 font-bold">CLOSED</option>
                               </select>
                             </td>
