@@ -315,6 +315,8 @@ export default function AdminDashboardPage() {
   // Dashboard datasets
   const [applications, setApplications] = useState<FranchiseApp[]>([]);
   const [contactQueries, setContactQueries] = useState<FranchiseApp[]>([]);
+  const [franchiseCategoryFilter, setFranchiseCategoryFilter] = useState<'ALL' | 'OPEN' | 'CLOSED'>('ALL');
+  const [contactCategoryFilter, setContactCategoryFilter] = useState<'ALL' | 'OPEN' | 'CLOSED'>('ALL');
   const [stores, setStores] = useState<Store[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewFilterStatus, setReviewFilterStatus] = useState<'PENDING' | 'APPROVED' | 'REJECTED'>('PENDING');
@@ -880,8 +882,8 @@ export default function AdminDashboardPage() {
       setStores(storesData);
 
       setKpis({
-        franchiseCount: franchises.filter((app: any) => getCleanStatusLabel(app.status) === 'PENDING').length,
-        contactCount: contacts.filter((app: any) => getCleanStatusLabel(app.status) === 'PENDING').length,
+        franchiseCount: franchises.filter((app: any) => getCleanStatusLabel(app.status) === 'OPEN').length,
+        contactCount: contacts.filter((app: any) => getCleanStatusLabel(app.status) === 'OPEN').length,
         storesCount: storesData.length,
         pendingReviewsCount: reviewsData.filter((r: any) => r.status === 'PENDING').length,
       });
@@ -2047,11 +2049,11 @@ export default function AdminDashboardPage() {
   };
 
   const getCleanStatusLabel = (status: string) => {
-    const s = status.toUpperCase();
+    const s = (status || '').toUpperCase();
     if (s === 'CLOSED' || s === 'APPROVED' || s === 'RESOLVED' || s === 'COMPLETED') {
       return 'CLOSED';
     }
-    return 'PENDING';
+    return 'OPEN';
   };
 
   const getStatusStyle = (status: string) => {
@@ -2059,7 +2061,7 @@ export default function AdminDashboardPage() {
     if (s === 'CLOSED') {
       return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25';
     }
-    return 'bg-orange-500/10 text-orange-400 border border-orange-500/25';
+    return 'bg-amber-500/10 text-amber-400 border border-amber-500/25';
   };
 
   // Helper to format clean phone for WhatsApp
@@ -2437,24 +2439,50 @@ export default function AdminDashboardPage() {
             {activeTab === 'franchise' && (() => {
               let lastDate = '';
               const sortedApps = [...applications].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+              const openCount = applications.filter((a) => getCleanStatusLabel(a.status) === 'OPEN').length;
+              const closedCount = applications.filter((a) => getCleanStatusLabel(a.status) === 'CLOSED').length;
+
+              const filteredApps = sortedApps.filter((app) => {
+                const label = getCleanStatusLabel(app.status);
+                if (franchiseCategoryFilter === 'OPEN') return label === 'OPEN';
+                if (franchiseCategoryFilter === 'CLOSED') return label === 'CLOSED';
+                return true;
+              });
+
               return (
                 <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
-                  <div className="pb-3 border-b border-slate-800/80 flex items-center justify-between">
-                    <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">Franchise Lead Registry</h3>
+                  <div className="pb-3 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">Franchise Lead Registry</h3>
+                      <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-medium">{applications.length} Total</span>
+                    </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-medium">{applications.length} Records</span>
+                      {/* Status Category Dropdown */}
+                      <div className="flex items-center gap-1.5 bg-[#090D16] border border-slate-800 rounded-xl px-3 py-1.5">
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Category:</span>
+                        <select
+                          value={franchiseCategoryFilter}
+                          onChange={(e) => setFranchiseCategoryFilter(e.target.value as any)}
+                          className="bg-transparent text-emerald-400 font-extrabold text-xs focus:outline-none cursor-pointer"
+                        >
+                          <option value="ALL" className="bg-[#111827] text-white">All Records ({applications.length})</option>
+                          <option value="OPEN" className="bg-[#111827] text-amber-400">Open ({openCount})</option>
+                          <option value="CLOSED" className="bg-[#111827] text-emerald-400">Closed ({closedCount})</option>
+                        </select>
+                      </div>
+
                       {sessionStorage.getItem('ecofone_admin_role') === 'master' && (
                         <button
                           onClick={() => handleClearLeadsClick('franchise')}
-                          className="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-bold hover:bg-red-600 hover:text-white transition-colors"
+                          className="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-1.5 rounded-xl font-bold hover:bg-red-600 hover:text-white transition-colors"
                         >
                           🧹 Clear History
                         </button>
                       )}
                     </div>
                   </div>
-                  {!applications.length ? (
-                    <div className="text-xs text-slate-505 text-center py-16">No franchise lead submissions stored in system registry.</div>
+                  {!filteredApps.length ? (
+                    <div className="text-xs text-slate-505 text-center py-16">No franchise lead submissions match the selected category status.</div>
                   ) : (
                     <div className="overflow-x-auto text-[11px] sm:text-xs">
                       <table className="w-full text-left text-slate-300 min-w-[700px]">
@@ -2465,11 +2493,11 @@ export default function AdminDashboardPage() {
                             <th className="py-3 px-2">Investment Capital</th>
                             <th className="py-3 px-2 text-center">Status</th>
                             <th className="py-3 px-2 text-center">Outreach</th>
-                            <th className="py-3 px-2 text-right">Actions</th>
+                            <th className="py-3 px-2 text-right">Change Status</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-800/50">
-                          {sortedApps.map((app) => {
+                          {filteredApps.map((app) => {
                             const appDate = app.createdAt 
                               ? new Date(app.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                               : 'Unknown Date';
@@ -2519,22 +2547,19 @@ export default function AdminDashboardPage() {
                               </div>
                             </td>
                             <td className="py-4 px-2 text-right">
-                              <div className="flex items-center justify-end gap-1.5">
-                                <button
-                                  disabled={updatingId !== null || getCleanStatusLabel(app.status) === 'PENDING'}
-                                  onClick={() => handleUpdateStatus(app.id, 'PENDING')}
-                                  className="bg-orange-500/10 hover:bg-orange-600 text-orange-400 hover:text-white border border-orange-500/20 px-2.5 py-1.5 rounded-lg text-[10px] font-bold disabled:opacity-50 transition-all"
-                                >
-                                  Pending
-                                </button>
-                                <button
-                                  disabled={updatingId !== null || getCleanStatusLabel(app.status) === 'CLOSED'}
-                                  onClick={() => handleUpdateStatus(app.id, 'CLOSED')}
-                                  className="bg-emerald-500/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 px-2.5 py-1.5 rounded-lg text-[10px] font-bold disabled:opacity-50 transition-all"
-                                >
-                                  Closed
-                                </button>
-                              </div>
+                              <select
+                                value={getCleanStatusLabel(app.status)}
+                                onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'OPEN' ? 'PENDING' : 'CLOSED')}
+                                disabled={updatingId !== null}
+                                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider cursor-pointer focus:outline-none border transition-all ${
+                                  getCleanStatusLabel(app.status) === 'CLOSED'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                    : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
+                                }`}
+                              >
+                                <option value="OPEN" className="bg-[#111827] text-amber-400 font-bold">OPEN</option>
+                                <option value="CLOSED" className="bg-[#111827] text-emerald-400 font-bold">CLOSED</option>
+                              </select>
                             </td>
                           </tr>
                         </React.Fragment>
@@ -2552,24 +2577,50 @@ export default function AdminDashboardPage() {
             {activeTab === 'contact' && (() => {
               let lastDate = '';
               const sortedContacts = [...contactQueries].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+              const openCount = contactQueries.filter((a) => getCleanStatusLabel(a.status) === 'OPEN').length;
+              const closedCount = contactQueries.filter((a) => getCleanStatusLabel(a.status) === 'CLOSED').length;
+
+              const filteredContacts = sortedContacts.filter((app) => {
+                const label = getCleanStatusLabel(app.status);
+                if (contactCategoryFilter === 'OPEN') return label === 'OPEN';
+                if (contactCategoryFilter === 'CLOSED') return label === 'CLOSED';
+                return true;
+              });
+
               return (
                 <div className="bg-[#111827]/80 border border-slate-800/80 rounded-3xl p-6 shadow-xl space-y-4">
-                  <div className="pb-3 border-b border-slate-800/80 flex items-center justify-between">
-                    <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">Customer Inquiry Tickets</h3>
-                    <div className="flex items-center gap-2">
+                  <div className="pb-3 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">Customer Inquiry Tickets</h3>
                       <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-medium">{contactQueries.length} Tickets</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {/* Status Category Dropdown */}
+                      <div className="flex items-center gap-1.5 bg-[#090D16] border border-slate-800 rounded-xl px-3 py-1.5">
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Category:</span>
+                        <select
+                          value={contactCategoryFilter}
+                          onChange={(e) => setContactCategoryFilter(e.target.value as any)}
+                          className="bg-transparent text-emerald-400 font-extrabold text-xs focus:outline-none cursor-pointer"
+                        >
+                          <option value="ALL" className="bg-[#111827] text-white">All Tickets ({contactQueries.length})</option>
+                          <option value="OPEN" className="bg-[#111827] text-amber-400">Open ({openCount})</option>
+                          <option value="CLOSED" className="bg-[#111827] text-emerald-400">Closed ({closedCount})</option>
+                        </select>
+                      </div>
+
                       {sessionStorage.getItem('ecofone_admin_role') === 'master' && (
                         <button
                           onClick={() => handleClearLeadsClick('contact')}
-                          className="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-bold hover:bg-red-600 hover:text-white transition-colors"
+                          className="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-1.5 rounded-xl font-bold hover:bg-red-600 hover:text-white transition-colors"
                         >
                           🧹 Clear History
                         </button>
                       )}
                     </div>
                   </div>
-                  {!contactQueries.length ? (
-                    <div className="text-xs text-slate-505 text-center py-16">No customer inquiry tickets logged in system registry.</div>
+                  {!filteredContacts.length ? (
+                    <div className="text-xs text-slate-505 text-center py-16">No customer inquiry tickets match the selected category status.</div>
                   ) : (
                     <div className="overflow-x-auto text-[11px] sm:text-xs">
                       <table className="w-full text-left text-slate-300 min-w-[700px]">
@@ -2579,11 +2630,11 @@ export default function AdminDashboardPage() {
                             <th className="py-3 px-2">Query Details</th>
                             <th className="py-3 px-2 text-center">Status</th>
                             <th className="py-3 px-2 text-center">Outreach</th>
-                            <th className="py-3 px-2 text-right">Actions</th>
+                            <th className="py-3 px-2 text-right">Change Status</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-800/50">
-                          {sortedContacts.map((app) => {
+                          {filteredContacts.map((app) => {
                             const appDate = app.createdAt 
                               ? new Date(app.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                               : 'Unknown Date';
@@ -2634,22 +2685,19 @@ export default function AdminDashboardPage() {
                               </div>
                             </td>
                             <td className="py-4 px-2 text-right">
-                              <div className="flex items-center justify-end gap-1.5">
-                                <button
-                                  disabled={updatingId !== null || getCleanStatusLabel(app.status) === 'PENDING'}
-                                  onClick={() => handleUpdateStatus(app.id, 'PENDING')}
-                                  className="bg-orange-500/10 hover:bg-orange-600 text-orange-400 hover:text-white border border-orange-500/20 px-2.5 py-1.5 rounded-lg text-[10px] font-bold disabled:opacity-50 transition-all"
-                                >
-                                  Pending
-                                </button>
-                                <button
-                                  disabled={updatingId !== null || getCleanStatusLabel(app.status) === 'CLOSED'}
-                                  onClick={() => handleUpdateStatus(app.id, 'CLOSED')}
-                                  className="bg-emerald-500/10 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/20 px-2.5 py-1.5 rounded-lg text-[10px] font-bold disabled:opacity-50 transition-all"
-                                >
-                                  Closed
-                                </button>
-                              </div>
+                              <select
+                                value={getCleanStatusLabel(app.status)}
+                                onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'OPEN' ? 'PENDING' : 'CLOSED')}
+                                disabled={updatingId !== null}
+                                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider cursor-pointer focus:outline-none border transition-all ${
+                                  getCleanStatusLabel(app.status) === 'CLOSED'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                    : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
+                                }`}
+                              >
+                                <option value="OPEN" className="bg-[#111827] text-amber-400 font-bold">OPEN</option>
+                                <option value="CLOSED" className="bg-[#111827] text-emerald-400 font-bold">CLOSED</option>
+                              </select>
                             </td>
                           </tr>
                         </React.Fragment>
