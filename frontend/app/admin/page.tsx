@@ -2550,11 +2550,11 @@ export default function AdminDashboardPage() {
                               <select
                                 value={getCleanStatusLabel(app.status)}
                                 onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'PENDING' ? 'PENDING' : 'CLOSED')}
-                                disabled={updatingId !== null}
-                                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider cursor-pointer focus:outline-none border transition-all ${
+                                disabled={updatingId !== null || getCleanStatusLabel(app.status) === 'CLOSED'}
+                                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider focus:outline-none border transition-all ${
                                   getCleanStatusLabel(app.status) === 'CLOSED'
-                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-                                    : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 opacity-60 cursor-not-allowed'
+                                    : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 cursor-pointer'
                                 }`}
                               >
                                 <option value="PENDING" className="bg-[#111827] text-amber-400 font-bold">PENDING</option>
@@ -2688,11 +2688,11 @@ export default function AdminDashboardPage() {
                               <select
                                 value={getCleanStatusLabel(app.status)}
                                 onChange={(e) => handleUpdateStatus(app.id, e.target.value === 'PENDING' ? 'PENDING' : 'CLOSED')}
-                                disabled={updatingId !== null}
-                                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider cursor-pointer focus:outline-none border transition-all ${
+                                disabled={updatingId !== null || getCleanStatusLabel(app.status) === 'CLOSED'}
+                                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-xl uppercase tracking-wider focus:outline-none border transition-all ${
                                   getCleanStatusLabel(app.status) === 'CLOSED'
-                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-                                    : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 opacity-60 cursor-not-allowed'
+                                    : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 cursor-pointer'
                                 }`}
                               >
                                 <option value="PENDING" className="bg-[#111827] text-amber-400 font-bold">PENDING</option>
