@@ -1,3 +1,7 @@
+'use client';
+
+import { useRef, useEffect, useState, useCallback } from 'react';
+
 // ============================================================================
 // SERVICE CAROUSEL COMPONENT (MOBILE AUTO-PLAY SLIDER)
 // ----------------------------------------------------------------------------
