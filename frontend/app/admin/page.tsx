@@ -293,6 +293,7 @@ export default function AdminDashboardPage() {
 
   // Certificate Form inputs
   const [newCertType, setNewCertType] = useState('INTERNSHIP');
+  const [customCertType, setCustomCertType] = useState('');
   const [newCertUid, setNewCertUid] = useState('');
   const [newCertName, setNewCertName] = useState('');
   const [newCertRole, setNewCertRole] = useState('');
@@ -641,14 +642,25 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     if (!newCertName.trim() || !newCertRole.trim()) return;
 
-    const typeCode = newCertType === 'EXPERIENCE' ? 'EXP' : newCertType === 'EXCELLENCE' ? 'EXC' : 'INT';
+    const finalType = newCertType === 'CUSTOM'
+      ? (customCertType.trim().toUpperCase() || 'CUSTOM')
+      : newCertType;
+
+    const typeCode = finalType === 'EXPERIENCE'
+      ? 'EXP'
+      : finalType === 'EXCELLENCE'
+      ? 'EXC'
+      : finalType === 'INTERNSHIP'
+      ? 'INT'
+      : (finalType.replace(/[^A-Z0-9]/gi, '').substring(0, 3).toUpperCase() || 'CST');
+
     // Auto-generate guaranteed unique UID (EVG-{TYPE}-{YEAR}-{TIME_RANDOM})
     const autoUid = `EVG-${typeCode}-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}${Math.floor(100 + Math.random() * 900)}`;
 
     const payload = {
       uid: autoUid,
       recipientName: newCertName.trim().toUpperCase(),
-      type: newCertType,
+      type: finalType,
       role: newCertRole.trim(),
       startDate: newCertStartDate,
       endDate: newCertEndDate,
@@ -3847,7 +3859,7 @@ export default function AdminDashboardPage() {
                       />
                     </div>
 
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certificate Category *</label>
                       <select
                         value={newCertType}
@@ -3857,7 +3869,22 @@ export default function AdminDashboardPage() {
                         <option value="INTERNSHIP">Internship Certificate</option>
                         <option value="EXPERIENCE">Experience Certificate</option>
                         <option value="EXCELLENCE">Certificate of Excellence</option>
+                        <option value="CUSTOM">✏️ Custom Category (Specify Below)</option>
                       </select>
+
+                      {newCertType === 'CUSTOM' && (
+                        <div className="pt-1 animate-fade-in">
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. APPRENTICESHIP, FELLOWSHIP, RECOGNITION"
+                            value={customCertType}
+                            onChange={(e) => setCustomCertType(e.target.value)}
+                            className="w-full bg-slate-900 border border-emerald-500/60 rounded-xl px-3 py-2 text-emerald-300 placeholder:text-slate-500 text-xs font-semibold focus:outline-none focus:border-emerald-400 shadow-sm"
+                          />
+                          <p className="text-[10px] text-emerald-400/80 mt-1 font-medium">Specify any custom category for this verification entry.</p>
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-1">
