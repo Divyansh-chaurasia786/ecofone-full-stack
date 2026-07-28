@@ -723,25 +723,86 @@ export default function AdminDashboardPage() {
   };
 
   const handleDownloadQrCode = (uid: string) => {
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${uid}`;
-    showCorporateToast('info', 'QR Image Request', `Generating high-resolution QR PNG for ${uid}...`);
-    fetch(qrUrl)
-      .then(res => res.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `QR_${uid}.png`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-        showCorporateToast('success', 'Download Ready', `File QR_${uid}.png saved to your device.`);
-      })
-      .catch(err => {
-        console.error('QR download failed:', err);
-        showCorporateToast('error', 'Download Error', 'Unable to download QR code image. Please try again.');
-      });
+    const size = 600;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=H&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${uid}`;
+    showCorporateToast('info', 'QR Image Request', `Generating high-resolution QR with EcoFone logo for ${uid}...`);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    const qrImg = new Image();
+    qrImg.crossOrigin = 'anonymous';
+    qrImg.onload = () => {
+      if (!ctx) return;
+      // 1. Draw QR code with ECC=H
+      ctx.drawImage(qrImg, 0, 0, size, size);
+
+      // 2. Center logo calculations (22% of total QR size)
+      const logoSize = Math.round(size * 0.22);
+      const center = size / 2;
+      const halfLogo = logoSize / 2;
+
+      const logoImg = new Image();
+      logoImg.crossOrigin = 'anonymous';
+      logoImg.onload = () => {
+        // Draw white background circle for logo cutout
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(center, center, halfLogo + 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw subtle border around white logo circle
+        ctx.strokeStyle = '#CBD5E1';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Draw EcoFone logo inside center circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(center, center, halfLogo, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(logoImg, center - halfLogo, center - halfLogo, logoSize, logoSize);
+        ctx.restore();
+
+        // Convert canvas to blob and download
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `QR_EcoFone_${uid}.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          showCorporateToast('success', 'Download Ready', `File QR_EcoFone_${uid}.png saved with centered logo.`);
+        }, 'image/png');
+      };
+
+      logoImg.onerror = () => {
+        // Fallback without logo if logo image fails to load
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `QR_${uid}.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          showCorporateToast('success', 'Download Ready', `File QR_${uid}.png saved to your device.`);
+        });
+      };
+      logoImg.src = '/logo.png';
+    };
+    qrImg.onerror = (err) => {
+      console.error('QR download failed:', err);
+      showCorporateToast('error', 'Download Error', 'Unable to download QR code image. Please try again.');
+    };
+    qrImg.src = qrUrl;
   };
 
   const handleCopyVerificationLink = (uid: string) => {
@@ -3957,11 +4018,18 @@ export default function AdminDashboardPage() {
                             .map((cert) => (
                             <tr key={cert.id} className="hover:bg-slate-900/20">
                               <td className="py-3 px-4">
-                                <img
-                                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${cert.uid}`}
-                                  alt="Verification QR"
-                                  className="w-12 h-12 object-contain bg-white p-1 rounded-lg border border-slate-700 shadow-sm"
-                                />
+                                <div className="relative w-12 h-12 flex items-center justify-center bg-white p-1 rounded-lg border border-slate-700 shadow-sm overflow-hidden group">
+                                  <img
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=H&data=https://ecofone-frontend-new.vercel.app/verify-certificate/${cert.uid}`}
+                                    alt="Verification QR"
+                                    className="w-full h-full object-contain"
+                                  />
+                                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <div className="w-3.5 h-3.5 bg-white rounded-full p-0.5 shadow border border-slate-200 flex items-center justify-center">
+                                      <img src="/logo.png" alt="EcoFone" className="w-full h-full object-contain rounded-full" />
+                                    </div>
+                                  </div>
+                                </div>
                               </td>
                               <td className="py-3 px-4">
                                 <span className="font-mono text-emerald-400 font-bold block">{cert.uid}</span>
